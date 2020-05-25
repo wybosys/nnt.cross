@@ -1,6 +1,17 @@
 #ifndef __NNT_MACROXX_H_INCLUDED
 #define __NNT_MACROXX_H_INCLUDED
 
+#ifndef NNT_NS
+#define NNT_NS nnt
+#endif
+
+#define NNT_BEGIN namespace NNT_NS {
+#define NNT_END }
+#define USE_NNT using namespace NNT_NS;
+
+#define NNT_BEGIN_NS(ns) NNT_BEGIN namespace ns {
+#define NNT_END_NS() } NNT_END
+
 #define NNT_FRIEND(cls) friend class cls;
 #define NNT_NOCOPY(cls) \
 private:                 \
@@ -47,13 +58,62 @@ public:                          \
 
 #define NNT_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NNT_COMBINE(__auto_guard_, __LINE__)(obj);
 
-namespace nnt
+#define NNT_PASS
+
+#ifdef NNT_STATIC
+#define NNT_LIBRARY 1
+#endif
+
+#ifdef NNT_SHARED
+#define NNT_LIBRARY 1
+#endif
+
+#ifndef NNT_LIBRARY
+#define NNT_APP 1
+#endif
+
+#if defined(WIN32) || defined(_WIN32)
+#include <Windows.h>
+#define NNT_WINDOWS
+#ifdef NNT_LIBRARY
+#ifdef NNT_SHARED
+#define NNT_API __declspec(dllexport)
+#endif
+#else
+#define NNT_API __declspec(dllimport)
+#endif
+#else
+#define NNT_UNIXLIKE
+#endif
+
+#ifndef NNT_API
+#define NNT_API NNT_PASS
+#endif
+
+#include <string>
+#include <iostream>
+#include <vector>
+
+#if defined(NNT_WINDOWS) && defined(_UNICODE)
+#include <xstring>
+#endif
+
+NNT_BEGIN
+
+using namespace ::std;
+
+#if defined(NNT_WINDOWS) && defined(_UNICODE)
+typedef wstring system_string;
+#else
+typedef string system_string;
+#endif
+
+template <class T, class TP = typename T::private_class_type>
+static TP* DPtr(T* obj)
 {
-    template <class T, class TP = typename T::private_class_type>
-    static TP* DPtr(T* obj)
-    {
-        return obj->d_ptr;
-    }
+    return obj->d_ptr;
 }
+
+NNT_END
 
 #endif
