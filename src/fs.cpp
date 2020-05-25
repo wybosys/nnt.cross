@@ -99,6 +99,7 @@ bool rmtree(string const& str)
             return false;
         }
         else if (!rmtree(cur)) {
+            cerr << ("É¾³ı " + cur + " Ê§°Ü") << endl;
             return false;
         }
     }
