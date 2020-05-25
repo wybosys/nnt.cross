@@ -7,7 +7,9 @@
 
 #define NNT_BEGIN namespace NNT_NS {
 #define NNT_END }
+
 #define USE_NNT using namespace NNT_NS;
+#define USE_NNT_NS(ns) USE_NNT; using namespace NNT_NS::ns;
 
 #define NNT_BEGIN_NS(ns) NNT_BEGIN namespace ns {
 #define NNT_END_NS() } NNT_END
@@ -79,7 +81,7 @@ public:                          \
 #ifdef NNT_SHARED
 #define NNT_API __declspec(dllexport)
 #endif
-#else
+#elif !defined(NNT_USE_STATIC)
 #define NNT_API __declspec(dllimport)
 #endif
 #else

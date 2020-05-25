@@ -21,7 +21,7 @@ string normalize(string const& str)
 
 bool mkdir(string const& str) 
 {
-    return ::CreateDirectoryA(str.c_str(), NULL) == S_OK;
+    return CreateDirectoryA(str.c_str(), NULL);
 }
 
 bool mkdirs(string const& str)
@@ -30,12 +30,13 @@ bool mkdirs(string const& str)
     if (!strs.size())
         return false;
     auto cur = strs[0];
-    size_t idx = 0;
-    do {
+    if (!exists(cur) && !mkdir(cur))
+        return false;
+    for (size_t idx = 1; idx < strs.size(); ++idx) {
+        cur += PATH_DELIMITER + strs[idx];
         if (!exists(cur) && !mkdir(cur))
             return false;
-        cur += PATH_DELIMITER + strs[idx++];
-    } while (idx <= strs.size());
+    }
     return true;
 }
 
@@ -58,24 +59,29 @@ vector<string> listdir(string const& str) {
     vector<string> r;
     if (!isdirectory(str))
         return r;
+    auto tgt = normalize(str) + PATH_DELIMITER + "*.*";
     WIN32_FIND_DATAA data;
-    auto h = FindFirstFileA(str.c_str(), &data);
+    auto h = FindFirstFileA(tgt.c_str(), &data);
     if (h == INVALID_HANDLE_VALUE)
         return r;
     do {
+        string cur = data.cFileName;
+        if (cur == "." || cur == "..")
+            continue;
         r.push_back(data.cFileName);
     } while (FindNextFileA(h, &data));
+    FindClose(h);
     return r;
 }
 
 bool rmfile(string const& str)
 {
-    return DeleteFileA(str.c_str()) == S_OK;
+    return DeleteFileA(str.c_str());
 }
 
 bool rmdir(string const& str)
 {
-    return RemoveDirectoryA(str.c_str()) == S_OK;
+    return RemoveDirectoryA(str.c_str());
 }
 
 string absolute(string const& str)
