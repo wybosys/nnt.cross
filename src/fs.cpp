@@ -56,6 +56,15 @@ bool isdirectory(string const& str)
 
 vector<string> listdir(string const& str) {
     vector<string> r;
+    if (!isdirectory(str))
+        return r;
+    WIN32_FIND_DATAA data;
+    auto h = FindFirstFileA(str.c_str(), &data);
+    if (h == INVALID_HANDLE_VALUE)
+        return r;
+    do {
+        r.push_back(data.cFileName);
+    } while (FindNextFileA(h, &data));
     return r;
 }
 
@@ -66,7 +75,19 @@ bool rmfile(string const& str)
 
 bool rmtree(string const& str)
 {
-    return false;
+    if (!isdirectory(str))
+        return false;
+    for (auto &e : listdir(str)) {
+        auto cur = str + PATH_DELIMITER + e;
+        if (isfile(cur) && !rmfile(cur)) {
+            cerr << ("É¾³ý " + cur + " Ê§°Ü") << endl;
+            return false;
+        }
+        else if (!rmtree(cur)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 string absolute(string const& str)
