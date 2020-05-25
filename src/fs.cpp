@@ -73,6 +73,16 @@ bool rmfile(string const& str)
     return DeleteFileA(str.c_str()) == S_OK;
 }
 
+string absolute(string const& str)
+{
+    char buf[BUFSIZ];
+    if (S_OK == GetFullPathNameA(str.c_str(), BUFSIZ, buf, NULL))
+        return buf;
+    return str;
+}
+
+#endif
+
 bool rmtree(string const& str)
 {
     if (!isdirectory(str))
@@ -89,16 +99,6 @@ bool rmtree(string const& str)
     }
     return true;
 }
-
-string absolute(string const& str)
-{
-    char buf[BUFSIZ];
-    if (S_OK == GetFullPathNameA(str.c_str(), BUFSIZ, buf, NULL))
-        return buf;
-    return str;
-}
-
-#endif
 
 #ifdef NNT_UNIXLIKE
 
