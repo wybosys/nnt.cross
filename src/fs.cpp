@@ -73,6 +73,11 @@ bool rmfile(string const& str)
     return DeleteFileA(str.c_str()) == S_OK;
 }
 
+bool rmdir(string const& str)
+{
+    return RemoveDirectoryA(str.c_str()) == S_OK;
+}
+
 string absolute(string const& str)
 {
     char buf[BUFSIZ];
@@ -97,7 +102,7 @@ bool rmtree(string const& str)
             return false;
         }
     }
-    return true;
+    return rmdir(str);
 }
 
 #ifdef NNT_UNIXLIKE
