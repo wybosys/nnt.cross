@@ -100,9 +100,11 @@ bool rmtree(string const& str)
         return false;
     for (auto &e : listdir(str)) {
         auto cur = str + PATH_DELIMITER + e;
-        if (isfile(cur) && !rmfile(cur)) {
-            cerr << ("É¾³ý " + cur + " Ê§°Ü") << endl;
-            return false;
+        if (isfile(cur)) {
+            if (!rmfile(cur)) {
+                cerr << ("É¾³ý " + cur + " Ê§°Ü") << endl;
+                return false;
+            }
         }
         else if (!rmtree(cur)) {
             cerr << ("É¾³ý " + cur + " Ê§°Ü") << endl;
