@@ -4,17 +4,15 @@
 #include <cross.h>
 #include <fs.h>
 
-TEST(fs)
-{
+TEST (fs) {
     USE_CROSS;
 
-    string dir = "test/abc/cde/efg";
+    string dir = "xxx/abc/cde/efg";
     mkdirs(dir);
-    rmtree("test");
+    rmtree("xxx");
 }
 
-int main()
-{
+int main() {
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);
     runner.RunTestsIf(::UnitTest::Test::GetTestList(), nullptr, ::UnitTest::True(), 0);

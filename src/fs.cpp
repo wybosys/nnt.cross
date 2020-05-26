@@ -125,7 +125,7 @@ vector<string> listdir(string const &str) {
     auto d = readdir(h);
     while (d) {
         string cur = d->d_name;
-        if (cur != "." && cur == "..") {
+        if (cur != "." && cur != "..") {
             r.emplace_back(cur);
         }
         d = readdir(h);
