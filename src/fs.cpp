@@ -83,10 +83,11 @@ bool rmdir(string const &str)
 
 string absolute(string const &str)
 {
+    auto nstr = normalize(str);
     char buf[BUFSIZ];
-    if (S_OK == GetFullPathNameA(str.c_str(), BUFSIZ, buf, NULL))
+    if (S_OK == GetFullPathNameA(nstr.c_str(), BUFSIZ, buf, NULL))
         return buf;
-    return str;
+    return nstr;
 }
 
 bool isabsolute(string const& str)
