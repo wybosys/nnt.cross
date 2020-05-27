@@ -17,6 +17,10 @@ extern NNT_API bool rmfile(string const&);
 extern NNT_API bool rmtree(string const&);
 extern NNT_API bool rmdir(string const&);
 extern NNT_API string absolute(string const&);
+extern NNT_API bool isabsolute(string const&);
+extern NNT_API string dirname(string const&);
+extern NNT_API string pwd();
+extern NNT_API bool cd(string const&);
 
 CROSS_END
 

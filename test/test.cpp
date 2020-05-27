@@ -17,6 +17,15 @@ TEST (fs) {
 
     Logger t;
     t.warn("hahaha");
+
+    UNITTEST_CHECK_EQUAL(dirname(""), "");
+    UNITTEST_CHECK_EQUAL(dirname(dirname(dir)), normalize("xxx/abc"));
+    UNITTEST_CHECK_EQUAL(isabsolute(dir), false);
+    UNITTEST_CHECK_EQUAL(isabsolute("/"), true);
+
+#ifdef NNT_WINDOWS
+    UNITTEST_CHECK_EQUAL(isabsolute("C://"), true);
+#endif
 }
 
 int main() {

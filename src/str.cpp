@@ -21,10 +21,14 @@ vector<std::string> explode(string const &str, string const &delimeter, bool ski
 }
 
 string implode(vector<string> const &str, string const &delimeter) {
-    string r;
-    for (auto &i : str)
-        r += delimeter + i;
-    return r;
+    const size_t l = str.size();
+    if (l) {
+        string r = str[0];
+        for (auto i = str.begin() + 1; i != str.end(); ++i)
+            r += delimeter + *i;
+        return r;
+    }
+    return "";
 }
 
 bool beginwith(string const &str, string const &tgt) {

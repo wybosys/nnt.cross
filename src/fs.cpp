@@ -89,6 +89,40 @@ string absolute(string const &str)
     return str;
 }
 
+bool isabsolute(string const& str)
+{
+    const size_t l = str.length();
+    if (l == 0)
+        return false;
+    char idr = str[0];
+    if (idr == '/' || idr == '\\')
+        return true;
+    idr = str[1];
+    return idr == '/' || idr == '\\' || idr == ':';
+}
+
+string dirname(string const& str) 
+{
+    auto nstr = normalize(str);
+    auto ps = explode(nstr, PATH_DELIMITER, true);
+    if (ps.empty())
+        return nstr;
+    ps.pop_back();
+    return implode(ps, PATH_DELIMITER);
+}
+
+string pwd()
+{
+    char buf[MAX_PATH] = { 0 };
+    GetCurrentDirectoryA(MAX_PATH, buf);
+    return buf;
+}
+
+bool cd(string const& str)
+{
+    return SetCurrentDirectoryA(str.c_str()) == S_OK;
+}
+
 #endif
 
 #ifdef NNT_UNIXLIKE
