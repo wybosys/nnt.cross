@@ -153,8 +153,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\cross.h" />
     <ClInclude Include="..\..\src\fs.h" />
+    <ClInclude Include="..\..\src\logger.h" />
     <ClInclude Include="..\..\src\macro.h" />
     <ClInclude Include="..\..\src\str.h" />
+    <ClInclude Include="..\..\src\time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\cross.cpp">
@@ -162,7 +164,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\fs.cpp" />
+    <ClCompile Include="..\..\src\logger.cpp" />
     <ClCompile Include="..\..\src\str.cpp" />
+    <ClCompile Include="..\..\src\time.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

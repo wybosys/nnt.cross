@@ -3,6 +3,8 @@
 
 #include <cross.h>
 #include <fs.h>
+#include <time.h>
+#include <logger.h>
 
 TEST (fs) {
     USE_CROSS;
@@ -10,6 +12,11 @@ TEST (fs) {
     string dir = "xxx/abc/cde/efg";
     mkdirs(dir);
     rmtree("xxx");
+
+    UNITTEST_CHECK_EQUAL(Time::Current(), (timestamp_t)Time::Now());
+
+    Logger t;
+    t.warn("hahaha");
 }
 
 int main() {

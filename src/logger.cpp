@@ -1,0 +1,70 @@
+#include "cross.h"
+#include "logger.h"
+
+CROSS_BEGIN
+
+void Logger::debug(string const& msg)
+{
+    log(LogLevel::DEBUG, msg);
+}
+
+void Logger::info(string const& msg)
+{
+    log(LogLevel::INFO, msg);
+}
+
+void Logger::notice(string const& msg)
+{
+    log(LogLevel::NOTICE, msg);
+}
+
+void Logger::warn(string const& msg)
+{
+    log(LogLevel::WARNING, msg);
+}
+
+void Logger::error(string const& msg)
+{
+    log(LogLevel::ERROR, msg);
+}
+
+void Logger::alert(string const& msg)
+{
+    log(LogLevel::ALERT, msg);
+}
+
+void Logger::critical(string const& msg)
+{
+    log(LogLevel::CRITICAL, msg);
+}
+
+void Logger::emergency(string const& msg)
+{
+    log(LogLevel::EMERGENCY, msg);
+}
+
+void Logger::log(LogLevel lv, string const& msg)
+{
+    auto str = (prefix.empty() ? "" : prefix + ": ") + msg;
+    switch (lv)
+    {
+    case LogLevel::DEBUG:
+        NNT_DEBUG_EXPRESS(cout << str << endl;);
+        break;
+    case LogLevel::SPECIAL:
+    case LogLevel::CUSTOM:
+    case LogLevel::INFO:
+    case LogLevel::NOTICE:
+        cout << str << endl;
+        break;
+    case LogLevel::WARNING:
+    case LogLevel::ERROR:
+    case LogLevel::ALERT:
+    case LogLevel::CRITICAL:
+    case LogLevel::EMERGENCY:
+        cerr << str << endl;
+        break;
+    }
+}
+
+CROSS_END
