@@ -159,6 +159,13 @@ static TP *DPtr(T *obj)
     return obj->d_ptr;
 }
 
+template <typename T>
+static T const &Nil()
+{
+    static const T __s;
+    return __s;
+};
+
 NNT_END
 
 #endif
