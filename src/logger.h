@@ -17,11 +17,25 @@ enum struct LogLevel
     EMERGENCY = 0
 };
 
-class NNT_API Logger
+class ILogger
 {
 public:
 
-    virtual ~Logger() = default;
+    virtual void debug(string const&) = 0;
+    virtual void info(string const&) = 0;
+    virtual void notice(string const&) = 0;
+    virtual void warn(string const&) = 0;
+    virtual void error(string const&) = 0;
+    virtual void alert(string const&) = 0;
+    virtual void critical(string const&) = 0;
+    virtual void emergency(string const&) = 0;
+
+    virtual void log(LogLevel, string const&) = 0;
+};
+
+class NNT_API Logger : public ILogger
+{
+public:
 
     string prefix;
 
