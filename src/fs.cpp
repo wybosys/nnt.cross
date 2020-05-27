@@ -85,7 +85,7 @@ string absolute(string const &str)
 {
     auto nstr = normalize(str);
     char buf[BUFSIZ];
-    if (S_OK == GetFullPathNameA(nstr.c_str(), BUFSIZ, buf, NULL))
+    if (GetFullPathNameA(nstr.c_str(), BUFSIZ, buf, NULL))
         return buf;
     return nstr;
 }
