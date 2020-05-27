@@ -150,7 +150,9 @@ bool rmdir(string const &str) {
 
 string absolute(string const &str) {
     char buf[PATH_MAX];
-    return ::realpath(str.c_str(), buf);
+    if (::realpath(str.c_str(), buf))
+        return buf;
+    return str;
 }
 
 #endif
