@@ -11,7 +11,7 @@ enum struct LogLevel
     INFO = 6,
     NOTICE = 5,
     WARNING = 4,
-    ERROR = 3,
+    FATAL = 3,
     ALERT = 2,
     CRITICAL = 1,
     EMERGENCY = 0

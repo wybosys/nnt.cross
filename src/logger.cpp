@@ -25,7 +25,7 @@ void Logger::warn(string const& msg)
 
 void Logger::error(string const& msg)
 {
-    log(LogLevel::ERROR, msg);
+    log(LogLevel::FATAL, msg);
 }
 
 void Logger::alert(string const& msg)
@@ -58,7 +58,7 @@ void Logger::log(LogLevel lv, string const& msg)
         cout << str << endl;
         break;
     case LogLevel::WARNING:
-    case LogLevel::ERROR:
+    case LogLevel::FATAL:
     case LogLevel::ALERT:
     case LogLevel::CRITICAL:
     case LogLevel::EMERGENCY:
