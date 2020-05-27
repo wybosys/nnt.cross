@@ -49,6 +49,7 @@ public:
     virtual void emergency(string const&);
 
     virtual void log(LogLevel, string const&);
+    virtual string format(LogLevel, string const&);
 };
 
 CROSS_END

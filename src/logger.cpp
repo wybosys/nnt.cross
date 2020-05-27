@@ -43,9 +43,14 @@ void Logger::emergency(string const& msg)
     log(LogLevel::EMERGENCY, msg);
 }
 
+string Logger::format(LogLevel lv, string const& msg)
+{
+    return (prefix.empty() ? "" : prefix + ": ") + msg;
+}
+
 void Logger::log(LogLevel lv, string const& msg)
 {
-    auto str = (prefix.empty() ? "" : prefix + ": ") + msg;
+    auto str = format(lv, msg);
     switch (lv)
     {
     case LogLevel::DEBUG:
