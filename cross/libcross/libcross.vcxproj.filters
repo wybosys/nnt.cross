@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="jsoncpp">
+      <UniqueIdentifier>{669df2f1-95d8-400a-83f9-6962c89cc6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="jsoncpp\json">
+      <UniqueIdentifier>{3520ee35-9720-4965-9a8d-ed4924685794}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\fs.h">
@@ -39,6 +45,45 @@
     <ClInclude Include="..\..\src\url.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\json.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xml.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json_tool.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\allocator.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\assertions.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\config.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\forwards.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\json.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\json_features.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\reader.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\value.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\version.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\jsoncpp\json\writer.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\fs.cpp">
@@ -59,5 +104,25 @@
     <ClCompile Include="..\..\src\url.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\json.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xml.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jsoncpp\json_reader.cpp">
+      <Filter>jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jsoncpp\json_value.cpp">
+      <Filter>jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jsoncpp\json_writer.cpp">
+      <Filter>jsoncpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\jsoncpp\json_valueiterator.inl">
+      <Filter>jsoncpp</Filter>
+    </None>
   </ItemGroup>
 </Project>
