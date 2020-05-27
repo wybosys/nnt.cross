@@ -34,6 +34,7 @@ private:                \
 
 #define NNT_CLASS_DECL(cls)                                               \
 protected:                                                                \
+    typedef cls self_class_type;                                          \
     typedef NNT_PRIVATECLASS(cls) private_class_type;                     \
     friend class NNT_PRIVATECLASS(cls);                                   \
     private_class_type *d_ptr = nullptr;                                  \
@@ -72,6 +73,9 @@ public:                         \
         }                                           \
     }                                               \
     bool cls::is_shared() { return nullptr != _##cls##_shared; }
+
+#define NNT_THIS const_cast<self_class_type *>(this)
+#define NNT_DPTR const_cast<private_class_type *>(d_ptr)
 
 #define NNT_DOT .
 #define NNT_COMMA ,

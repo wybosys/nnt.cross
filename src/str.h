@@ -3,14 +3,14 @@
 
 CROSS_BEGIN
 
-extern vector<string> explode(string const& str, string const& delimeter, bool skipempty = false);
-extern string implode(vector<string> const&, string const& delimeter);
-extern bool beginwith(string const& str, string const& tgt);
-extern bool endwith(string const& str, string const& tgt);
+extern NNT_API vector<string> explode(string const& str, string const& delimeter, bool skipempty = false);
+extern NNT_API string implode(vector<string> const&, string const& delimeter);
+extern NNT_API bool beginwith(string const& str, string const& tgt);
+extern NNT_API bool endwith(string const& str, string const& tgt);
 
-extern int toInt(string const&);
-extern float toFloat(string const&);
-extern double toDouble(string const&);
+extern NNT_API int toInt(string const&);
+extern NNT_API float toFloat(string const&);
+extern NNT_API double toDouble(string const&);
 
 CROSS_END
 
