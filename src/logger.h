@@ -37,6 +37,8 @@ class NNT_API Logger : public ILogger
 {
 public:
 
+    virtual ~Logger() = default;
+
     string prefix;
 
     virtual void debug(string const&);
