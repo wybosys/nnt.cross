@@ -3,6 +3,12 @@
 #include "str.h"
 #include <regex>
 
+#ifdef NNT_WINDOWS
+
+#include <Windows.h>
+
+#endif
+
 #ifdef NNT_UNIXLIKE
 
 #include <sys/stat.h>
