@@ -103,6 +103,7 @@ public:                         \
 
 #if defined(WIN32) || defined(_WIN32)
 #include <SDKDDKVer.h>
+#pragma warning(disable : 4251)
 #define WIN32_LEAN_AND_MEAN
 #define NNT_WINDOWS
 #ifdef NNT_LIBRARY
