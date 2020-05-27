@@ -56,6 +56,16 @@ UrlValue::UrlValue(UrlValue::variant const &v)
     : vt(FromCom(v.vt)), _var(v) {
 }
 
+UrlValue::UrlValue(UrlValue const& r)
+    : vt(r.vt), _var(r._var) {
+}
+
+UrlValue& UrlValue::operator=(UrlValue const&r) {
+    const_cast<VT&>(vt) = r.vt;
+    const_cast<variant&>(_var) = r._var;
+    return *this;
+}
+
 UrlValue::integer UrlValue::toInteger() const {
     switch (_var.vt) {
     case UrlValue::variant::VT::INT:

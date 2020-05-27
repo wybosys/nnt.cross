@@ -36,6 +36,8 @@ public:
 
     UrlValue(variant const &);
 
+    UrlValue(UrlValue const&);
+
     VT const vt;
 
     integer toInteger() const;
@@ -55,6 +57,8 @@ public:
     operator string const& () const;
 
     operator variant const &() const;
+
+    UrlValue& operator=(UrlValue const&);
 
 private:
     variant const _var;
