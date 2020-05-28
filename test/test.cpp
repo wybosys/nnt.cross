@@ -8,6 +8,7 @@
 #include <json.h>
 #include <xml.h>
 #include <url.h>
+#include <threads.h>
 
 TEST (fs) {
     USE_CROSS;
@@ -76,8 +77,12 @@ TEST(prop)
 }
 
 int main() {
+    USE_CROSS;
+
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);
     runner.RunTestsIf(::UnitTest::Test::GetTestList(), nullptr, ::UnitTest::True(), 0);
+
+    MainThreadExec();
     return 0;
 }
