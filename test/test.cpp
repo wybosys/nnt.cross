@@ -6,6 +6,7 @@
 #include <time.h>
 #include <logger.h>
 #include <json.h>
+#include <xml.h>
 
 TEST (fs) {
     USE_CROSS;
@@ -29,7 +30,7 @@ TEST (fs) {
 #endif
 }
 
-TEST(json)
+TEST(prop)
 {
     USE_CROSS;
 
@@ -40,10 +41,25 @@ TEST(json)
     string astr = json_encode(*v);
     UNITTEST_CHECK_EQUAL(str, astr);
 
+    auto xo = toxmlobj(*p);
+    astr = xml_encode(*xo);
+    xo = xml_decode(astr);
+    p = toproperty(*xo);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
+    UNITTEST_CHECK_EQUAL(str, astr);
 
     str = "[false,null,\"string\"]";
     v = json_decode(str);
     p = toproperty(*v);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
+    UNITTEST_CHECK_EQUAL(str, astr);
+
+    xo = toxmlobj(*p);
+    astr = xml_encode(*xo);
+    xo = xml_decode(astr);
+    p = toproperty(*xo);
     v = tojsonobj(*p);
     astr = json_encode(*v);
     UNITTEST_CHECK_EQUAL(str, astr);

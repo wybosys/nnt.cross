@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../../src/jsoncpp;$(IncludePath)</IncludePath>
+    <IncludePath>../../src/;../../src/jsoncpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../../src/jsoncpp;$(IncludePath)</IncludePath>
+    <IncludePath>../../src/;../../src/jsoncpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -173,6 +173,7 @@
     <ClInclude Include="..\..\src\property.h" />
     <ClInclude Include="..\..\src\str.h" />
     <ClInclude Include="..\..\src\time.h" />
+    <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\..\src\url.h" />
     <ClInclude Include="..\..\src\xml.h" />
   </ItemGroup>
@@ -190,6 +191,7 @@
     <ClCompile Include="..\..\src\property.cpp" />
     <ClCompile Include="..\..\src\str.cpp" />
     <ClCompile Include="..\..\src\time.cpp" />
+    <ClCompile Include="..\..\src\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\src\url.cpp" />
     <ClCompile Include="..\..\src\xml.cpp" />
   </ItemGroup>

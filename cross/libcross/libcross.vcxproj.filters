@@ -19,6 +19,9 @@
     <Filter Include="jsoncpp\json">
       <UniqueIdentifier>{3520ee35-9720-4965-9a8d-ed4924685794}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tinyxml2">
+      <UniqueIdentifier>{7465949f-3111-47bf-9765-9dc3efad5712}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\fs.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="..\..\src\property.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h">
+      <Filter>tinyxml2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\fs.cpp">
@@ -124,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\property.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tinyxml2\tinyxml2.cpp">
+      <Filter>tinyxml2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
