@@ -4,6 +4,86 @@
 
 CROSS_BEGIN
 
+PropertyKey::PropertyKey(integer v)
+    :vt(VT::INTEGER)  {
+    _pod.i = v;
+
+    ostringstream oss;
+    oss << v;
+    _k = oss.str();
+}
+
+PropertyKey::PropertyKey(number v)
+    :vt(VT::NUMBER) {
+    _pod.n = v;
+
+    ostringstream oss;
+    oss << v;
+    _k = oss.str();
+}
+
+PropertyKey::PropertyKey(string const& str)
+: _k(str), vt(VT::STRING) {
+}
+
+PropertyKey::PropertyKey(bool b)
+    : _k(b ? "true" : "false"), vt(VT::BOOLEAN)
+{
+    _pod.b = b;
+}
+
+PropertyKey::operator integer() const {
+    switch (vt)
+    {
+    case VT::INTEGER:
+        return _pod.i;
+    case VT::NUMBER:
+        return (integer)round(_pod.n);
+    case VT::BOOLEAN:
+        return _pod.b ? 1 : 0;
+    }
+
+    istringstream iss(_k);
+    integer r;
+    iss >> r;
+    return r;
+}
+
+PropertyKey::operator number() const {
+    switch (vt)
+    {
+    case VT::INTEGER:
+        return _pod.i;
+    case VT::NUMBER:
+        return _pod.n;
+    case VT::BOOLEAN:
+        return _pod.b ? 1 : 0;
+    }
+
+    istringstream iss(_k);
+    number r;
+    iss >> r;
+    return r;
+}
+
+PropertyKey::operator string const& () const {
+    return _k;
+}
+
+PropertyKey::operator bool() const {
+    switch (vt)
+    {
+    case VT::INTEGER:
+        return !!_pod.i;
+    case VT::NUMBER:
+        return !!_pod.n;
+    case VT::BOOLEAN:
+        return _pod.b;
+    }
+
+    return _k != "false";
+}
+
 Property::VT FromCom(Property::variant::VT vt) {
     switch (vt) {
     case Property::variant::VT::INT:
@@ -137,6 +217,7 @@ Property::map_type &Property::map() {
     _var = nullptr;
     _array = nullptr;
     _map = make_shared<map_type>();
+    const_cast<VT&>(vt) = VT::MAP;
     return *_map;
 }
 
@@ -152,6 +233,7 @@ Property::array_type &Property::array() {
     _var = nullptr;
     _map = nullptr;
     _array = make_shared<array_type>();
+    const_cast<VT&>(vt) = VT::ARRAY;
     return *_array;
 }
 

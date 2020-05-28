@@ -34,9 +34,18 @@ TEST(json)
     USE_CROSS;
 
     string str = "{\"b\":false,\"nil\":null,\"s\":\"string\"}";
-    auto v = json_decode(str);
-    
+    auto v = json_decode(str);    
+    auto p = toproperty(*v);
+    v = tojsonobj(*p);
     string astr = json_encode(*v);
+    UNITTEST_CHECK_EQUAL(str, astr);
+
+
+    str = "[false,null,\"string\"]";
+    v = json_decode(str);
+    p = toproperty(*v);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
     UNITTEST_CHECK_EQUAL(str, astr);
 }
 

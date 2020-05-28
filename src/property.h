@@ -6,6 +6,66 @@
 
 CROSS_BEGIN
 
+// key的类型
+class PropertyKey
+{
+public:
+    
+    enum struct VT {
+        INTEGER,
+        NUMBER,
+        STRING,
+        BOOLEAN
+    };
+
+    const VT vt;
+
+    typedef ptrdiff_t integer;
+    typedef double number;
+
+    PropertyKey(integer v);
+    PropertyKey(number);
+    PropertyKey(string const&);
+    PropertyKey(bool);
+
+    inline bool operator == (PropertyKey const& r) const {
+        return _k == r._k;
+    }
+
+    inline bool operator != (PropertyKey const& r) const {
+        return _k == r._k;
+    }
+
+    inline bool operator < (PropertyKey const& r) const {
+        return _k < r._k;
+    }
+
+    inline bool operator <= (PropertyKey const& r) const {
+        return _k <= r._k;
+    }
+
+    inline bool operator > (PropertyKey const& r) const {
+        return _k > r._k;
+    }
+
+    inline bool operator >= (PropertyKey const& r) const {
+        return _k >= r._k;
+    }
+
+    operator integer() const;
+    operator number() const;
+    operator string const& () const;
+    operator bool() const;
+
+private:
+    union {
+        integer i;
+        number n;
+        bool b;
+    } _pod = { 0 };
+    string _k;
+};
+
 // 定义域
 class PropertyDeclaration 
 {
@@ -36,7 +96,7 @@ public:
     typedef double number;
     typedef COMXX_NS::Variant variant;
     typedef shared_ptr<Property> data_type;
-    typedef map<string, data_type> map_type;
+    typedef map<PropertyKey, data_type> map_type;
     typedef vector<data_type> array_type;
 
     Property();
