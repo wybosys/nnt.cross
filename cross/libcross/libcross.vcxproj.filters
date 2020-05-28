@@ -84,6 +84,9 @@
     <ClInclude Include="..\..\src\jsoncpp\json\writer.h">
       <Filter>jsoncpp\json</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\property.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\fs.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\jsoncpp\json_writer.cpp">
       <Filter>jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\property.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 #ifndef __NNTCROSS_JSON_H_INCLUDED
 #define __NNTCROSS_JSON_H_INCLUDED
 
-#include "jsoncpp/json/json.h"
+#include <json/json.h>
 
 CROSS_BEGIN
 

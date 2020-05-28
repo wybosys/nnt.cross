@@ -1,0 +1,9 @@
+#ifndef __NNTCROSS_XML_H_INCLUDED
+#define __NNTCROSS_XML_H_INCLUDED
+
+CROSS_BEGIN
+
+
+CROSS_END
+
+#endif
