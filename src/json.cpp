@@ -4,9 +4,11 @@
 
 CROSS_BEGIN
 
-string json_encode(JsonObject const& obj) {
+string json_encode(JsonObject const& obj, JsonEncodeOption const& opt) {
     ostringstream oss;
     Json::StreamWriterBuilder builder;
+    if (!opt.pretty)
+        builder.settings_["indentation"] = "";
     unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
     writer->write(obj, &oss);
     return oss.str();

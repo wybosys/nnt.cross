@@ -5,6 +5,7 @@
 #include <fs.h>
 #include <time.h>
 #include <logger.h>
+#include <json.h>
 
 TEST (fs) {
     USE_CROSS;
@@ -26,6 +27,17 @@ TEST (fs) {
 #ifdef NNT_WINDOWS
     UNITTEST_CHECK_EQUAL(isabsolute("C://"), true);
 #endif
+}
+
+TEST(json)
+{
+    USE_CROSS;
+
+    string str = "{\"b\":false,\"nil\":null,\"s\":\"string\"}";
+    auto v = json_decode(str);
+    
+    string astr = json_encode(*v);
+    UNITTEST_CHECK_EQUAL(str, astr);
 }
 
 int main() {
