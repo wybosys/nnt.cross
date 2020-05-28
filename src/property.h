@@ -6,6 +6,18 @@
 
 CROSS_BEGIN
 
+// 定义域
+class PropertyDeclaration 
+{
+public:
+
+    // 约束
+    string ns, scheme;
+
+    // 编码
+    string encoding;
+};
+
 class Property
 {
 public:
@@ -15,12 +27,17 @@ public:
         INTEGER,
         NUMBER,
         BOOLEAN,
-        STRING
+        STRING,
+        ARRAY,
+        MAP
     };
 
     typedef ptrdiff_t integer;
     typedef double number;
     typedef COMXX_NS::Variant variant;
+    typedef shared_ptr<Property> data_type;
+    typedef map<string, data_type> map_type;
+    typedef vector<data_type> array_type;
 
     Property();
 
@@ -60,8 +77,28 @@ public:
 
     Property& operator=(Property const&);
 
+    // 名称
+    string name;
+
+    // 定义域
+    shared_ptr<PropertyDeclaration> declaration;
+    
+    // 转换成map
+    map_type &map();
+
+    // 获取map
+    map_type const& map() const;
+
+    // 转换成array
+    array_type &array();
+
+    // 获取array
+    array_type const& array() const;
+
 private:
-    variant const _var;
+    shared_ptr<variant> _var;
+    shared_ptr<map_type> _map;
+    shared_ptr<array_type> _array;
 };
 
 inline Property::operator integer() const {
@@ -81,7 +118,7 @@ inline Property::operator string const& () const {
 }
 
 inline Property::operator variant const &() const {
-    return _var;
+    return *_var;
 }
 
 template<typename _CharT, typename _Traits>
