@@ -27,8 +27,8 @@ bool Url::parse(string const& str)
         return false;
 
     auto lefts = explode(qss[0], "/", true);
-    protocol = lefts[1];
-    host = lefts[2];
+    protocol = lefts[0];
+    host = lefts[1];
     paths = vector<string>(lefts.begin() + 2, lefts.end());
 
     auto rights = explode(qss[1], "&");
@@ -75,7 +75,7 @@ string build_querystring(Url::args_type const& args, fn_url_encoder url_encoder)
         strs.emplace_back(oss.str());
     }
 
-    return implode(strs, "&");
+    return "?" + implode(strs, "&");
 }
 
 CROSS_END

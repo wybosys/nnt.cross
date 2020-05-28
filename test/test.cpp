@@ -36,7 +36,8 @@ TEST(url)
     USE_CROSS;
 
     string str = "http://www.baidu.com/abc/cde?abc=123&cde=123";
-    
+    Url u(str);
+    UNITTEST_CHECK_EQUAL(u.toString(), str);
 }
 
 TEST(prop)
