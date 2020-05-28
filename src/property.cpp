@@ -206,7 +206,11 @@ bool Property::toBool() const {
 }
 
 string const &Property::toString() const {
-    return _var->toString();
+    if (_var->vt == Property::variant::VT::STRING)
+        return _var->toString();
+    ostringstream oss;
+    oss << *this;
+    return oss.str();
 }
 
 Property::map_type &Property::map() {

@@ -1,7 +1,7 @@
 #ifndef __NNTCROSS_URL_H_INCLUDED
 #define __NNTCROSS_URL_H_INCLUDED
 
-#include <map>
+#include "property.h"
 
 CROSS_BEGIN
 
@@ -9,15 +9,28 @@ class Url
 {
 public:
 
-    typedef map<string, string> args_type;
+    Url();
+    Url(string const&);
 
-    string domain;
-    string protocol;
+    typedef map<string, Property> args_type;
+
+    string protocol, host;
+    vector<string> paths;
     args_type args;
+
+    void clear();
+    bool parse(string const&);
+
+    string toString() const;
+
+    inline operator string () const {
+        return toString();
+    }
 };
 
-extern NNT_API string url_encode(string const&);
-extern NNT_API string url_decode(string const&);
+typedef string(fn_url_encoder)(Property const&);
+
+extern NNT_API string build_querystring(Url::args_type const&, fn_url_encoder = nullptr);
 
 CROSS_END
 

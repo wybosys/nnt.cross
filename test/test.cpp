@@ -7,6 +7,7 @@
 #include <logger.h>
 #include <json.h>
 #include <xml.h>
+#include <url.h>
 
 TEST (fs) {
     USE_CROSS;
@@ -28,6 +29,14 @@ TEST (fs) {
 #ifdef NNT_WINDOWS
     UNITTEST_CHECK_EQUAL(isabsolute("C://"), true);
 #endif
+}
+
+TEST(url)
+{
+    USE_CROSS;
+
+    string str = "http://www.baidu.com/abc/cde?abc=123&cde=123";
+    
 }
 
 TEST(prop)
