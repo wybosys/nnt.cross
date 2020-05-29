@@ -3,14 +3,16 @@
 
 #include "property.h"
 
-namespace tinyxml2
+#define TINYXML_NS tinyxml2
+
+namespace TINYXML_NS
 {
     class XMLDocument;
 }
 
 CROSS_BEGIN
 
-typedef tinyxml2::XMLDocument XmlObject;
+typedef TINYXML_NS::XMLDocument XmlObject;
 
 extern NNT_API string xml_encode(XmlObject const&);
 

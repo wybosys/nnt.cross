@@ -4,6 +4,8 @@
 
 CROSS_BEGIN
 
+using namespace TINYXML_NS;
+
 string xml_encode(XmlObject const& xo) 
 {
     tinyxml2::XMLPrinter pr;
@@ -20,14 +22,34 @@ shared_ptr<XmlObject> xml_decode(string const& str)
     return xo;
 }
 
-void toxmlobj(Property const& po, tinyxml2::XMLElement& cur)
+template <typename T>
+void SetText(XMLElement& cur, T const& v) {
+    char buf[BUFSIZ];
+    XMLUtil::ToStr(v, buf, BUFSIZ);
+    SetText<string>(cur, buf);
+}
+
+template <>
+void SetText<string>(XMLElement& cur, string const& txt)
+{
+    if (cur.FirstChild() && cur.FirstChild()->ToText())
+        cur.FirstChild()->SetValue(txt.c_str());
+    else {
+        XMLText* theText = cur.GetDocument()->NewText(txt.c_str());
+        cur.InsertFirstChild(theText);
+    }
+}
+
+void toxmlobj(Property const& po, XMLElement& cur)
 {
     cur.SetAttribute("vt", (int)po.vt);
 
 #define CUR_SET_VALUE(toval) \
         auto v = po.##toval(); \
     cur.SetAttribute("value", v); \
-    cur.SetText(v);
+    SetText(cur, v);
+
+    // cur.SetText(v); // 兼容cc中的老版本
 
     switch (po.vt) {
     default:
@@ -43,8 +65,7 @@ void toxmlobj(Property const& po, tinyxml2::XMLElement& cur)
         CUR_SET_VALUE(toBool);
     } break;
     case Property::VT::STRING: {
-        auto v = po.toString();
-        cur.SetText(v.c_str());
+        SetText(cur, po.toString());
     } break;
     case Property::VT::ARRAY: {
         for (auto &e : po.array()) {
