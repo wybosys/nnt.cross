@@ -12,6 +12,7 @@ public:
 
     static timestamp_t Current();
     static seconds_t Now();
+    static void Sleep(seconds_t);
 
 };
 

@@ -78,7 +78,10 @@ TEST(task)
     // SingleTaskDispatcher dis;
 
     // 测试定长线程任务池
-    FixedTaskDispatcher dis;
+    // FixedTaskDispatcher dis;
+
+    // 测试可变线程任务池
+    QueuedTaskDispatcher dis;
 
     // dis.attach();
 
@@ -87,12 +90,14 @@ TEST(task)
     for (int i = 0; i < 100; ++i) {
         dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
             cout << ++count << endl;
+            Time::Sleep(1);
             }));
     }
     dis.start();
     for (int i = 0; i < 100; ++i) {
         dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
             cout << ++count << endl;
+            Time::Sleep(1);
             }));
     }
     dis.wait();

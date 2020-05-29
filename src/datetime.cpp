@@ -1,6 +1,8 @@
 #include "cross.h"
 #include "datetime.h"
 #include <time.h>
+#include <thread>
+#include <chrono>  
 
 #ifdef NNT_WINDOWS
 
@@ -49,5 +51,10 @@ seconds_t Time::Now()
 }
 
 #endif
+
+void Time::Sleep(seconds_t sec)
+{
+    this_thread::sleep_for(chrono::milliseconds((long)(sec * 1e3)));
+}
 
 CROSS_END

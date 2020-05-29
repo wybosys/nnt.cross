@@ -244,7 +244,7 @@ public:
 
     static void ThdProc(FixedTaskDispatcherPrivate *self)
     {
-        cout << "开始执行任务" << endl;
+        // cout << "开始执行任务" << endl;
 
         self->mtx_tasks.lock();
         ITask::task_type tsk;
@@ -267,7 +267,7 @@ public:
         }
 
         // 启动等待，并开始下一次迭代
-        cout << "等待添加任务" << endl;
+        // cout << "等待添加任务" << endl;
         self->smp_tasks.wait();
 
         if (!self->waitstop)
@@ -291,6 +291,7 @@ FixedTaskDispatcher::FixedTaskDispatcher(size_t count)
 
 FixedTaskDispatcher::~FixedTaskDispatcher()
 {
+    d_ptr->stop();
     NNT_CLASS_DESTORY();
 }
 
@@ -324,6 +325,7 @@ void FixedTaskDispatcher::wait()
             e = nullptr;
         }
     }
+    d_ptr->thds.clear();
 }
 
 void FixedTaskDispatcher::cancel()
@@ -345,12 +347,99 @@ void FixedTaskDispatcher::clear()
 class QueuedTaskDispatcherPrivate
 {
 public:
+
+    QueuedTaskDispatcher *owner;
+    mutex mtx_tasks;
+    set<ITask::task_type> tasks;
+    bool running = false, waitstop = false, waitwait = false;
+    atomic<size_t> thd_runnings;
+
+    vector<shared_ptr<thread>> thds;
+    semaphore smp_tasks;
+
+    void start()
+    {
+        if (running)
+            return;
+        running = true;
+
+        waitwait = false;
+        waitstop = false;
+
+        for (size_t i = 0; i < mincount; ++i) {
+            auto t = make_shared<thread>(ThdProc, this);
+            thds.emplace_back(t);
+        }
+    }
+
+    void stop()
+    {
+        if (!running)
+            return;
+
+        waitstop = true;
+        smp_tasks.notify();
+
+        for (auto &e : thds) {
+            if (e->joinable()) {
+                e->join();
+                e = nullptr;
+            }
+        }
+        thds.clear();
+
+        running = false;
+    }
+
+    static void ThdProc(QueuedTaskDispatcherPrivate *self)
+    {
+        // cout << "开始执行任务" << endl;
+
+        ++self->thd_runnings;
+
+        self->mtx_tasks.lock();
+        ITask::task_type tsk;
+        if (!self->tasks.empty()) {
+            tsk = *self->tasks.begin();
+            self->tasks.erase(self->tasks.begin());
+        }
+        self->mtx_tasks.unlock();
+
+        self->owner->_run(tsk);
+
+        // 移除所有执行完成的任务
+        self->mtx_tasks.lock();
+        const size_t left = self->tasks.size();
+        self->mtx_tasks.unlock();
+
+        --self->thd_runnings;
+
+        if (self->waitwait && left == 0) {
+            // 所有任务已经运行结束
+            return;
+        }
+
+        // 启动等待，并开始下一次迭代
+        // cout << "等待添加任务" << endl;
+        self->smp_tasks.wait();
+
+        if (!self->waitstop)
+            ThdProc(self);
+    }
+
+    void create_worker()
+    {
+        auto t = make_shared<thread>(ThdProc, this);
+        thds.emplace_back(t);
+    }
+
     size_t mincount, maxcount;
 };
 
 QueuedTaskDispatcher::QueuedTaskDispatcher()
 {
     NNT_CLASS_CONSTRUCT();
+    d_ptr->owner = this;
     d_ptr->mincount = thread::hardware_concurrency();
     d_ptr->maxcount = d_ptr->mincount << 1;
 }
@@ -358,49 +447,72 @@ QueuedTaskDispatcher::QueuedTaskDispatcher()
 QueuedTaskDispatcher::QueuedTaskDispatcher(size_t min, size_t max)
 {
     NNT_CLASS_CONSTRUCT();
+    d_ptr->owner = this;
     d_ptr->mincount = min < 1 ? thread::hardware_concurrency() : min;
     d_ptr->maxcount = min < max ? max : min;
 }
 
 QueuedTaskDispatcher::~QueuedTaskDispatcher()
 {
+    d_ptr->stop();
     NNT_CLASS_DESTORY();
 }
 
-bool QueuedTaskDispatcher::add(task_type&&)
+bool QueuedTaskDispatcher::add(task_type&& tsk)
 {
+    if (tsk->dispatcher())
+        return false;
+
+    NNT_AUTOGUARD(d_ptr->mtx_tasks);
+    d_ptr->tasks.emplace(tsk);
+
+    if (d_ptr->thd_runnings == d_ptr->thds.size()) {
+        if (d_ptr->thds.size() < d_ptr->maxcount) {
+            // 创建一个新工作线程
+            d_ptr->create_worker();
+        }
+    }
+
+    d_ptr->smp_tasks.notify();
     return true;
 }
 
 void QueuedTaskDispatcher::start()
 {
-
+    d_ptr->start();
 }
 
 void QueuedTaskDispatcher::stop()
 {
-
-
+    d_ptr->stop();
 }
 
 void QueuedTaskDispatcher::wait() 
 {
-
+    d_ptr->waitwait = true;
+    for (auto &e : d_ptr->thds) {
+        if (e->joinable()) {
+            e->join();
+            e = nullptr;
+        }
+    }
+    d_ptr->thds.clear();
 }
 
 void QueuedTaskDispatcher::cancel()
 {
-
+    clear();
 }
 
 bool QueuedTaskDispatcher::isrunning() const
 {
-    return false;
+    return d_ptr->running;
 }
 
 void QueuedTaskDispatcher::clear()
 {
-
+    NNT_AUTOGUARD(d_ptr->mtx_tasks);
+    d_ptr->tasks.clear();
 }
 
 CROSS_END
