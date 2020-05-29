@@ -103,11 +103,44 @@ TEST(task)
     dis.wait();
 }
 
+FixedTaskDispatcher dis;
+atomic<int> async_count = 9000;
+
+TEST(async_task)
+{
+    // 测试异步线程
+    dis.start();
+
+    for (int i = 0; i < 100; ++i) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
+            if (IsMainThread()) {
+                cout << "主线程: " << ++async_count << endl;
+            }
+            else {
+                cout << "子线程: " << ++async_count << endl;
+            }
+            }));
+    }
+
+    for (int i = 0; i < 100; ++i) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
+            MainThread::shared().invoke([&]() {
+                if (IsMainThread()) {
+                    cout << "主线程: " << ++async_count << endl;
+                }
+                else {
+                    cout << "子线程: " << ++async_count << endl;
+                }
+                });
+            }));
+    }
+}
+
 int main() {
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);
     runner.RunTestsIf(::UnitTest::Test::GetTestList(), nullptr, ::UnitTest::True(), 0);
 
-    MainThreadExec();
+    MainThread::shared().exec();
     return 0;
 }

@@ -7,14 +7,37 @@
 
 CROSS_BEGIN
 
-// 业务的主线程每帧回调
-extern NNT_API void MainThreadTick();
+NNT_CLASS_PREPARE(MainThread);
 
-// 用于做主线程大循环
-extern NNT_API void MainThreadExec();
+// 业务主线程
+class NNT_API MainThread
+{
+    NNT_CLASS_DECL(MainThread);
+
+    MainThread();
+    ~MainThread();
+
+public:
+
+    NNT_SINGLETON_DECL(MainThread);
+
+    typedef function<void()> func_type;
+
+    // 大循环中执行
+    void invoke(func_type const&);
+
+    // 大循环
+    void exec();
+
+    // 或者在已有大循环中进行回调
+    void tick();
+};
+
+// 当前是否在主线程
+extern bool IsMainThread();
 
 // 信号量
-class semaphore
+class NNT_API semaphore
 {
 public:
 
@@ -47,7 +70,7 @@ private:
 };
 
 // 任务接口
-class ITask : public IObject
+class NNT_API ITask : public IObject
 {
     NNT_NOCOPY(ITask);
 
@@ -93,13 +116,13 @@ public:
     }
 };
 
-class Task : public TaskImpl<Task> {
+class NNT_API Task : public TaskImpl<Task> {
 public:
     Task(func_type fn = nullptr) :TaskImpl<Task>(fn) {}
 };
 
 // 接口线程调度器
-class ITaskDispatcher : public IObject
+class NNT_API ITaskDispatcher : public IObject
 {
 public:
 
@@ -135,7 +158,7 @@ protected:
 NNT_CLASS_PREPARE(SingleTaskDispatcher);
 
 // 单线程任务调度
-class SingleTaskDispatcher : public ITaskDispatcher
+class NNT_API SingleTaskDispatcher : public ITaskDispatcher
 {
     NNT_CLASS_DECL(SingleTaskDispatcher);
 
@@ -159,7 +182,7 @@ public:
 NNT_CLASS_PREPARE(FixedTaskDispatcher);
 
 // 定长线程任务调度
-class FixedTaskDispatcher : public ITaskDispatcher
+class NNT_API FixedTaskDispatcher : public ITaskDispatcher
 {
     NNT_CLASS_DECL(FixedTaskDispatcher);
 
@@ -182,7 +205,7 @@ public:
 NNT_CLASS_PREPARE(QueuedTaskDispatcher);
 
 // 队列线程任务调度
-class QueuedTaskDispatcher : public ITaskDispatcher
+class NNT_API QueuedTaskDispatcher : public ITaskDispatcher
 {
     NNT_CLASS_DECL(QueuedTaskDispatcher);
 

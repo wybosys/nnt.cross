@@ -3,15 +3,88 @@
 #include "datetime.h"
 #include <list>
 #include <set>
+#include <csignal>
+
+#ifdef NNT_WINDOWS
+#include <Windows.h>
+#endif
 
 CROSS_BEGIN
 
-void MainThreadTick() {
+NNT_SINGLETON_IMPL(MainThread);
 
+class MainThreadPrivate
+{
+public:
+
+    MainThreadPrivate() {
+#ifdef NNT_WINDOWS
+        ::SetConsoleCtrlHandler(FnQuit, TRUE);
+#endif
+    }
+
+    static bool waitquit;
+
+#ifdef NNT_WINDOWS
+    static BOOL WINAPI FnQuit(DWORD type)
+    {
+        waitquit = true;
+        return TRUE;
+    }
+#else
+    static void FnQuit()
+    {
+        waitquit = true;
+    }
+#endif
+
+    mutex mtx_funcs;
+    vector<MainThread::func_type> funcs;
+
+    static thread_local bool ismainthread;
+};
+
+bool MainThreadPrivate::waitquit = false;
+bool thread_local MainThreadPrivate::ismainthread = false;
+
+MainThread::MainThread()
+{
+    NNT_CLASS_CONSTRUCT();
 }
 
-void MainThreadExec() {
-    
+MainThread::~MainThread()
+{
+    NNT_CLASS_DESTORY();
+}
+
+void MainThread::exec()
+{
+    while (!private_class_type::waitquit) {
+        tick();
+        Time::Sleep(1);
+    }
+}
+
+void MainThread::tick()
+{
+    MainThreadPrivate::ismainthread = true;
+
+    NNT_AUTOGUARD(d_ptr->mtx_funcs);
+    for (auto &e : d_ptr->funcs) {
+        e();
+    }
+    d_ptr->funcs.clear();
+}
+
+void MainThread::invoke(func_type const& fn)
+{
+    NNT_AUTOGUARD(d_ptr->mtx_funcs);
+    d_ptr->funcs.emplace_back(fn);
+}
+
+bool IsMainThread()
+{
+    return MainThreadPrivate::ismainthread;
 }
 
 ITask::ITask(func_type fn)
