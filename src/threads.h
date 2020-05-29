@@ -96,6 +96,9 @@ public:
     // 复制一个任务
     virtual task_type copy() const = 0;
 
+    // 取消任务
+    virtual void cancel() {}
+
 private:
     void _main();
     bool _running;

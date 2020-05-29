@@ -246,6 +246,9 @@ void SingleTaskDispatcher::wait()
 
 void SingleTaskDispatcher::cancel()
 {
+    for (auto &e : d_ptr->tasks) {
+        e->cancel();
+    }
     clear();
 }
 
@@ -403,6 +406,9 @@ void FixedTaskDispatcher::wait()
 
 void FixedTaskDispatcher::cancel()
 {
+    for (auto &e : d_ptr->tasks) {
+        e->cancel();
+    }
     clear();
 }
 
@@ -574,6 +580,9 @@ void QueuedTaskDispatcher::wait()
 
 void QueuedTaskDispatcher::cancel()
 {
+    for (auto &e : d_ptr->tasks) {
+        e->cancel();
+    }
     clear();
 }
 
