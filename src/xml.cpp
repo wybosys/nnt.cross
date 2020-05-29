@@ -40,6 +40,12 @@ void SetText<string>(XMLElement& cur, string const& txt)
     }
 }
 
+XMLElement* InsertNewChildElement(XMLElement& cur, char const* name)
+{
+    XMLElement* node = cur.GetDocument()->NewElement(name);
+    return cur.InsertEndChild(node) ? node : 0;
+}
+
 void toxmlobj(Property const& po, XMLElement& cur)
 {
     cur.SetAttribute("vt", (int)po.vt);
@@ -69,14 +75,14 @@ void toxmlobj(Property const& po, XMLElement& cur)
     } break;
     case Property::VT::ARRAY: {
         for (auto &e : po.array()) {
-            auto ele = cur.InsertNewChildElement("element");
+            auto ele = InsertNewChildElement(cur, "element");
             toxmlobj(*e, *ele);
         }
     } break;
     case Property::VT::MAP: {
         for (auto &e : po.map()) {
             auto nm = (string const&)e.first;
-            auto ele = cur.InsertNewChildElement("element");
+            auto ele = InsertNewChildElement(cur, "element");
             ele->SetAttribute("key", nm.c_str());
             toxmlobj(*e.second, *ele);
         }
