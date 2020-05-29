@@ -68,14 +68,20 @@ public:
             thd = make_shared<thread>(ThdProc, this);
         }
         else {
-            ThdProc(this);
+            for (auto e : tasks) {
+                owner->_run(e);
+            }
+            tasks.clear();
         }
     }
 
     static void ThdProc(SingleTaskDispatcherPrivate *self)
     {
+        // cout << "开始执行任务" << endl;
+         
         self->mtx_tasks.lock();
         auto snap = self->tasks;
+        // cout << "任务数量:" << snap.size() << endl;
         self->mtx_tasks.unlock();
 
         for (auto e : snap) {
@@ -97,6 +103,7 @@ public:
         }
 
         // 启动等待，并开始下一次迭代
+        // cout << "等待添加任务" << endl;
         self->smp_tasks.wait();
 
         if (!self->waitstop)
@@ -132,12 +139,18 @@ SingleTaskDispatcher::~SingleTaskDispatcher()
     NNT_CLASS_DESTORY();
 }
 
-bool SingleTaskDispatcher::add(task_type const& tsk)
+bool SingleTaskDispatcher::add(task_type&& tsk)
 {
     if (tsk->dispatcher())
         return false;
-    d_ptr->tasks.emplace(tsk);
-    d_ptr->smp_tasks.notify();
+    if (d_ptr->newthd) {
+        d_ptr->tasks.emplace(tsk);
+        // cout << "添加一个任务" << endl;
+        d_ptr->smp_tasks.notify();
+    }
+    else {
+        _run(tsk);
+    }
     return true;
 }
 
@@ -200,7 +213,7 @@ FixedTaskDispatcher::~FixedTaskDispatcher()
     NNT_CLASS_DESTORY();
 }
 
-bool FixedTaskDispatcher::add(task_type const&)
+bool FixedTaskDispatcher::add(task_type&&)
 {
     return true;
 }
@@ -251,7 +264,7 @@ QueuedTaskDispatcher::~QueuedTaskDispatcher()
     NNT_CLASS_DESTORY();
 }
 
-bool QueuedTaskDispatcher::add(task_type const&)
+bool QueuedTaskDispatcher::add(task_type&&)
 {
     return true;
 }

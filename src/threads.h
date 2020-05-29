@@ -106,7 +106,7 @@ public:
     typedef ITask::task_type task_type;
     
     // 添加一个任务
-    virtual bool add(task_type const&) = 0;
+    virtual bool add(task_type&&) = 0;
 
     // 开始调度
     virtual void start() = 0;
@@ -144,7 +144,7 @@ public:
     SingleTaskDispatcher();
     virtual ~SingleTaskDispatcher();
 
-    virtual bool add(task_type const&);
+    virtual bool add(task_type&&);
     virtual void start();
     virtual void stop();
     virtual bool isrunning() const;
@@ -169,7 +169,7 @@ public:
     FixedTaskDispatcher(size_t count);
     virtual ~FixedTaskDispatcher();
 
-    virtual bool add(task_type const&);
+    virtual bool add(task_type&&);
     virtual void start();
     virtual void stop();
     virtual bool isrunning() const;
@@ -194,7 +194,7 @@ public:
     QueuedTaskDispatcher(size_t min, size_t max);
     virtual ~QueuedTaskDispatcher();
 
-    virtual bool add(task_type const&);
+    virtual bool add(task_type&&);
     virtual void start();
     virtual void stop();
     virtual bool isrunning() const;

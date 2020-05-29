@@ -75,19 +75,19 @@ TEST(prop)
 TEST(task)
 {
     SingleTaskDispatcher dis;
-    atomic<int> count = 0;
+    // dis.attach();
 
-    // auto x = make_shared<Task>();
+    atomic<int> count = 0;
 
     for (int i = 0; i < 100; ++i) {
         dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
-            cout << ++count << endl;
+            // cout << ++count << endl;
             }));
     }
     dis.start();
     for (int i = 0; i < 100; ++i) {
         dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
-            cout << ++count << endl;
+            // cout << ++count << endl;
             }));
     }
     dis.wait();
