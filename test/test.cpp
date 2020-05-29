@@ -44,9 +44,10 @@ TEST(rest)
 {
     CurlHttpConnector cnt;
     cnt.url = "https://cn.bing.com/search";
+    cnt.method = HttpConnector::METHOD_POST;
     cnt.setarg("q", "abc");
     UNITTEST_CHECK_EQUAL(cnt.send(), true);
-    // cout << cnt.body().str() << endl;
+    cout << cnt.body().str() << endl;
     for (auto &e : cnt.respheaders()) {
         cout << e.first << ":" << e.second << endl;
     }

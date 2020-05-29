@@ -3,6 +3,8 @@
 #include "str.h"
 #include <curl/curl.h>
 #include <sstream>
+#include "json.h"
+#include "xml.h"
 
 CROSS_BEGIN
 
@@ -138,24 +140,56 @@ bool CurlHttpConnector::send() const {
     curl_easy_setopt(h, CURLOPT_SSL_VERIFYPEER, 0);
 
     // 处理post请求
+    curl_httppost *form = nullptr;
     if ((method & METHOD_POST) == METHOD_POST) {
         curl_easy_setopt(h, CURLOPT_POST, 1);
-        curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, "");
 
         switch (method) {
         case METHOD_POST: {
             _reqheaders[HEADER_CONTENT_TYPE] = _P("multipart/form-data");
+            curl_httppost *last = nullptr;
+            for (auto &e : _reqargs) {
+                auto val = escape(h, e.second);
+                curl_formadd(&form, &last,
+                    CURLFORM_COPYNAME, e.first.c_str(), CURLFORM_NAMELENGTH, e.first.length(),
+                    CURLFORM_COPYCONTENTS, val.c_str(), CURLFORM_CONTENTLEN, val.length(),
+                    CURLFORM_END);
+            }
+            curl_easy_setopt(h, CURLOPT_HTTPPOST, form);
         } break;
         case METHOD_POST_URLENCODED: {
             _reqheaders[HEADER_CONTENT_TYPE] = _P("application/x-www-form-urlencoded; charset=utf-8;");
+            auto val = build_query(h, _reqargs);
+            curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
+            curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
         } break;
         case METHOD_POST_JSON: {
             _reqheaders[HEADER_CONTENT_TYPE] = _P("application/json; charset=utf-8;");
+            auto p = Combine(_reqargs);
+            auto val = json_encode(*tojsonobj(*p));
+            curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
+            curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
         } break;
         case METHOD_POST_XML: {
             _reqheaders[HEADER_CONTENT_TYPE] = _P("application/xml; charset=utf-8;");
+            auto p = Combine(_reqargs);
+            auto val = xml_encode(*toxmlobj(*p));
+            curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
+            curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
         } break;
         }
+    }
+
+    // 设置请求头
+    curl_slist *headers = nullptr;
+    if (!_reqheaders.empty()) {
+        for (auto &e : _reqheaders) {
+            ostringstream oss;
+            oss << e.first << ": " << e.second;
+            auto val = oss.str();
+            headers = curl_slist_append(headers, val.c_str());
+        }
+        curl_easy_setopt(h, CURLOPT_HTTPHEADER, headers);
     }
 
     // 跳过https证书验证
@@ -184,6 +218,12 @@ bool CurlHttpConnector::send() const {
         d_ptr->errcode = st;
         d_ptr->errmsg = "curl_easy_perform 执行失败";
     }
+
+    // 清理
+    if (form)
+        curl_formfree(form);
+    if (headers)
+        curl_slist_free_all(headers);
 
     curl_easy_cleanup(h);
     return suc;

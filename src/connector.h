@@ -30,6 +30,9 @@ public:
     static string USERAGENT;
 
     typedef Progress<unsigned long long> progress_type;
+    typedef shared_ptr<Property> arg_type;
+    typedef map<string, arg_type> args_type;
+    typedef map<string, string> files_type;
 
 protected:
 
@@ -55,10 +58,6 @@ public:
     };
 
     unsigned int method = METHOD_GET;
-
-    typedef shared_ptr<Property> arg_type;
-    typedef map<string, arg_type> args_type;
-    typedef map<string, string> files_type;
 
     const string HEADER_CONTENT_TYPE = "Content-Type";
 
@@ -137,6 +136,9 @@ class NNT_API WebSocketConnector : public Connector
 {
 
 };
+
+// 转换args到property，之后既可以使用property的序列化方法
+extern Connector::arg_type Combine(Connector::args_type const&);
 
 CROSS_END
 

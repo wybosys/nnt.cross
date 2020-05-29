@@ -80,4 +80,16 @@ unsigned short HttpConnector::respcode() const {
     return 404;
 }
 
+Connector::arg_type Combine(Connector::args_type const& args) {
+    auto r = make_shared<Property>();
+    r->map();
+    for (auto &e : args) {
+        auto &v = e.second;
+        if (v->name.empty())
+            v->name = e.first;
+        r->map()[e.first] = v;
+    }
+    return r;
+}
+
 CROSS_END
