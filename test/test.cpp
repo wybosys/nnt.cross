@@ -9,6 +9,7 @@
 #include <xml.h>
 #include <url.h>
 #include <threads.h>
+#include <connector_curl.h>
 
 USE_CROSS;
 
@@ -37,6 +38,18 @@ TEST(url)
     string str = "http://www.baidu.com/abc/cde?abc=123&cde=123";
     Url u(str);
     UNITTEST_CHECK_EQUAL(u.toString(), str);
+}
+
+TEST(rest)
+{
+    CurlHttpConnector cnt;
+    cnt.url = "https://cn.bing.com/search";
+    cnt.setarg("q", "abc");
+    UNITTEST_CHECK_EQUAL(cnt.send(), true);
+    // cout << cnt.body().str() << endl;
+    for (auto &e : cnt.respheaders()) {
+        cout << e.first << ":" << e.second << endl;
+    }
 }
 
 TEST(prop)

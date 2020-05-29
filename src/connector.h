@@ -12,7 +12,7 @@ class NNT_API Connector : public Object
 public:
 
     // 关闭连接
-    virtual void close();
+    virtual void close() {}
 
     // 访问地址
     string url;
@@ -29,16 +29,15 @@ public:
     // ua
     static string USERAGENT;
 
-    typedef Range<size_t> range_type;
-    typedef Progress<size_t> progress_type;
+    typedef Progress<unsigned long long> progress_type;
 
 protected:
 
-    virtual void on_connected() {} // 连接成功
-    virtual void on_progress(range_type const&) {} // 传输进度
-    virtual void on_bytes(range_type const&) {} // 收到完整数据
-    virtual void on_error(error const&) {} // 遇到错误
-    virtual void on_disconnect() {} // 断开连接
+    virtual void on_connected() const {} // 连接成功
+    virtual void on_progress(progress_type const&) const {} // 传输进度
+    virtual void on_bytes() const {} // 收到完整数据
+    virtual void on_error(error const&) const {} // 遇到错误
+    virtual void on_disconnect() const {} // 断开连接
 
 };
 
@@ -57,9 +56,11 @@ public:
 
     unsigned int method = METHOD_GET;
 
-    typedef Property arg_type;
+    typedef shared_ptr<Property> arg_type;
     typedef map<string, arg_type> args_type;
     typedef map<string, string> files_type;
+
+    const string HEADER_CONTENT_TYPE = "Content-Type";
 
     // 是否完整获取返回数据
     bool full = false;
@@ -71,8 +72,14 @@ public:
     unsigned int ctimeout = CTIMEOUT; // connection time out
     unsigned int timeout = TIMEOUT; // timeout
 
-        // 设置参数
+    // 设置参数
+    virtual HttpConnector& setarg(string const&, arg_type const&);
     virtual HttpConnector& setargs(args_type const&);
+
+    template <typename T>
+    inline HttpConnector& setarg(string const& key, T const& v) {
+        return setarg(key, make_shared<Property>(v));
+    }
 
     // 获得参数值
     virtual arg_type const& getarg(string const&);
@@ -81,7 +88,13 @@ public:
     virtual bool hasarg(string const&);
 
     // 设置请求头
+    virtual HttpConnector& setheader(string const&, arg_type const&);
     virtual HttpConnector& setheaders(args_type const&);
+
+    template <typename T>
+    inline HttpConnector& setheader(string const& key, T const& v) {
+        return setheader(key, make_shared<Property>(v));
+    }
 
     // 读取请求头
     virtual arg_type const& getheader(string const&);
@@ -93,22 +106,31 @@ public:
     virtual bool uploads(files_type const&);
 
     // 执行请求
-    virtual string const& send() const;
+    virtual bool send() const;
 
     // 如果请求错误，保存错误信息
-    virtual int errcode();
-    virtual string const& errmsg();
+    virtual int errcode() const;
+    virtual string const& errmsg() const;
 
     // 返回的消息主体
-    virtual string const& body();
+    virtual stringbuf const& body() const;
 
     // 返回的头
-    virtual args_type const& respheaders();
+    virtual args_type const& respheaders() const;
+
+    // 返回的错误码
+    virtual unsigned short respcode() const;
 
 protected:
 
+    // 分开上传下载进度回调，默认on_progress为下载进度回调
+    virtual void on_progress_upload(progress_type const&) const {}
+    virtual void on_progress_download(progress_type const& range) const {
+        on_progress(range);
+    }
+
     mutable args_type _reqheaders;
-    args_type _rspheaders, _reqargs;
+    args_type _reqargs;
 };
 
 class NNT_API WebSocketConnector : public Connector

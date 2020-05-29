@@ -207,6 +207,11 @@ static basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Trait
     return stm << *v;
 }
 
+template <typename V>
+inline shared_ptr<Property> _P(V const& v) {
+    return make_shared<Property>(v);
+}
+
 CROSS_END
 
 #endif

@@ -16,6 +16,15 @@ public:
     CurlHttpConnector();
     virtual ~CurlHttpConnector();
 
+    virtual void close();
+    virtual bool send() const;
+
+    virtual int errcode() const;
+    virtual string const& errmsg() const;
+    virtual stringbuf const& body() const;
+    virtual args_type const& respheaders() const;
+    virtual unsigned short respcode() const;
+
 };
 
 CROSS_END

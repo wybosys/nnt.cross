@@ -1,11 +1,17 @@
 #include "cross.h"
 #include "connector.h"
+#include <sstream>
 
 CROSS_BEGIN
 
 unsigned int Connector::CTIMEOUT = 30;
 unsigned int Connector::TIMEOUT = 30;
 string Connector::USERAGENT = "Mozilla/5.0 (Linux) AppleWebKit/600.1.4 (KHTML, like Gecko) NetType/WIFI";
+
+HttpConnector& HttpConnector::setarg(string const& key, arg_type const& arg) {
+    _reqargs[key] = arg;
+    return *this;
+}
 
 HttpConnector& HttpConnector::setargs(args_type const& args) {
     for (auto& e : args) {
@@ -22,6 +28,11 @@ HttpConnector::arg_type const& HttpConnector::getarg(string const& key) {
 bool HttpConnector::hasarg(string const& key) {
     auto fnd = _reqargs.find(key);
     return fnd != _reqargs.end();
+}
+
+HttpConnector& HttpConnector::setheader(string const& key, arg_type const& header) {
+    _reqheaders[key] = header;
+    return *this;
 }
 
 HttpConnector& HttpConnector::setheaders(args_type const& headers) {
@@ -45,24 +56,28 @@ bool HttpConnector::uploads(files_type const& files) {
     return false;
 }
 
-string const& HttpConnector::send() const {
-    return Nil<string>();
+bool HttpConnector::send() const {
+    return false;
 }
 
-int HttpConnector::errcode() {
+int HttpConnector::errcode() const {
     return 0;
 }
 
-string const& HttpConnector::errmsg() {
+string const& HttpConnector::errmsg() const {
     return Nil<string>();
 }
 
-string const& HttpConnector::body() {
-    return Nil<string>();
+stringbuf const& HttpConnector::body() const {
+    return *Nil<ostringstream>().rdbuf();
 }
 
-HttpConnector::args_type const& HttpConnector::respheaders() {
-    return _rspheaders;
+HttpConnector::args_type const& HttpConnector::respheaders() const {
+    return Nil<args_type>();
+}
+
+unsigned short HttpConnector::respcode() const {
+    return 404;
 }
 
 CROSS_END
