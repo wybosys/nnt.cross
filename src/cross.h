@@ -13,6 +13,18 @@
 
 CROSS_BEGIN
 
+template <typename V>
+struct Range
+{
+    V from, to;
+};
+
+template <typename V>
+struct Progress : Range<V>
+{
+    V value;
+};
+
 CROSS_END
 
 #endif

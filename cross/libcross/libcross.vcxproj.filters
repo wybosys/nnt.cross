@@ -96,6 +96,15 @@
     <ClInclude Include="..\..\src\datetime.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\connector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\code.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\connector_curl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\fs.cpp">
@@ -138,6 +147,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\datetime.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\connector.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\connector_curl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
