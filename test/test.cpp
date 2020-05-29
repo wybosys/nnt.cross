@@ -80,13 +80,13 @@ TEST(task)
     // auto x = make_shared<Task>();
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_ref<Task>([&](ITask*) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
             cout << ++count << endl;
             }));
     }
     dis.start();
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_ref<Task>([&](ITask*) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
             cout << ++count << endl;
             }));
     }

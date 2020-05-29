@@ -298,6 +298,13 @@ static shared_ref<T> make_ref(Args&&... args)
     return shared_ref<T>::_assign(new T(forward<Args>(args)...));
 };
 
+template <typename T, typename TI, typename ...Args>
+static shared_ptr<TI> make_dynamic_shared(Args&&... args)
+{
+    shared_ptr<TI> r(new T(forward<Args>(args)...));
+    return r;
+}
+
 NNT_END
 
 #endif

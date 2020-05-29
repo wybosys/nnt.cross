@@ -11,14 +11,14 @@ extern NNT_API void MainThreadTick();
 // 用于做主线程大循环
 extern NNT_API void MainThreadExec();
 
-class ITask : public RefObject
+class ITask : public IObject
 {
     NNT_NOCOPY(ITask);
 
 public:
 
     typedef function<void(ITask*)> func_type;
-    typedef shared_ref<ITask> task_type;
+    typedef shared_ptr<ITask> task_type;
 
     ITask(func_type fn = nullptr);
 
@@ -51,7 +51,7 @@ public:
     TaskImpl(func_type fn = nullptr) : ITask(fn) {}
     
     virtual task_type copy() const {
-        auto r = make_ref<TImpl>();
+        auto r = make_dynamic_shared<TImpl, ITask>();
         r->proc = proc;
         return r;
     }
