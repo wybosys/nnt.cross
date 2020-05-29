@@ -7,7 +7,7 @@ CROSS_BEGIN
 string xml_encode(XmlObject const& xo) 
 {
     tinyxml2::XMLPrinter pr;
-    xo.Print(&pr);
+    const_cast<XmlObject&>(xo).Print(&pr);
     return string(pr.CStr(), pr.CStrSize());
 }
 
