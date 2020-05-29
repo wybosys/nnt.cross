@@ -74,20 +74,25 @@ TEST(prop)
 
 TEST(task)
 {
-    SingleTaskDispatcher dis;
+    // 测试单线程任务池
+    // SingleTaskDispatcher dis;
+
+    // 测试定长线程任务池
+    FixedTaskDispatcher dis;
+
     // dis.attach();
 
     atomic<int> count = 0;
 
     for (int i = 0; i < 100; ++i) {
         dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
-            // cout << ++count << endl;
+            cout << ++count << endl;
             }));
     }
     dis.start();
     for (int i = 0; i < 100; ++i) {
         dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
-            // cout << ++count << endl;
+            cout << ++count << endl;
             }));
     }
     dis.wait();

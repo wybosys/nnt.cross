@@ -165,7 +165,8 @@ class FixedTaskDispatcher : public ITaskDispatcher
 
 public:
 
-    // \@count 使用多少个线程执行任务
+    // \@count 使用多少个线程执行任务， 默认为cpu核心线程数
+    FixedTaskDispatcher();
     FixedTaskDispatcher(size_t count);
     virtual ~FixedTaskDispatcher();
 
@@ -188,9 +189,10 @@ class QueuedTaskDispatcher : public ITaskDispatcher
 public:
 
     /*
-    \@min 最小多少个线程
-    \@max 超过max线程后，其他任务排队等待执行
+    \@min 最小多少个线程，默认cpu核心线程数
+    \@max 超过max线程后，其他任务排队等待执行，默认为2倍cpu核心线程数
     */
+    QueuedTaskDispatcher();
     QueuedTaskDispatcher(size_t min, size_t max);
     virtual ~QueuedTaskDispatcher();
 
