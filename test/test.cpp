@@ -10,9 +10,9 @@
 #include <url.h>
 #include <threads.h>
 
-TEST (fs) {
-    USE_CROSS;
+USE_CROSS;
 
+TEST (fs) {
     string dir = "xxx/abc/cde/efg";
     mkdirs(dir);
     rmtree("xxx");
@@ -34,8 +34,6 @@ TEST (fs) {
 
 TEST(url)
 {
-    USE_CROSS;
-
     string str = "http://www.baidu.com/abc/cde?abc=123&cde=123";
     Url u(str);
     UNITTEST_CHECK_EQUAL(u.toString(), str);
@@ -43,8 +41,6 @@ TEST(url)
 
 TEST(prop)
 {
-    USE_CROSS;
-
     string str = "{\"b\":false,\"nil\":null,\"s\":\"string\"}";
     auto v = json_decode(str);    
     auto p = toproperty(*v);
@@ -76,9 +72,27 @@ TEST(prop)
     UNITTEST_CHECK_EQUAL(str, astr);
 }
 
-int main() {
-    USE_CROSS;
+TEST(task)
+{
+    SingleTaskDispatcher dis;
+    atomic<int> count;
 
+    // auto x = make_shared<Task>();
+
+    for (int i = 0; i < 100; ++i) {
+        dis.add(make_ref<Task>([&](ITask*) {
+            cout << ++count << endl;
+            }));
+    }
+    dis.start();
+    for (int i = 0; i < 100; ++i) {
+        dis.add(make_ref<Task>([&](ITask*) {
+            cout << ++count << endl;
+            }));
+    }
+}
+
+int main() {
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);
     runner.RunTestsIf(::UnitTest::Test::GetTestList(), nullptr, ::UnitTest::True(), 0);

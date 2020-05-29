@@ -128,6 +128,7 @@ public:                         \
 #include <string>
 #include <iostream>
 #include <vector>
+#include <atomic>
 
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
 #include <xstring>
@@ -176,6 +177,126 @@ public:
 };
 
 typedef Object IObject;
+
+class RefObject : public IObject {
+public:
+
+    virtual void grab() const {
+        ++_referencedCount;
+    }
+
+    virtual bool drop() const {
+        if (--_referencedCount == 0) {
+            delete this;
+            return true;
+        }
+        return false;
+    }
+
+private:
+    mutable atomic<size_t> _referencedCount = 1;
+};
+
+template <typename T>
+class shared_ref
+{
+public:
+
+    shared_ref()
+        : _ptr(new T())
+    {
+    }
+
+    shared_ref(shared_ref<T> const& r)
+        : _ptr(const_cast<T*>(r.get()))
+    {
+        if (_ptr)
+            _ptr->grab();
+    }
+
+    template <typename R>
+    shared_ref(shared_ref<R> const& r) 
+        : _ptr(dynamic_cast<T*>(const_cast<R*>(r.get())))
+    {
+        if (_ptr)
+            _ptr->grab();
+    }
+
+    ~shared_ref() {
+        if (_ptr) {
+            _ptr->drop();
+            _ptr = nullptr;
+        }
+    }
+
+    shared_ref<T>& operator = (T const* r) {
+        if (_ptr == r)
+            return *this;
+        if (_ptr)
+            _ptr->drop();
+        _ptr = const_cast<T*>(r);
+        if (_ptr)
+            _ptr->grab();
+        return *this;
+    }
+
+    template <typename R>
+    inline operator R* () {
+        return dynamic_cast<R*>(_ptr);
+    }
+
+    template <typename R>
+    inline operator R const* () const {
+        return dynamic_cast<R const*>(_ptr);
+    }
+    
+    inline T& operator * () {
+        return *_ptr;
+    }
+
+    inline T const& operator *() const {
+        return *_ptr;
+    }
+
+    inline T* operator -> () {
+        return _ptr;
+    }
+
+    inline T const* operator -> () const {
+        return _ptr;
+    }
+
+    inline bool operator < (shared_ref<T> const& r) const {
+        return _ptr < r._ptr;
+    }
+
+    inline T* get() {
+        return _ptr;
+    }
+
+    inline T const* get() const {
+        return _ptr;
+    }
+
+private:
+    T* _ptr;
+
+    shared_ref(nullptr_t) :_ptr(nullptr) {}
+
+    static shared_ref<T> _assign(T* ptr) {
+        auto r = shared_ref<T>(nullptr);
+        r._ptr = ptr;
+        return r;
+    }
+
+    template <typename T, typename ...Args> friend shared_ref<T> make_ref(Args&&...);
+};
+
+template <typename T, typename ...Args>
+static shared_ref<T> make_ref(Args&&... args)
+{
+    return shared_ref<T>::_assign(new T(forward<Args>(args)...));
+};
 
 NNT_END
 
