@@ -75,7 +75,7 @@ TEST(prop)
 TEST(task)
 {
     SingleTaskDispatcher dis;
-    atomic<int> count;
+    atomic<int> count = 0;
 
     // auto x = make_shared<Task>();
 
@@ -90,6 +90,7 @@ TEST(task)
             cout << ++count << endl;
             }));
     }
+    dis.wait();
 }
 
 int main() {

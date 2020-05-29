@@ -2,6 +2,8 @@
 #define __NNTCROSS_THREADS_H_INCLUDED
 
 #include <functional>
+#include <thread>
+#include <mutex>
 
 CROSS_BEGIN
 
@@ -11,6 +13,40 @@ extern NNT_API void MainThreadTick();
 // 用于做主线程大循环
 extern NNT_API void MainThreadExec();
 
+// 信号量
+class semaphore
+{
+public:
+
+    void notify() {
+        lock_guard<decltype(_mtx)> lck(_mtx);
+        ++_count;
+        _cond.notify_one();
+    }
+
+    void wait() {
+        unique_lock<decltype(_mtx)> lck(_mtx);
+        while (!_count)
+            _cond.wait(lck);
+        --_count;
+    }
+
+    bool try_wait() {
+        lock_guard<decltype(_mtx)> lck(_mtx);
+        if (_count) {
+            --_count;
+            return true;
+        }
+        return false;
+    }
+
+private:
+    mutex _mtx;
+    condition_variable _cond;
+    size_t _count = 0;
+};
+
+// 任务接口
 class ITask : public IObject
 {
     NNT_NOCOPY(ITask);
@@ -84,6 +120,12 @@ public:
     // 清空任务
     virtual void clear() = 0;
 
+    // 等待所有任务运行完成
+    virtual void wait() = 0;
+
+    // 取消所有任务
+    virtual void cancel() = 0;
+
 protected:
 
     // 执行一次任务
@@ -107,6 +149,8 @@ public:
     virtual void stop();
     virtual bool isrunning() const;
     virtual void clear();
+    virtual void wait();
+    virtual void cancel();
 
     // 连接到当前运行线程
     bool attach();
@@ -130,6 +174,8 @@ public:
     virtual void stop();
     virtual bool isrunning() const;
     virtual void clear();
+    virtual void wait();
+    virtual void cancel();
 };
 
 NNT_CLASS_PREPARE(QueuedTaskDispatcher);
@@ -153,6 +199,8 @@ public:
     virtual void stop();
     virtual bool isrunning() const;
     virtual void clear();
+    virtual void wait();
+    virtual void cancel();
 };
 
 CROSS_END

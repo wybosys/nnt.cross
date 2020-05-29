@@ -1,8 +1,6 @@
 #include "cross.h"
 #include "threads.h"
 #include "datetime.h"
-#include <thread>
-#include <mutex>
 #include <list>
 #include <set>
 
@@ -50,11 +48,10 @@ public:
 
     SingleTaskDispatcher *owner;
     bool newthd = true; // 是否需要开一个新线程承载
-    bool running = false, waitstop = false;
+    bool running = false, waitstop = false, waitwait = false;
     shared_ptr<thread> thd;
-
-    condition_variable cond;
-    mutex mtx_tasks, mtx_cond;
+    semaphore smp_tasks;
+    mutex mtx_tasks;
 
     set<ITask::task_type> tasks;
 
@@ -64,9 +61,11 @@ public:
             return;
         running = true;
 
+        waitwait = false;
+        waitstop = false;
+
         if (newthd) {
             thd = make_shared<thread>(ThdProc, this);
-            thd->detach();
         }
         else {
             ThdProc(this);
@@ -88,11 +87,17 @@ public:
         for (auto e : snap) {
             self->tasks.erase(e);
         }
+        const size_t left = self->tasks.size();
+        snap.clear();
         self->mtx_tasks.unlock();
+            
+        if (self->waitwait && left == 0) {
+            // 所有任务已经运行结束
+            return;
+        }
 
         // 启动等待，并开始下一次迭代
-        unique_lock<mutex> lck(self->mtx_cond);
-        self->cond.wait(lck);
+        self->smp_tasks.wait();
 
         if (!self->waitstop)
             ThdProc(self);
@@ -104,9 +109,9 @@ public:
             return;
 
         waitstop = true;
-        cond.notify_all();
+        smp_tasks.notify();
 
-        if (thd) {
+        if (thd && thd->joinable()) {
             thd->join();
             thd = nullptr;
         }
@@ -132,7 +137,7 @@ bool SingleTaskDispatcher::add(task_type const& tsk)
     if (tsk->dispatcher())
         return false;
     d_ptr->tasks.emplace(tsk);
-    d_ptr->cond.notify_all();
+    d_ptr->smp_tasks.notify();
     return true;
 }
 
@@ -144,6 +149,20 @@ void SingleTaskDispatcher::start()
 void SingleTaskDispatcher::stop()
 {
     d_ptr->stop();
+}
+
+void SingleTaskDispatcher::wait()
+{
+    d_ptr->waitwait = true;
+    if (d_ptr->thd && d_ptr->thd->joinable()) {
+        d_ptr->thd->join();
+        d_ptr->thd = nullptr;
+    }
+}
+
+void SingleTaskDispatcher::cancel()
+{
+    clear();
 }
 
 bool SingleTaskDispatcher::isrunning() const
@@ -196,6 +215,16 @@ void FixedTaskDispatcher::stop()
 
 }
 
+void FixedTaskDispatcher::wait()
+{
+
+}
+
+void FixedTaskDispatcher::cancel()
+{
+
+}
+
 bool FixedTaskDispatcher::isrunning() const
 {
     return false;
@@ -233,6 +262,16 @@ void QueuedTaskDispatcher::start()
 }
 
 void QueuedTaskDispatcher::stop()
+{
+
+}
+
+void QueuedTaskDispatcher::wait() 
+{
+
+}
+
+void QueuedTaskDispatcher::cancel()
 {
 
 }
