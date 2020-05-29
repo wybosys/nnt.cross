@@ -61,6 +61,8 @@ public:
         return lbuf;
     }
     
+    CURL *h = nullptr;
+
     int errcode;
     string errmsg;
     ostringstream buffer;
@@ -105,6 +107,12 @@ string build_query(CURL* h, HttpConnector::args_type const& args)
 
 void CurlHttpConnector::close()
 {
+    if (d_ptr->h) {
+        // 释放正在进行的连接
+        curl_easy_cleanup(d_ptr->h);
+        d_ptr->h = nullptr;
+    }
+
     d_ptr->clear();
 }
 
@@ -112,7 +120,8 @@ bool CurlHttpConnector::send() const {
     NNT_THIS->close();
 
     string url = this->url;
-    auto h = curl_easy_init();
+    d_ptr->h = curl_easy_init();
+    auto h = d_ptr->h;
 
     // 处理get请求
     if (method == METHOD_GET) {
@@ -206,7 +215,7 @@ bool CurlHttpConnector::send() const {
     curl_easy_setopt(h, CURLOPT_HEADERDATA, d_ptr);
 
     // 发起请求
-    const int st = curl_easy_perform(h);
+    auto st = curl_easy_perform(h);
     bool suc = false;
     if (st == CURLE_OK) {
         curl_easy_getinfo(h, CURLINFO_RESPONSE_CODE, &d_ptr->respcode);
@@ -216,7 +225,8 @@ bool CurlHttpConnector::send() const {
     }
     else {
         d_ptr->errcode = st;
-        d_ptr->errmsg = "curl_easy_perform 执行失败";
+        char const* msg = curl_easy_strerror(st);
+        d_ptr->errmsg = msg;
     }
 
     // 清理
@@ -224,8 +234,9 @@ bool CurlHttpConnector::send() const {
         curl_formfree(form);
     if (headers)
         curl_slist_free_all(headers);
-
     curl_easy_cleanup(h);
+    d_ptr->h = nullptr;
+
     return suc;
 }
 
