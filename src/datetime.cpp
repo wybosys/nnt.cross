@@ -1,5 +1,5 @@
 #include "cross.h"
-#include "time.h"
+#include "datetime.h"
 #include <time.h>
 
 #ifdef NNT_WINDOWS

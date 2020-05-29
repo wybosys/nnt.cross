@@ -205,7 +205,7 @@ bool Property::toBool() const {
     return toNumber() != 0;
 }
 
-string const &Property::toString() const {
+string Property::toString() const {
     if (_var->vt == Property::variant::VT::STRING)
         return _var->toString();
     ostringstream oss;

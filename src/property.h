@@ -123,7 +123,7 @@ public:
 
     bool toBool() const;
 
-    string const &toString() const;
+    string toString() const;
 
     operator integer() const;
 

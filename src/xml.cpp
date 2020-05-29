@@ -43,7 +43,7 @@ void toxmlobj(Property const& po, tinyxml2::XMLElement& cur)
         CUR_SET_VALUE(toBool);
     } break;
     case Property::VT::STRING: {
-        auto &v = po.toString();
+        auto v = po.toString();
         cur.SetText(v.c_str());
     } break;
     case Property::VT::ARRAY: {

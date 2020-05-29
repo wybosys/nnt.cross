@@ -39,9 +39,6 @@
     <ClInclude Include="..\..\src\logger.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\time.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\com++.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -96,6 +93,9 @@
     <ClInclude Include="..\..\src\threads.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\datetime.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\fs.cpp">
@@ -108,9 +108,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\logger.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\time.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\url.cpp">
@@ -138,6 +135,9 @@
       <Filter>tinyxml2</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\threads.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\datetime.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

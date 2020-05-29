@@ -170,6 +170,13 @@ static T const &Nil()
     return __s;
 };
 
+class Object {
+public:
+    virtual ~Object() = default;
+};
+
+typedef Object IObject;
+
 NNT_END
 
 #endif

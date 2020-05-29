@@ -173,7 +173,7 @@
     <ClInclude Include="..\..\src\property.h" />
     <ClInclude Include="..\..\src\str.h" />
     <ClInclude Include="..\..\src\threads.h" />
-    <ClInclude Include="..\..\src\time.h" />
+    <ClInclude Include="..\..\src\datetime.h" />
     <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\..\src\url.h" />
     <ClInclude Include="..\..\src\xml.h" />
@@ -192,7 +192,7 @@
     <ClCompile Include="..\..\src\property.cpp" />
     <ClCompile Include="..\..\src\str.cpp" />
     <ClCompile Include="..\..\src\threads.cpp" />
-    <ClCompile Include="..\..\src\time.cpp" />
+    <ClCompile Include="..\..\src\datetime.cpp" />
     <ClCompile Include="..\..\src\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\src\url.cpp" />
     <ClCompile Include="..\..\src\xml.cpp" />
