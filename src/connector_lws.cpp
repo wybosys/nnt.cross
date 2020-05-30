@@ -7,7 +7,7 @@
 #include <sstream>
 #include <thread>
 
-#include <libwebsockets/libwebsockets.h>
+#include <libwebsockets.h>
 
 CROSS_BEGIN
 
