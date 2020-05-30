@@ -30,6 +30,7 @@ public:
     static string USERAGENT;
 
     typedef Progress<unsigned long long> progress_type;
+    typedef Memory<stringbuf const&, size_t> memory_type;
     typedef shared_ptr<Property> arg_type;
     typedef map<string, arg_type> args_type;
     typedef map<string, string> files_type;
@@ -38,7 +39,8 @@ protected:
 
     virtual void on_connected() const {} // 连接成功
     virtual void on_progress(progress_type const&) const {} // 传输进度
-    virtual void on_bytes() const {} // 收到完整数据
+    virtual void on_bytes(memory_type const&) const {} // 收到部分数据
+    virtual void on_completed() const {} // 完成数据传输
     virtual void on_error(error const&) const {} // 遇到错误
     virtual void on_disconnect() const {} // 断开连接
 
@@ -101,24 +103,21 @@ public:
     // 是否存在请求头
     virtual bool hasheader(string const&);
 
-    // 上传文件
-    virtual bool uploads(files_type const&);
-
     // 执行请求
-    virtual bool send() const;
+    virtual bool send() const = 0;
 
     // 如果请求错误，保存错误信息
-    virtual int errcode() const;
-    virtual string const& errmsg() const;
+    virtual int errcode() const = 0;
+    virtual string const& errmsg() const = 0;
 
     // 返回的消息主体
-    virtual stringbuf const& body() const;
+    virtual stringbuf const& body() const = 0;
 
     // 返回的头
-    virtual args_type const& respheaders() const;
+    virtual args_type const& respheaders() const = 0;
 
     // 返回的错误码
-    virtual unsigned short respcode() const;
+    virtual unsigned short respcode() const = 0;
 
 protected:
 
@@ -132,9 +131,18 @@ protected:
     args_type _reqargs;
 };
 
+// websocket连接器
 class NNT_API WebSocketConnector : public Connector
 {
+public:
 
+    // 连接服务器
+
+protected:
+
+    // 正在连接
+    virtual void on_connecting() const {}
+    virtual void on_reconnecting() const {}
 };
 
 // 转换args到property，之后既可以使用property的序列化方法

@@ -52,34 +52,6 @@ bool HttpConnector::hasheader(string const& key) {
     return fnd != _reqheaders.end();
 }
 
-bool HttpConnector::uploads(files_type const& files) {
-    return false;
-}
-
-bool HttpConnector::send() const {
-    return false;
-}
-
-int HttpConnector::errcode() const {
-    return 0;
-}
-
-string const& HttpConnector::errmsg() const {
-    return Nil<string>();
-}
-
-stringbuf const& HttpConnector::body() const {
-    return *Nil<ostringstream>().rdbuf();
-}
-
-HttpConnector::args_type const& HttpConnector::respheaders() const {
-    return Nil<args_type>();
-}
-
-unsigned short HttpConnector::respcode() const {
-    return 404;
-}
-
 Connector::arg_type Combine(Connector::args_type const& args) {
     auto r = make_shared<Property>();
     r->map();

@@ -16,13 +16,21 @@ CROSS_BEGIN
 template <typename V>
 struct Range
 {
-    V from, to;
+    V from, size;
 };
 
 template <typename V>
 struct Progress : Range<V>
 {
     V value;
+};
+
+template <typename MemT, typename V>
+struct Memory : Range <V>
+{
+    Memory() {}
+    Memory(MemT v) : buffer(v) {}
+    MemT buffer;
 };
 
 CROSS_END

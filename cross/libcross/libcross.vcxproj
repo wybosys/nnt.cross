@@ -159,6 +159,7 @@
     <ClInclude Include="..\..\src\com++.h" />
     <ClInclude Include="..\..\src\connector.h" />
     <ClInclude Include="..\..\src\connector_curl.h" />
+    <ClInclude Include="..\..\src\connector_lws.h" />
     <ClInclude Include="..\..\src\cross.h" />
     <ClInclude Include="..\..\src\fs.h" />
     <ClInclude Include="..\..\src\json.h" />
@@ -186,6 +187,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\connector.cpp" />
     <ClCompile Include="..\..\src\connector_curl.cpp" />
+    <ClCompile Include="..\..\src\connector_lws.cpp" />
     <ClCompile Include="..\..\src\cross.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

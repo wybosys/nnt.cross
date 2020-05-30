@@ -78,8 +78,14 @@ void MainThread::tick()
 
 void MainThread::invoke(func_type const& fn)
 {
-    NNT_AUTOGUARD(d_ptr->mtx_funcs);
-    d_ptr->funcs.emplace_back(fn);
+    if (MainThreadPrivate::ismainthread) {
+        // 如果已经在主线程，则直接运行
+        fn();
+    }
+    else {
+        NNT_AUTOGUARD(d_ptr->mtx_funcs);
+        d_ptr->funcs.emplace_back(fn);
+    }
 }
 
 bool IsMainThread()
@@ -90,7 +96,7 @@ bool IsMainThread()
 ITask::ITask(func_type fn)
     :proc(move(fn))
 {
-
+    // pass
 }
 
 void ITask::_main()

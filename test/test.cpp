@@ -1,6 +1,7 @@
 ﻿#include <UnitTest++/UnitTest++.h>
 #include <UnitTest++/TestReporterStdout.h>
 
+#include <sstream>
 #include <cross.h>
 #include <fs.h>
 #include <datetime.h>
@@ -12,6 +13,17 @@
 #include <connector_curl.h>
 
 USE_CROSS;
+
+TEST(test)
+{
+    stringstream ss;
+    ss << "abc";
+    UNITTEST_CHECK_EQUAL(ss.str().length(), 3);
+    string val;
+    ss >> val;
+    UNITTEST_CHECK_EQUAL(val, "abc");
+    UNITTEST_CHECK_EQUAL(ss.str().length(), 3);
+}
 
 TEST (fs) {
     string dir = "xxx/abc/cde/efg";

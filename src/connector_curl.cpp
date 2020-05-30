@@ -17,6 +17,7 @@ public:
 
     void clear()
     {
+        buffersz = 0;
         buffer.clear();
         rspheaders.clear();
     }
@@ -26,6 +27,12 @@ public:
     {
         size_t lbuf = size * count;
         self->buffer.write(buf, lbuf);
+
+        CurlHttpConnector::memory_type mem(*self->buffer.rdbuf());
+        mem.from = self->buffersz;
+        mem.size = lbuf;
+        self->owner->on_bytes(mem);
+
         return lbuf;
     }
 
@@ -34,11 +41,11 @@ public:
         HttpConnector::progress_type down, up;
 
         down.from = 0;
-        down.to = dltotal;
+        down.size = dltotal;
         down.value = dlnow;
 
         up.from = 0;
-        up.to = ultotal;
+        up.size = ultotal;
         up.value = ulnow;
 
         self->owner->on_progress_download(down);
@@ -65,9 +72,11 @@ public:
 
     int errcode;
     string errmsg;
-    ostringstream buffer;
-    HttpConnector::args_type rspheaders;
 
+    ostringstream buffer;
+    size_t buffersz;
+
+    HttpConnector::args_type rspheaders;
     unsigned short respcode;
 };
 
@@ -220,13 +229,14 @@ bool CurlHttpConnector::send() const {
     if (st == CURLE_OK) {
         curl_easy_getinfo(h, CURLINFO_RESPONSE_CODE, &d_ptr->respcode);
         // 全部数据读取完成回调
-        on_bytes();
+        on_completed();
         suc = true;
     }
     else {
         d_ptr->errcode = st;
         char const* msg = curl_easy_strerror(st);
         d_ptr->errmsg = msg;
+        on_error(error(Code::FAILED, msg));
     }
 
     // 清理
