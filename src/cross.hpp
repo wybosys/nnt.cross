@@ -1,7 +1,7 @@
 #ifndef __NNTCROSS_H_INCLUDED
 #define __NNTCROSS_H_INCLUDED
 
-#include "macro.h"
+#include "macro.hpp"
 
 #ifndef CROSS_NS
 #define CROSS_NS cross

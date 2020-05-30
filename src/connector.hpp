@@ -1,8 +1,8 @@
 #ifndef __NNTCROSS_CONNECTOR_H_INCLUDED
 #define __NNTCROSS_CONNECTOR_H_INCLUDED
 
-#include "code.h"
-#include "property.h"
+#include "code.hpp"
+#include "property.hpp"
 #include <map>
 
 CROSS_BEGIN

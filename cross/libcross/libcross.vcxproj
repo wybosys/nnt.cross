@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NNT_STATIC;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>cross.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>cross.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NNT_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>cross.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>cross.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,14 +155,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\code.h" />
-    <ClInclude Include="..\..\src\com++.h" />
-    <ClInclude Include="..\..\src\connector.h" />
-    <ClInclude Include="..\..\src\connector_curl.h" />
-    <ClInclude Include="..\..\src\connector_lws.h" />
-    <ClInclude Include="..\..\src\cross.h" />
-    <ClInclude Include="..\..\src\fs.h" />
-    <ClInclude Include="..\..\src\json.h" />
+    <ClInclude Include="..\..\src\code.hpp" />
+    <ClInclude Include="..\..\src\com++.hpp" />
+    <ClInclude Include="..\..\src\connector.hpp" />
+    <ClInclude Include="..\..\src\connector_curl.hpp" />
+    <ClInclude Include="..\..\src\connector_lws.hpp" />
+    <ClInclude Include="..\..\src\cross.hpp" />
+    <ClInclude Include="..\..\src\fs.hpp" />
+    <ClInclude Include="..\..\src\json.hpp" />
     <ClInclude Include="..\..\src\jsoncpp\json\allocator.h" />
     <ClInclude Include="..\..\src\jsoncpp\json\assertions.h" />
     <ClInclude Include="..\..\src\jsoncpp\json\config.h" />
@@ -174,15 +174,15 @@
     <ClInclude Include="..\..\src\jsoncpp\json\version.h" />
     <ClInclude Include="..\..\src\jsoncpp\json\writer.h" />
     <ClInclude Include="..\..\src\jsoncpp\json_tool.h" />
-    <ClInclude Include="..\..\src\logger.h" />
-    <ClInclude Include="..\..\src\macro.h" />
-    <ClInclude Include="..\..\src\property.h" />
-    <ClInclude Include="..\..\src\str.h" />
-    <ClInclude Include="..\..\src\threads.h" />
-    <ClInclude Include="..\..\src\datetime.h" />
+    <ClInclude Include="..\..\src\logger.hpp" />
+    <ClInclude Include="..\..\src\macro.hpp" />
+    <ClInclude Include="..\..\src\property.hpp" />
+    <ClInclude Include="..\..\src\str.hpp" />
+    <ClInclude Include="..\..\src\threads.hpp" />
+    <ClInclude Include="..\..\src\datetime.hpp" />
     <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h" />
-    <ClInclude Include="..\..\src\url.h" />
-    <ClInclude Include="..\..\src\xml.h" />
+    <ClInclude Include="..\..\src\url.hpp" />
+    <ClInclude Include="..\..\src\xml.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\connector.cpp" />

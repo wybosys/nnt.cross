@@ -1,5 +1,5 @@
-#include "cross.h"
-#include "connector.h"
+#include "cross.hpp"
+#include "connector.hpp"
 #include <sstream>
 
 CROSS_BEGIN

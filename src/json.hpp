@@ -1,7 +1,7 @@
 #ifndef __NNTCROSS_JSON_H_INCLUDED
 #define __NNTCROSS_JSON_H_INCLUDED
 
-#include "property.h"
+#include "property.hpp"
 
 namespace Json
 {

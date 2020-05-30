@@ -1,10 +1,10 @@
-#include "cross.h"
-#include "connector_curl.h"
-#include "str.h"
+#include "cross.hpp"
+#include "connector_curl.hpp"
+#include "str.hpp"
 #include <curl/curl.h>
 #include <sstream>
-#include "json.h"
-#include "xml.h"
+#include "json.hpp"
+#include "xml.hpp"
 
 CROSS_BEGIN
 

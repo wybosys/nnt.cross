@@ -1,5 +1,5 @@
-#include "cross.h"
-#include "property.h"
+#include "cross.hpp"
+#include "property.hpp"
 #include <sstream>
 
 CROSS_BEGIN

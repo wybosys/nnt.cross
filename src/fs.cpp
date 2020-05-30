@@ -1,6 +1,6 @@
-﻿#include "cross.h"
-#include "fs.h"
-#include "str.h"
+﻿#include "cross.hpp"
+#include "fs.hpp"
+#include "str.hpp"
 #include <regex>
 
 #ifdef NNT_WINDOWS

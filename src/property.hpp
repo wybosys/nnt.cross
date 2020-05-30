@@ -2,7 +2,7 @@
 #define __NNTCROSS_PROPERTY_H_INCLUDED
 
 #include <map>
-#include "com++.h"
+#include "com++.hpp"
 
 CROSS_BEGIN
 

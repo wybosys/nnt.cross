@@ -1,7 +1,7 @@
-#include "cross.h"
-#include "url.h"
+#include "cross.hpp"
+#include "url.hpp"
 #include <sstream>
-#include "str.h"
+#include "str.hpp"
 
 CROSS_BEGIN
 

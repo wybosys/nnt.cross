@@ -1,7 +1,7 @@
 #ifndef __NNTCROSS_CONNECTOR_LWS_H_INCLUDED
 #define __NNTCROSS_CONNECTOR_LWS_H_INCLUDED
 
-#include "connector.h"
+#include "connector.hpp"
 
 CROSS_BEGIN
 

@@ -1,9 +1,9 @@
-#include "cross.h"
-#include "connector_lws.h"
-#include "url.h"
-#include "str.h"
+#include "cross.hpp"
+#include "connector_lws.hpp"
+#include "url.hpp"
+#include "str.hpp"
 #include <mutex>
-#include "logger.h"
+#include "logger.hpp"
 #include <sstream>
 #include <thread>
 

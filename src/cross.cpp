@@ -1,4 +1,4 @@
-#include "cross.h"
+#include "cross.hpp"
 
 CROSS_BEGIN
 

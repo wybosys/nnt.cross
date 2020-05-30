@@ -2,16 +2,16 @@
 #include <UnitTest++/TestReporterStdout.h>
 
 #include <sstream>
-#include <cross.h>
-#include <fs.h>
-#include <datetime.h>
-#include <logger.h>
-#include <json.h>
-#include <xml.h>
-#include <url.h>
-#include <threads.h>
-#include <connector_curl.h>
-#include <connector_lws.h>
+#include <cross.hpp>
+#include <fs.hpp>
+#include <datetime.hpp>
+#include <logger.hpp>
+#include <json.hpp>
+#include <xml.hpp>
+#include <url.hpp>
+#include <threads.hpp>
+#include <connector_curl.hpp>
+#include <connector_lws.hpp>
 
 USE_CROSS;
 

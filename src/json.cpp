@@ -1,5 +1,5 @@
-#include "cross.h"
-#include "json.h"
+#include "cross.hpp"
+#include "json.hpp"
 #include <sstream>
 #include <json/json.h>
 

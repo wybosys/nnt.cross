@@ -1,7 +1,7 @@
 #ifndef __NNTCROSS_XML_H_INCLUDED
 #define __NNTCROSS_XML_H_INCLUDED
 
-#include "property.h"
+#include "property.hpp"
 
 #define TINYXML_NS tinyxml2
 

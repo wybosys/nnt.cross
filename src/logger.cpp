@@ -1,5 +1,5 @@
-#include "cross.h"
-#include "logger.h"
+#include "cross.hpp"
+#include "logger.hpp"
 
 CROSS_BEGIN
 
