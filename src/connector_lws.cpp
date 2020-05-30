@@ -6,7 +6,7 @@
 #include "logger.h"
 #include <sstream>
 
-#include <lws/libwebsockets.h>
+#include <libwebsockets/libwebsockets.h>
 
 #ifdef NNT_WINDOWS
 #pragma comment(lib,"ws2_32.lib")
@@ -26,10 +26,10 @@ public:
     void close();
     bool write(Connector::memory_type const& mem);
 
-    static int ImpSocketCallback(struct lws *ws, lws_callback_reasons reason, void *user, void *buf, size_t len);
+    static int ImpSocketCallback(struct lws *ws, enum lws_callback_reasons reason, void *user, void *buf, size_t len);
 
     LibWebSocketConnector *owner = nullptr;
-    lws_context *lws = nullptr;
+    struct lws_context *lws = nullptr;
     struct lws *client = nullptr;
     mutex mtx_write, mtx_read, mtx_state;
     bool iswritable = false;
