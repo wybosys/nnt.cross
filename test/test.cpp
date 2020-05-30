@@ -12,6 +12,8 @@
 #include <threads.hpp>
 #include <connector_curl.hpp>
 #include <connector_lws.hpp>
+#include <digest.hpp>
+#include <zip.hpp>
 
 USE_CROSS;
 
@@ -57,7 +59,17 @@ TEST(ws)
 {
     LibWebSocketConnector cnt;
     cnt.url = "ws://192.168.102.200:60304";
-    cnt.connect();
+    //cnt.connect();
+}
+
+TEST(md5)
+{
+    UNITTEST_CHECK_EQUAL(md5str("hello"), "5d41402abc4b2a76b9719d911017c592");
+}
+
+TEST(zip)
+{
+
 }
 
 TEST(rest)

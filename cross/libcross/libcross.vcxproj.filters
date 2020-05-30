@@ -22,6 +22,9 @@
     <Filter Include="tinyxml2">
       <UniqueIdentifier>{7465949f-3111-47bf-9765-9dc3efad5712}</UniqueIdentifier>
     </Filter>
+    <Filter Include="md5">
+      <UniqueIdentifier>{b2ea96d0-bdd4-44ab-b66c-4c6397a3dd67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\jsoncpp\json_tool.h">
@@ -108,6 +111,15 @@
     <ClInclude Include="..\..\src\xml.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\zip.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\md5\md5.h">
+      <Filter>md5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\digest.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\fs.cpp">
@@ -160,6 +172,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\connector_lws.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\zip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\digest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\md5\md5.cpp">
+      <Filter>md5</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

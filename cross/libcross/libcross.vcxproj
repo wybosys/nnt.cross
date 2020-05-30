@@ -176,6 +176,8 @@
     <ClInclude Include="..\..\src\jsoncpp\json_tool.h" />
     <ClInclude Include="..\..\src\logger.hpp" />
     <ClInclude Include="..\..\src\macro.hpp" />
+    <ClInclude Include="..\..\src\digest.hpp" />
+    <ClInclude Include="..\..\src\md5\md5.h" />
     <ClInclude Include="..\..\src\property.hpp" />
     <ClInclude Include="..\..\src\str.hpp" />
     <ClInclude Include="..\..\src\threads.hpp" />
@@ -183,6 +185,7 @@
     <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\..\src\url.hpp" />
     <ClInclude Include="..\..\src\xml.hpp" />
+    <ClInclude Include="..\..\src\zip.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\connector.cpp" />
@@ -198,6 +201,11 @@
     <ClCompile Include="..\..\src\jsoncpp\json_value.cpp" />
     <ClCompile Include="..\..\src\jsoncpp\json_writer.cpp" />
     <ClCompile Include="..\..\src\logger.cpp" />
+    <ClCompile Include="..\..\src\digest.cpp" />
+    <ClCompile Include="..\..\src\md5\md5.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\src\property.cpp" />
     <ClCompile Include="..\..\src\str.cpp" />
     <ClCompile Include="..\..\src\threads.cpp" />
@@ -205,6 +213,7 @@
     <ClCompile Include="..\..\src\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\src\url.cpp" />
     <ClCompile Include="..\..\src\xml.cpp" />
+    <ClCompile Include="..\..\src\zip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\jsoncpp\json_valueiterator.inl" />
