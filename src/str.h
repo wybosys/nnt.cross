@@ -8,9 +8,13 @@ extern NNT_API string implode(vector<string> const&, string const& delimeter);
 extern NNT_API bool beginwith(string const& str, string const& tgt);
 extern NNT_API bool endwith(string const& str, string const& tgt);
 
-extern NNT_API int toInt(string const&);
-extern NNT_API float toFloat(string const&);
-extern NNT_API double toDouble(string const&);
+extern NNT_API int toint(string const&);
+extern NNT_API float tofloat(string const&);
+extern NNT_API double todouble(string const&);
+
+extern NNT_API string tostr(int);
+extern NNT_API string tostr(float);
+extern NNT_API string tostr(double);
 
 CROSS_END
 

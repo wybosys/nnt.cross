@@ -12,13 +12,10 @@ class NNT_API Connector : public Object
 public:
 
     // 关闭连接
-    virtual void close() {}
+    virtual void close() = 0;
 
     // 访问地址
     string url;
-
-    // 端口
-    unsigned short port;
 
     // connection time out
     static unsigned int CTIMEOUT;
@@ -30,7 +27,7 @@ public:
     static string USERAGENT;
 
     typedef Progress<unsigned long long> progress_type;
-    typedef Memory<stringbuf const&, size_t> memory_type;
+    typedef Memory<stringbuf&, size_t> memory_type;
     typedef shared_ptr<Property> arg_type;
     typedef map<string, arg_type> args_type;
     typedef map<string, string> files_type;
@@ -42,7 +39,7 @@ protected:
     virtual void on_bytes(memory_type const&) const {} // 收到部分数据
     virtual void on_completed() const {} // 完成数据传输
     virtual void on_error(error const&) const {} // 遇到错误
-    virtual void on_disconnect() const {} // 断开连接
+    virtual void on_disconnected() const {} // 断开连接
 
 };
 
@@ -137,12 +134,27 @@ class NNT_API WebSocketConnector : public Connector
 public:
 
     // 连接服务器
+    virtual bool connect() = 0;
+
+    // 发送数据
+    virtual bool write(memory_type const&) = 0;
+
+    // 自动重试的最大次数，-1代表持续重试
+    int maxretrys = MAXRETRYS;
+
+    static int MAXRETRYS;
 
 protected:
+
+    // 重连服务器
+    virtual void reconnect() {
+        connect();
+    }
 
     // 正在连接
     virtual void on_connecting() const {}
     virtual void on_reconnecting() const {}
+    virtual void on_reconnected() const {}
 };
 
 // 转换args到property，之后既可以使用property的序列化方法

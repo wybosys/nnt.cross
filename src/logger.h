@@ -37,6 +37,8 @@ class NNT_API Logger : public ILogger
 {
 public:
 
+    NNT_SINGLETON_DECL(Logger);
+
     virtual ~Logger() = default;
 
     string prefix;
@@ -52,6 +54,17 @@ public:
 
     virtual void log(LogLevel, string const&);
     virtual string format(LogLevel, string const&);
+
+    // ¾²Ì¬µÄ·½±ãº¯Êý
+#define _LOGGER_GO(func, imp) static void func(string const& msg) { Logger::shared().##imp(msg); }
+    _LOGGER_GO(Debug, debug);
+    _LOGGER_GO(Info, info);
+    _LOGGER_GO(Notice, notice);
+    _LOGGER_GO(Warn, warn);
+    _LOGGER_GO(Error, error);
+    _LOGGER_GO(Alert, alert);
+    _LOGGER_GO(Critical, critical);
+    _LOGGER_GO(Emergency, emergency);
 };
 
 CROSS_END

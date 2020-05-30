@@ -49,30 +49,44 @@ private:                                                                  \
     delete d_ptr;           \
     d_ptr = nullptr;
 
-#define NNT_SINGLETON_DECL(cls) \
-public:                         \
-    static cls &shared();       \
-    static void free_shared();  \
-    static bool is_shared();
-#define NNT_SINGLETON_IMPL(cls, ...)                \
-    static cls *_##cls##_shared = nullptr;          \
-    cls &cls::shared()                              \
-    {                                               \
-        if (!_##cls##_shared)                       \
-        {                                           \
-            _##cls##_shared = new cls(__VA_ARGS__); \
-        }                                           \
-        return *_##cls##_shared;                    \
-    }                                               \
-    void cls::free_shared()                         \
-    {                                               \
-        if (_##cls##_shared)                        \
-        {                                           \
-            delete _##cls##_shared;                 \
-            _##cls##_shared = nullptr;              \
-        }                                           \
-    }                                               \
-    bool cls::is_shared() { return nullptr != _##cls##_shared; }
+#define NNT_SINGLETON_DECL(cls)             \
+private:                                    \
+    static void _set_shared(cls *);         \
+                                            \
+public:                                     \
+    static cls &shared();                   \
+    static void free_shared();              \
+    static bool is_shared();                \
+    template <typename T, typename... Args> \
+    static inline void set_shared(Args &&... args) { _set_shared(new T(forward(args)...)); }
+
+#define NNT_SINGLETON_IMPL(cls, ...)                             \
+    static cls *_##cls##_shared = nullptr;                       \
+    cls &cls::shared()                                           \
+    {                                                            \
+        if (!_##cls##_shared)                                    \
+        {                                                        \
+            _##cls##_shared = new cls(__VA_ARGS__);              \
+        }                                                        \
+        return *_##cls##_shared;                                 \
+    }                                                            \
+    void cls::free_shared()                                      \
+    {                                                            \
+        if (_##cls##_shared)                                     \
+        {                                                        \
+            delete _##cls##_shared;                              \
+            _##cls##_shared = nullptr;                           \
+        }                                                        \
+    }                                                            \
+    bool cls::is_shared() { return nullptr != _##cls##_shared; } \
+    void cls::_set_shared(cls *r)                                \
+    {                                                            \
+        if (_##cls##_shared)                                     \
+        {                                                        \
+            delete _##cls##_shared;                              \
+        }                                                        \
+        _##cls##_shared = r;                                     \
+    }
 
 #define NNT_THIS const_cast<self_class_type *>(this)
 #define NNT_DPTR const_cast<private_class_type *>(d_ptr)
@@ -171,22 +185,26 @@ static T const &Nil()
     return __s;
 };
 
-class Object {
+class Object
+{
 public:
     virtual ~Object() = default;
 };
 
 typedef Object IObject;
 
-class RefObject : public IObject {
+class RefObject : public IObject
+{
 public:
-
-    virtual void grab() const {
+    virtual void grab() const
+    {
         ++_referencedCount;
     }
 
-    virtual bool drop() const {
-        if (--_referencedCount == 0) {
+    virtual bool drop() const
+    {
+        if (--_referencedCount == 0)
+        {
             delete this;
             return true;
         }
@@ -201,105 +219,118 @@ template <typename T>
 class shared_ref
 {
 public:
-
     shared_ref()
         : _ptr(new T())
     {
     }
 
-    shared_ref(shared_ref<T> const& r)
-        : _ptr(const_cast<T*>(r.get()))
+    shared_ref(shared_ref<T> const &r)
+        : _ptr(const_cast<T *>(r.get()))
     {
         if (_ptr)
             _ptr->grab();
     }
 
     template <typename R>
-    shared_ref(shared_ref<R> const& r) 
-        : _ptr(dynamic_cast<T*>(const_cast<R*>(r.get())))
+    shared_ref(shared_ref<R> const &r)
+        : _ptr(dynamic_cast<T *>(const_cast<R *>(r.get())))
     {
         if (_ptr)
             _ptr->grab();
     }
 
-    ~shared_ref() {
-        if (_ptr) {
+    ~shared_ref()
+    {
+        if (_ptr)
+        {
             _ptr->drop();
             _ptr = nullptr;
         }
     }
 
-    shared_ref<T>& operator = (T const* r) {
+    shared_ref<T> &operator=(T const *r)
+    {
         if (_ptr == r)
             return *this;
         if (_ptr)
             _ptr->drop();
-        _ptr = const_cast<T*>(r);
+        _ptr = const_cast<T *>(r);
         if (_ptr)
             _ptr->grab();
         return *this;
     }
 
     template <typename R>
-    inline operator R* () {
-        return dynamic_cast<R*>(_ptr);
+    inline operator R *()
+    {
+        return dynamic_cast<R *>(_ptr);
     }
 
     template <typename R>
-    inline operator R const* () const {
-        return dynamic_cast<R const*>(_ptr);
+    inline operator R const *() const
+    {
+        return dynamic_cast<R const *>(_ptr);
     }
-    
-    inline T& operator * () {
+
+    inline T &operator*()
+    {
         return *_ptr;
     }
 
-    inline T const& operator *() const {
+    inline T const &operator*() const
+    {
         return *_ptr;
     }
 
-    inline T* operator -> () {
+    inline T *operator->()
+    {
         return _ptr;
     }
 
-    inline T const* operator -> () const {
+    inline T const *operator->() const
+    {
         return _ptr;
     }
 
-    inline bool operator < (shared_ref<T> const& r) const {
+    inline bool operator<(shared_ref<T> const &r) const
+    {
         return _ptr < r._ptr;
     }
 
-    inline T* get() {
+    inline T *get()
+    {
         return _ptr;
     }
 
-    inline T const* get() const {
+    inline T const *get() const
+    {
         return _ptr;
     }
 
 private:
-    T* _ptr;
+    T *_ptr;
 
-    shared_ref(nullptr_t) :_ptr(nullptr) {}
+    shared_ref(nullptr_t) : _ptr(nullptr) {}
 
-    static shared_ref<T> _assign(T* ptr) {
+    static shared_ref<T> _assign(T *ptr)
+    {
         auto r = shared_ref<T>(nullptr);
         r._ptr = ptr;
         return r;
     }
 
-    template <typename T, typename ...Args> friend shared_ref<T> make_ref(Args&&...);
+    template <typename T, typename... Args>
+    friend shared_ref<T> make_ref(Args &&...);
 };
 
-template <typename T, typename ...Args>
-static shared_ref<T> make_ref(Args&&... args)
+template <typename T, typename... Args>
+static shared_ref<T> make_ref(Args &&... args)
 {
     return shared_ref<T>::_assign(new T(forward<Args>(args)...));
 };
 
-template <typename T, typename TI, typename ...Args>
-static shared_ptr<TI> make_dynamic_shared(Args&&... args)
+template <typename T, typename TI, typename... Args>
+static shared_ptr<TI> make_dynamic_shared(Args &&... args)
 {
     shared_ptr<TI> r(new T(forward<Args>(args)...));
     return r;

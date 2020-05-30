@@ -11,6 +11,7 @@
 #include <url.h>
 #include <threads.h>
 #include <connector_curl.h>
+#include <connector_lws.h>
 
 USE_CROSS;
 
@@ -47,9 +48,16 @@ TEST (fs) {
 
 TEST(url)
 {
-    string str = "http://www.baidu.com/abc/cde?abc=123&cde=123";
+    string str = "http://www.baidu.com:80/abc/cde?abc=123&cde=123";
     Url u(str);
     UNITTEST_CHECK_EQUAL(u.toString(), str);
+}
+
+TEST(ws)
+{
+    LibWebSocketConnector cnt;
+    cnt.url = "ws://192.168.102.200:60304";
+    cnt.connect();
 }
 
 TEST(rest)

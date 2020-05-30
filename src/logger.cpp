@@ -3,6 +3,8 @@
 
 CROSS_BEGIN
 
+NNT_SINGLETON_IMPL(Logger);
+
 void Logger::debug(string const& msg)
 {
     log(LogLevel::DEBUG, msg);

@@ -28,7 +28,17 @@ bool Url::parse(string const& str)
 
     auto lefts = explode(qss[0], "/", true);
     protocol = lefts[0];
-    host = lefts[1];
+
+    auto dms = explode(lefts[1], ":");
+    if (dms.size() == 1) {
+        host = dms[0];
+        port = 0;
+    }
+    else {
+        host = dms[0];
+        port = (unsigned short)toint(dms[1]);
+    }
+
     paths = vector<string>(lefts.begin() + 2, lefts.end());
 
     auto rights = explode(qss[1], "&");
@@ -47,8 +57,14 @@ string Url::toString() const
     vector<string> strs;
     if (!protocol.empty())
         strs.emplace_back(protocol + "/");
-    if (!host.empty())
-        strs.emplace_back(host);
+    if (!host.empty()) {
+        if (port > 0) {
+            strs.emplace_back(host + ":" + tostr(port));
+        }
+        else {
+            strs.emplace_back(host);
+        }
+    }
     if (!paths.empty())
         strs.emplace_back(implode(paths, "/"));
     string r = implode(strs, "/");
@@ -56,6 +72,10 @@ string Url::toString() const
         r += build_querystring(args);
     }
     return r;
+}
+
+string Url::path() const {
+    return "/" + implode(paths, "/");
 }
 
 string build_querystring(Url::args_type const& args, fn_url_encoder url_encoder)

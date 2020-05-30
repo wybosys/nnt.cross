@@ -1,5 +1,6 @@
 #include "cross.h"
 #include "str.h"
+#include <sstream>
 
 CROSS_BEGIN
 
@@ -43,16 +44,35 @@ bool endwith(string const &str, string const &tgt) {
     return str.substr(str.length() - tgt.length(), tgt.length()) == tgt;
 }
 
-int toInt(string const &str) {
+int toint(string const &str) {
     return atoi(str.c_str());
 }
 
-float toFloat(string const &str) {
+float tofloat(string const &str) {
     return (float) atof(str.c_str());
 }
 
-double toDouble(string const &str) {
+double todouble(string const &str) {
     return (double) atof(str.c_str());
+}
+
+template <typename T>
+inline string tostr(T v) {
+    ostringstream oss;
+    oss << v;
+    return oss.str();
+}
+
+string tostr(int v) {
+    return tostr<int>(v);
+}
+
+string tostr(float v) {
+    return tostr<float>(v);
+}
+
+string tostr(double v) {
+    return tostr<double>(v);
 }
 
 CROSS_END

@@ -15,6 +15,7 @@ public:
     typedef map<string, Property> args_type;
 
     string protocol, host;
+    unsigned short port = 0; // 端口0代表没有设置
     vector<string> paths;
     args_type args;
 
@@ -26,6 +27,8 @@ public:
     inline operator string () const {
         return toString();
     }
+
+    string path() const;
 };
 
 typedef string(fn_url_encoder)(Property const&);

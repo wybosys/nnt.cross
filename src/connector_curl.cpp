@@ -26,11 +26,16 @@ public:
         * self)
     {
         size_t lbuf = size * count;
+        if (!lbuf)
+            return lbuf;
+
         self->buffer.write(buf, lbuf);
 
         CurlHttpConnector::memory_type mem(*self->buffer.rdbuf());
         mem.from = self->buffersz;
         mem.size = lbuf;
+        self->buffersz += lbuf;
+
         self->owner->on_bytes(mem);
 
         return lbuf;
