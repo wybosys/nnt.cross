@@ -5,6 +5,7 @@
 #include <mutex>
 #include "logger.h"
 #include <sstream>
+#include <thread>
 
 #include <libwebsockets/libwebsockets.h>
 
@@ -20,15 +21,20 @@ public:
 
     bool connect();
     void close();
+    void clear();
     bool write(Connector::memory_type const& mem);
 
     static int ImpSocketCallback(struct lws *ws, enum lws_callback_reasons reason, void *user, void *buf, size_t len);
+
+    static void ImpWait(LibWebSocketConnectorPrivate*);
 
     LibWebSocketConnector *owner = nullptr;
     struct lws_context *lws = nullptr;
     struct lws *client = nullptr;
     mutex mtx_write, mtx_read, mtx_state;
     bool iswritable = false;
+    bool waitquit = false;
+    shared_ptr<thread> thd_wait;
 
     void on_connected();
     void on_error();
@@ -111,6 +117,8 @@ void LibWebSocketConnectorPrivate::close()
         lws_context_destroy(lws);
         lws = nullptr;
     }
+
+    clear();
 }
 
 bool LibWebSocketConnectorPrivate::write(Connector::memory_type const& mem)
@@ -160,6 +168,13 @@ bool LibWebSocketConnectorPrivate::write(Connector::memory_type const& mem)
     return true;
 }
 
+void LibWebSocketConnectorPrivate::clear()
+{
+    if (thd_wait && thd_wait->joinable()) {
+        thd_wait->join();
+        thd_wait = nullptr;
+    }
+}
 
 int LibWebSocketConnectorPrivate::ImpSocketCallback(struct lws *ws, lws_callback_reasons reason, void *user, void *buf, size_t len)
 {
@@ -169,34 +184,47 @@ int LibWebSocketConnectorPrivate::ImpSocketCallback(struct lws *ws, lws_callback
         lws_callback_on_writable(self->client);
         self->on_connected();
     } break;
-    case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
+    case LWS_CALLBACK_CLIENT_CONNECTION_ERROR: {
         self->on_error();
-        break;
+    } break;
     case LWS_CALLBACK_PROTOCOL_DESTROY:
-    case LWS_CALLBACK_CLOSED:
+    case LWS_CALLBACK_CLOSED: {
         self->on_disconnected();
-        break;
-    case LWS_CALLBACK_CLIENT_RECEIVE:
+    } break;
+    case LWS_CALLBACK_CLIENT_RECEIVE: {
         self->on_bytes((char const*)buf, len);
-        break;
-    case LWS_CALLBACK_CLIENT_WRITEABLE:
+    } break;
+    case LWS_CALLBACK_CLIENT_WRITEABLE: {
         self->on_writeable();
-        break;
+    } break;
     default:
         break;
     }
     return 0;
 }
 
+void LibWebSocketConnectorPrivate::ImpWait(LibWebSocketConnectorPrivate *self) 
+{
+    while (!self->waitquit) {
+        self->owner->wait();
+    }
+}
+
 void LibWebSocketConnectorPrivate::on_connected()
 {
     owner->on_connected();
+
+    // 启动轮询监听线程
+    thd_wait = make_shared<thread>(ImpWait, this);
 }
 
 void LibWebSocketConnectorPrivate::on_error()
 {
     NNT_AUTOGUARD(mtx_write);
     iswritable = false;
+    waitquit = true;
+
+    clear();
 
     string msg = "lws连接遇到错误";
     Logger::Error(msg);
@@ -206,7 +234,10 @@ void LibWebSocketConnectorPrivate::on_error()
 void LibWebSocketConnectorPrivate::on_disconnected()
 {
     NNT_AUTOGUARD(mtx_write);
-    iswritable = false;        
+    iswritable = false;      
+    waitquit = true;
+
+    clear();
 
     Logger::Info("lws断开连接");
     owner->on_disconnected();
@@ -248,11 +279,13 @@ LibWebSocketConnector::~LibWebSocketConnector()
 
 bool LibWebSocketConnector::connect()
 {
+    d_ptr->waitquit = false;
     return d_ptr->connect();
 }
 
 void LibWebSocketConnector::close()
 {
+    d_ptr->waitquit = true;
     d_ptr->close();
 }
 
