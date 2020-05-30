@@ -32,15 +32,16 @@ private:                \
     class cls;                 \
     class NNT_PRIVATECLASS(cls);
 
-#define NNT_CLASS_DECL(cls)                                               \
-protected:                                                                \
-    typedef cls self_class_type;                                          \
-    typedef NNT_PRIVATECLASS(cls) private_class_type;                     \
-    friend class NNT_PRIVATECLASS(cls);                                   \
-    private_class_type *d_ptr = nullptr;                                  \
-    friend private_class_type *nnt::DPtr<cls, private_class_type>(cls *); \
-                                                                          \
-private:                                                                  \
+#define NNT_CLASS_DECL(cls)                           \
+protected:                                            \
+    typedef cls self_class_type;                      \
+    typedef NNT_PRIVATECLASS(cls) private_class_type; \
+    friend class NNT_PRIVATECLASS(cls);               \
+    private_class_type *d_ptr = nullptr;              \
+    template <class T, class TP>                      \
+    friend TP *nnt::DPtr<T, TP>(T *);                 \
+                                                      \
+private:                                              \
     NNT_NOCOPY(cls);
 
 #define NNT_CLASS_CONSTRUCT(...) \
