@@ -8,10 +8,6 @@
 
 #include <libwebsockets/libwebsockets.h>
 
-#ifdef NNT_WINDOWS
-#pragma comment(lib,"ws2_32.lib")
-#endif
-
 CROSS_BEGIN
 
 #define WS_RX_BUFFER_SIZE (65536)
