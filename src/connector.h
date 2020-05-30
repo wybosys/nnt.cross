@@ -139,6 +139,9 @@ public:
     // 发送数据
     virtual bool write(memory_type const&) = 0;
 
+    // 等待数据
+    virtual void wait() = 0;
+
     // 自动重试的最大次数，-1代表持续重试
     int maxretrys = MAXRETRYS;
 

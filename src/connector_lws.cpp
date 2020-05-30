@@ -31,7 +31,7 @@ public:
     LibWebSocketConnector *owner = nullptr;
     lws_context *lws = nullptr;
     struct lws *client = nullptr;
-    mutex mtx_write, mtx_read;
+    mutex mtx_write, mtx_read, mtx_state;
     bool iswritable = false;
 
     void on_connected();
@@ -104,6 +104,8 @@ bool LibWebSocketConnectorPrivate::connect() {
 
 void LibWebSocketConnectorPrivate::close()
 {
+    NNT_AUTOGUARD(mtx_state);
+
     if (client) {
         lws_close_reason(client, LWS_CLOSE_STATUS_NORMAL, nullptr, 0);
         client = nullptr;
@@ -262,6 +264,15 @@ bool LibWebSocketConnector::write(memory_type const& mem)
 {
     NNT_AUTOGUARD(d_ptr->mtx_write);
     return d_ptr->write(mem);
+}
+
+void LibWebSocketConnector::wait()
+{
+    NNT_AUTOGUARD(d_ptr->mtx_state);
+    if (d_ptr->lws) {
+        lws_service(d_ptr->lws, 30);
+        lws_callback_on_writable(d_ptr->client);
+    }
 }
 
 CROSS_END

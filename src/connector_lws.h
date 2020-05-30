@@ -19,6 +19,7 @@ public:
     virtual bool connect();
     virtual void close();
     virtual bool write(memory_type const&);
+    virtual void wait();
 
 };
 
