@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../../src/;../../src/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;$(IncludePath)</IncludePath>
+    <IncludePath>../../src/;../../src/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;$(IncludePath)</IncludePath>
     <LibraryPath>D:/sdks/opt/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../../src/;../../src/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;$(IncludePath)</IncludePath>
+    <IncludePath>../../src/;../../src/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;$(IncludePath)</IncludePath>
     <LibraryPath>D:/sdks/opt/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -185,7 +185,11 @@
     <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\..\src\url.hpp" />
     <ClInclude Include="..\..\src\xml.hpp" />
-    <ClInclude Include="..\..\src\zip.hpp" />
+    <ClInclude Include="..\..\src\minizip.hpp" />
+    <ClInclude Include="..\..\src\minizip\crypt.h" />
+    <ClInclude Include="..\..\src\minizip\ioapi.h" />
+    <ClInclude Include="..\..\src\minizip\iowin32.h" />
+    <ClInclude Include="..\..\src\minizip\unzip.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\connector.cpp" />
@@ -214,6 +218,18 @@
     <ClCompile Include="..\..\src\url.cpp" />
     <ClCompile Include="..\..\src\xml.cpp" />
     <ClCompile Include="..\..\src\zip.cpp" />
+    <ClCompile Include="..\..\src\minizip\ioapi.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\minizip\iowin32.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\minizip\unzip.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\jsoncpp\json_valueiterator.inl" />

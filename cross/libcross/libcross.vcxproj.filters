@@ -25,6 +25,9 @@
     <Filter Include="md5">
       <UniqueIdentifier>{64d5b080-d140-461d-bb6d-6b059a855cc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="zip">
+      <UniqueIdentifier>{3efaed2c-df6c-42c9-be05-ee65e6144dde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\jsoncpp\json_tool.h">
@@ -120,6 +123,18 @@
     <ClInclude Include="..\..\src\md5\md5.h">
       <Filter>md5</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\zip\unzip.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\zip\ioapi.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\zip\iowin32.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\zip\crypt.h">
+      <Filter>zip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\fs.cpp">
@@ -181,6 +196,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\md5\md5.c">
       <Filter>md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\zip\unzip.c">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\zip\ioapi.c">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\zip\iowin32.c">
+      <Filter>zip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

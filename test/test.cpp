@@ -69,7 +69,13 @@ TEST(md5)
 
 TEST(zip)
 {
+    mkdir("test-file");
+    mkdir("test-dir");
 
+    bool suc = unzip("../../test/test-file.zip", "test-file");
+    UNITTEST_CHECK_EQUAL(suc, true);
+    suc = unzip("../../test/test-dir.zip", "test-dir");
+    UNITTEST_CHECK_EQUAL(suc, true);
 }
 
 TEST(rest)
