@@ -103,16 +103,6 @@ bool isabsolute(string const& str)
     return idr == ':';
 }
 
-string dirname(string const& str) 
-{
-    auto nstr = normalize(str);
-    auto ps = explode(nstr, PATH_DELIMITER, true);
-    if (ps.empty())
-        return nstr;
-    ps.pop_back();
-    return implode(ps, PATH_DELIMITER);
-}
-
 string pwd()
 {
     char buf[MAX_PATH] = { 0 };
@@ -158,8 +148,8 @@ bool isdirectory(string const &str) {
     return S_ISDIR(st.st_mode);
 }
 
-vector<string> listdir(string const &str) {
-    vector<string> r;
+strings listdir(string const &str) {
+    strings r;
     if (!isdirectory(str))
         return r;
     auto tgt = normalize(str) + PATH_DELIMITER;
@@ -191,7 +181,26 @@ string absolute(string const &str) {
     return str;
 }
 
+bool isabsolute(string const &str) {
+    const size_t l = str.length();
+    if (l == 0)
+        return false;
+    char idr = str[0];
+    if (idr == '/' || idr == '\\' || idr == '~')
+        return true;
+    return false;
+}
+
 #endif
+
+string dirname(string const &str) {
+    auto nstr = normalize(str);
+    auto ps = explode(nstr, PATH_DELIMITER, true);
+    if (ps.empty())
+        return nstr;
+    ps.pop_back();
+    return implode(ps, PATH_DELIMITER);
+}
 
 string replace(string const &str, string const &match, string const &tgt) {
     return ::std::regex_replace(str, ::std::regex(match), tgt);
@@ -230,18 +239,18 @@ bool rmtree(string const &str) {
     return rmdir(str);
 }
 
-string file_get_contents(string const& file) {
+string file_get_contents(string const &file) {
     string t;
     file_get_contents(file, t);
     return t;
 }
 
-bool file_get_contents(string const& file, string& result) {
+bool file_get_contents(string const &file, string &result) {
 #ifdef NNT_WINDOWS
     FILE *fp = NULL;
     fopen_s(&fp, file.c_str(), "rb");
 #else
-    FILE* fp = fopen(file.c_str(), "r");
+    FILE *fp = fopen(file.c_str(), "r");
 #endif
 
     if (fp == nullptr)
@@ -261,18 +270,18 @@ bool file_get_contents(string const& file, string& result) {
     return true;
 }
 
-bool file_put_contents(string const& file, string const& result) {
+bool file_put_contents(string const &file, string const &result) {
 #ifdef NNT_WINDOWS
     FILE *fp = NULL;
     fopen_s(&fp, file.c_str(), "wb");
 #else
-    FILE* fp = fopen(file.c_str(), "w");
+    FILE *fp = fopen(file.c_str(), "w");
 #endif
 
     if (fp == nullptr)
         return false;
 
-    char const* buf = result.c_str();
+    char const *buf = result.c_str();
     size_t full = result.length();
 
     while (1) {
@@ -283,7 +292,7 @@ bool file_put_contents(string const& file, string const& result) {
         buf += writed;
         full -= writed;
     }
-    
+
     fclose(fp);
     return true;
 }

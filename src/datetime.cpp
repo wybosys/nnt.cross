@@ -2,7 +2,7 @@
 #include "datetime.hpp"
 #include <time.h>
 #include <thread>
-#include <chrono>  
+#include <chrono>
 
 #ifdef NNT_WINDOWS
 
@@ -52,9 +52,21 @@ seconds_t Time::Now()
 
 #endif
 
-void Time::Sleep(seconds_t sec)
-{
-    ::std::this_thread::sleep_for(::std::chrono::milliseconds((long)(sec * 1e3)));
+#ifdef NNT_UNIXLIKE
+
+timestamp_t Time::Current() {
+    return time(nullptr);
+}
+
+seconds_t Time::Now() {
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    return double(ms * 1e-3);
+}
+
+#endif
+
+void Time::Sleep(seconds_t sec) {
+    ::std::this_thread::sleep_for(::std::chrono::milliseconds((long) (sec * 1e3)));
 }
 
 CROSS_END

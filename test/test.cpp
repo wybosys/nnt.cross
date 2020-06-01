@@ -17,8 +17,7 @@
 
 USE_CROSS;
 
-TEST(test)
-{
+TEST (test) {
     ::std::stringstream ss;
     ss << "abc";
     UNITTEST_CHECK_EQUAL(ss.str().length(), 3);
@@ -33,7 +32,7 @@ TEST (fs) {
     mkdirs(dir);
     rmtree("xxx");
 
-    UNITTEST_CHECK_EQUAL(Time::Current(), (timestamp_t)Time::Now());
+    UNITTEST_CHECK_EQUAL(Time::Current(), (timestamp_t) Time::Now());
 
     Logger t;
     t.warn("hahaha");
@@ -54,27 +53,23 @@ TEST (fs) {
     UNITTEST_CHECK_EQUAL(str, nstr);
 }
 
-TEST(url)
-{
+TEST (url) {
     string str = "http://www.baidu.com:80/abc/cde?abc=123&cde=123";
     Url u(str);
     UNITTEST_CHECK_EQUAL(u.toString(), str);
 }
 
-TEST(ws)
-{
+TEST (ws) {
     LibWebSocketConnector cnt;
     cnt.url = "ws://192.168.102.200:60304";
     //cnt.connect();
 }
 
-TEST(md5)
-{
+TEST (md5) {
     UNITTEST_CHECK_EQUAL(md5str("hello"), "5d41402abc4b2a76b9719d911017c592");
 }
 
-TEST(zip)
-{
+TEST (zip) {
     mkdir("test-file");
     mkdir("test-dir");
 
@@ -84,8 +79,7 @@ TEST(zip)
     UNITTEST_CHECK_EQUAL(suc, true);
 }
 
-TEST(rest)
-{
+TEST (rest) {
     CurlHttpConnector cnt;
     cnt.url = "https://cn.bing.com/search";
     cnt.method = HttpConnector::METHOD_POST;
@@ -97,10 +91,9 @@ TEST(rest)
     }
 }
 
-TEST(prop)
-{
+TEST (prop) {
     string str = "{\"b\":false,\"nil\":null,\"s\":\"string\"}";
-    auto v = json_decode(str);    
+    auto v = json_decode(str);
     auto p = toproperty(*v);
     v = tojsonobj(*p);
     string astr = json_encode(*v);
@@ -130,8 +123,7 @@ TEST(prop)
     UNITTEST_CHECK_EQUAL(str, astr);
 }
 
-TEST(task)
-{
+TEST (task) {
     // 测试单线程任务池
     // SingleTaskDispatcher dis;
 
@@ -143,54 +135,51 @@ TEST(task)
 
     // dis.attach();
 
-    ::std::atomic<int> count = 0;
+    ::std::atomic<int> count(0);
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask *) {
             cout << ++count << endl;
             Time::Sleep(1);
-            }));
+        }));
     }
     dis.start();
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask *) {
             cout << ++count << endl;
             Time::Sleep(1);
-            }));
+        }));
     }
     dis.wait();
 }
 
 FixedTaskDispatcher dis;
-::std::atomic<int> async_count = 9000;
+::std::atomic<int> async_count(9000);
 
-TEST(async_task)
-{
+TEST (async_task) {
     // 测试异步线程
     dis.start();
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask *) {
             if (IsMainThread()) {
                 cout << "主线程: " << ++async_count << endl;
-            }
-            else {
+            } else {
                 cout << "子线程: " << ++async_count << endl;
             }
-            }));
+        }));
     }
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask *) {
             MainThread::shared().invoke([&]() {
                 if (IsMainThread()) {
                     cout << "主线程: " << ++async_count << endl;
-                }
-                else {
+                } else {
                     cout << "子线程: " << ++async_count << endl;
                 }
-                });
-            }));
+            });
+        }));
     }
 }
 
