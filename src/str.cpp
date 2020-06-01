@@ -44,16 +44,24 @@ bool endwith(string const &str, string const &tgt) {
     return str.substr(str.length() - tgt.length(), tgt.length()) == tgt;
 }
 
+template <typename T>
+inline T fromstr(string const& str) {
+    ::std::istringstream iss(str);
+    T v;
+    iss >> v;
+    return v;
+}
+
 int toint(string const &str) {
-    return atoi(str.c_str());
+    return fromstr<int>(str);
 }
 
 float tofloat(string const &str) {
-    return (float) atof(str.c_str());
+    return fromstr<float>(str);
 }
 
 double todouble(string const &str) {
-    return (double) atof(str.c_str());
+    return fromstr<double>(str);
 }
 
 template <typename T>
