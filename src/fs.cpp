@@ -100,7 +100,7 @@ bool isabsolute(string const& str)
     if (idr == '/' || idr == '\\')
         return true;
     idr = str[1];
-    return idr == '/' || idr == '\\' || idr == ':';
+    return idr == ':';
 }
 
 string dirname(string const& str) 
