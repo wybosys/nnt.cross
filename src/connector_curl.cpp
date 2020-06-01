@@ -69,7 +69,7 @@ public:
             return lbuf;
         string key(bytes.begin(), bytes.begin() + pos);
         string val(bytes.begin() + pos, bytes.end() - 2);
-        self->rspheaders[key] = _P(val);
+        self->rspheaders[key] = make_property(val);
         return lbuf;
     }
     
@@ -169,7 +169,7 @@ bool CurlHttpConnector::send() const {
 
         switch (method) {
         case METHOD_POST: {
-            _reqheaders[HEADER_CONTENT_TYPE] = _P("multipart/form-data");
+            _reqheaders[HEADER_CONTENT_TYPE] = make_property("multipart/form-data");
             curl_httppost *last = nullptr;
             for (auto &e : _reqargs) {
                 auto val = escape(h, e.second);
@@ -181,20 +181,20 @@ bool CurlHttpConnector::send() const {
             curl_easy_setopt(h, CURLOPT_HTTPPOST, form);
         } break;
         case METHOD_POST_URLENCODED: {
-            _reqheaders[HEADER_CONTENT_TYPE] = _P("application/x-www-form-urlencoded; charset=utf-8;");
+            _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/x-www-form-urlencoded; charset=utf-8;");
             auto val = build_query(h, _reqargs);
             curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
             curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
         } break;
         case METHOD_POST_JSON: {
-            _reqheaders[HEADER_CONTENT_TYPE] = _P("application/json; charset=utf-8;");
+            _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/json; charset=utf-8;");
             auto p = Combine(_reqargs);
             auto val = json_encode(*tojsonobj(*p));
             curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
             curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
         } break;
         case METHOD_POST_XML: {
-            _reqheaders[HEADER_CONTENT_TYPE] = _P("application/xml; charset=utf-8;");
+            _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/xml; charset=utf-8;");
             auto p = Combine(_reqargs);
             auto val = xml_encode(*toxmlobj(*p));
             curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());

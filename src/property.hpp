@@ -225,7 +225,7 @@ static ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <
 }
 
 template <typename V>
-inline shared_ptr<Property> _P(V const& v) {
+inline shared_ptr<Property> make_property(V& v) {
     return make_shared<Property>(v);
 }
 
