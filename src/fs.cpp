@@ -230,6 +230,12 @@ bool rmtree(string const &str) {
     return rmdir(str);
 }
 
+string file_get_contents(string const& file) {
+    string t;
+    file_get_contents(file, t);
+    return t;
+}
+
 bool file_get_contents(string const& file, string& result) {
 #ifdef NNT_WINDOWS
     FILE *fp = NULL;

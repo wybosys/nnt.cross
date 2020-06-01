@@ -22,6 +22,7 @@ extern NNT_API string dirname(string const&);
 extern NNT_API string pwd();
 extern NNT_API bool cd(string const&);
 extern NNT_API bool file_get_contents(string const& file, string& result);
+extern NNT_API string file_get_contents(string const& file);
 extern NNT_API bool file_put_contents(string const& file, string const& result);
 
 CROSS_END
