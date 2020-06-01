@@ -155,4 +155,12 @@ shared_ptr<Property> toproperty(XmlObject const& xo)
     return r;
 }
 
+shared_ptr<XmlObject> toxmlobj(shared_ptr<Property> const& obj) {
+    return obj ? toxmlobj(*obj) : nullptr;
+}
+
+shared_ptr<Property> toproperty(shared_ptr<XmlObject> const& obj) {
+    return obj ? toproperty(*obj) : nullptr;
+}
+
 CROSS_END

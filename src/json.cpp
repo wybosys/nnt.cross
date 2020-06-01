@@ -101,4 +101,12 @@ shared_ptr<Property> toproperty(JsonObject const& jo) {
     return r;
 }
 
+shared_ptr<JsonObject> tojsonobj(shared_ptr<Property> const& obj) {
+    return obj ? tojsonobj(*obj) : nullptr;
+}
+
+shared_ptr<Property> toproperty(shared_ptr<JsonObject> const& obj) {
+    return obj ? toproperty(*obj) : nullptr;
+}
+
 CROSS_END

@@ -20,7 +20,11 @@ extern NNT_API shared_ptr<XmlObject> xml_decode(string const&);
 
 extern NNT_API shared_ptr<XmlObject> toxmlobj(Property const&);
 
+extern NNT_API shared_ptr<XmlObject> toxmlobj(shared_ptr<Property> const&);
+
 extern NNT_API shared_ptr<Property> toproperty(XmlObject const&);
+
+extern NNT_API shared_ptr<Property> toproperty(shared_ptr<XmlObject> const&);
 
 CROSS_END
 
