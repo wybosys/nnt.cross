@@ -149,11 +149,17 @@ public:
     // 获取map
     map_type const& map() const;
 
+    // 获取map中的值
+    data_type map(string const&) const;
+
     // 转换成array
     array_type &array();
 
     // 获取array
     array_type const& array() const;
+
+    // 获取array的下标对应的值
+    data_type array(size_t) const;
 
 private:
     shared_ptr<variant> _var;
@@ -179,6 +185,17 @@ inline Property::operator string const& () const {
 
 inline Property::operator variant const &() const {
     return *_var;
+}
+
+Property::data_type Property::map(string const& key) const {
+    auto &m = map();
+    auto fnd = m.find(key);
+    return fnd == m.end() ? nullptr : fnd->second;
+}
+
+Property::data_type Property::array(size_t idx) const {
+    auto &l = array();
+    return idx < l.size() ? l[idx] : nullptr;
 }
 
 template<typename _CharT, typename _Traits>
