@@ -107,6 +107,8 @@ public:
 
     Variant(Variant const&);
 
+    Variant(::std::shared_ptr<Variant> const&);
+
     ~Variant();
 
     const VT vt;
@@ -335,6 +337,16 @@ inline Variant::Variant(Variant const& r) : vt(r.vt) {
     _str = r._str;
     _func = r._func;
     if (r.vt == VT::OBJECT && _pod.o) {
+        _pod.o->grab();
+    }
+}
+
+inline Variant::Variant(::std::shared_ptr<Variant> const& r) : vt(r->vt) {
+    _pod = r->_pod;
+    _bytes = r->_bytes;
+    _str = r->_str;
+    _func = r->_func;
+    if (r->vt == VT::OBJECT && _pod.o) {
         _pod.o->grab();
     }
 }
