@@ -12,7 +12,7 @@ extern NNT_API bool mkdirs(string const&);
 extern NNT_API bool exists(string const&);
 extern NNT_API bool isfile(string const&);
 extern NNT_API bool isdirectory(string const&);
-extern NNT_API vector<string> listdir(string const&);
+extern NNT_API ::std::vector<string> listdir(string const&);
 extern NNT_API bool rmfile(string const&);
 extern NNT_API bool rmtree(string const&);
 extern NNT_API bool rmdir(string const&);

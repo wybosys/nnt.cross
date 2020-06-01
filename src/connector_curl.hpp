@@ -21,7 +21,7 @@ public:
 
     virtual int errcode() const;
     virtual string const& errmsg() const;
-    virtual stringbuf const& body() const;
+    virtual ::std::stringbuf const& body() const;
     virtual args_type const& respheaders() const;
     virtual unsigned short respcode() const;
 

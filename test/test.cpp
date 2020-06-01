@@ -19,7 +19,7 @@ USE_CROSS;
 
 TEST(test)
 {
-    stringstream ss;
+    ::std::stringstream ss;
     ss << "abc";
     UNITTEST_CHECK_EQUAL(ss.str().length(), 3);
     string val;
@@ -143,7 +143,7 @@ TEST(task)
 
     // dis.attach();
 
-    atomic<int> count = 0;
+    ::std::atomic<int> count = 0;
 
     for (int i = 0; i < 100; ++i) {
         dis.add(make_dynamic_shared<Task, ITask>([&](ITask*) {
@@ -162,7 +162,7 @@ TEST(task)
 }
 
 FixedTaskDispatcher dis;
-atomic<int> async_count = 9000;
+::std::atomic<int> async_count = 9000;
 
 TEST(async_task)
 {

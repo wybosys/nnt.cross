@@ -4,8 +4,8 @@
 
 CROSS_BEGIN
 
-vector<std::string> explode(string const &str, string const &delimeter, bool skipempty) {
-    vector<std::string> ret;
+strings explode(string const &str, string const &delimeter, bool skipempty) {
+    strings ret;
     size_t sid = 0, eid = 0;
     while ((eid = str.find(delimeter, sid)) < str.size()) {
         string val = str.substr(sid, eid - sid);
@@ -21,7 +21,7 @@ vector<std::string> explode(string const &str, string const &delimeter, bool ski
     return ret;
 }
 
-string implode(vector<string> const &str, string const &delimeter) {
+string implode(strings const &str, string const &delimeter) {
     const size_t l = str.size();
     if (l) {
         string r = str[0];
@@ -58,7 +58,7 @@ double todouble(string const &str) {
 
 template <typename T>
 inline string tostr(T v) {
-    ostringstream oss;
+    ::std::ostringstream oss;
     oss << v;
     return oss.str();
 }

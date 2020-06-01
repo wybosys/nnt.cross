@@ -39,7 +39,7 @@ bool Url::parse(string const& str)
         port = (unsigned short)toint(dms[1]);
     }
 
-    paths = vector<string>(lefts.begin() + 2, lefts.end());
+    paths = ::std::vector<string>(lefts.begin() + 2, lefts.end());
 
     auto rights = explode(qss[1], "&");
     for (auto &e : rights) {
@@ -54,7 +54,7 @@ bool Url::parse(string const& str)
 
 string Url::toString() const
 {
-    vector<string> strs;
+    ::std::vector<string> strs;
     if (!protocol.empty())
         strs.emplace_back(protocol + "/");
     if (!host.empty()) {
@@ -80,11 +80,11 @@ string Url::path() const {
 
 string build_querystring(Url::args_type const& args, fn_url_encoder url_encoder)
 {
-    vector<string> strs;
+    ::std::vector<string> strs;
     strs.reserve(args.size());
 
     for (auto &e : args) {
-        ostringstream oss;
+        ::std::ostringstream oss;
         oss << e.first << "=";
         if (url_encoder) {
             oss << url_encoder(e.second);

@@ -56,7 +56,7 @@ NNT_API enum struct Code
     OK = 0, // ³É¹¦
 };
 
-class NNT_API error : public exception {
+class NNT_API error : public ::std::exception {
 public:
 
     error(string const& msg, int code = (int)Code::FAILED) 

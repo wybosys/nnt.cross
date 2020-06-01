@@ -38,8 +38,12 @@ protected:                                            \
     typedef NNT_PRIVATECLASS(cls) private_class_type; \
     friend class NNT_PRIVATECLASS(cls);               \
     private_class_type *d_ptr = nullptr;              \
-    template <class T, class TP>                      \
-    friend TP *nnt::DPtr<T, TP>(T *);                 \
+                                                      \
+public:                                               \
+    inline private_class_type &d() const              \
+    {                                                 \
+        return *(private_class_type *)d_ptr;          \
+    }                                                 \
                                                       \
 private:                                              \
     NNT_NOCOPY(cls);
@@ -140,10 +144,16 @@ public:                                     \
 #define NNT_API NNT_PASS
 #endif
 
+#ifndef USE_STL
+#define USE_STL using namespace std;
+#endif
+
 #include <string>
 #include <iostream>
 #include <vector>
 #include <atomic>
+#include <memory>
+#include <functional>
 
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
 #include <xstring>
@@ -165,19 +175,23 @@ public:                                     \
 
 NNT_BEGIN
 
-using namespace ::std;
-
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
-typedef wstring system_string;
+typedef ::std::wstring system_string;
 #else
-typedef string system_string;
+typedef ::std::string system_string;
 #endif
 
-template <class T, class TP = typename T::private_class_type>
-static TP *DPtr(T *obj)
-{
-    return obj->d_ptr;
-}
+using ::std::string;
+using ::std::function;
+using ::std::shared_ptr;
+using ::std::make_shared;
+using ::std::cout;
+using ::std::cin;
+using ::std::cout;
+using ::std::cerr;
+using ::std::endl;
+
+typedef ::std::vector<string> strings;
 
 template <typename T>
 static T const &Nil()
@@ -197,6 +211,8 @@ typedef Object IObject;
 class RefObject : public IObject
 {
 public:
+    RefObject() : _referencedCount(1) {}
+
     virtual void grab() const
     {
         ++_referencedCount;
@@ -213,7 +229,7 @@ public:
     }
 
 private:
-    mutable atomic<size_t> _referencedCount = 1;
+    mutable ::std::atomic<size_t> _referencedCount;
 };
 
 template <typename T>
@@ -320,20 +336,20 @@ private:
         return r;
     }
 
-    template <typename T, typename... Args>
-    friend shared_ref<T> make_ref(Args &&...);
+    template <typename TT, typename... Args>
+    friend shared_ref<TT> make_ref(Args &&...);
 };
 
 template <typename T, typename... Args>
 static shared_ref<T> make_ref(Args &&... args)
 {
-    return shared_ref<T>::_assign(new T(forward<Args>(args)...));
+    return shared_ref<T>::_assign(new T(::std::forward<Args>(args)...));
 };
 
 template <typename T, typename TI, typename... Args>
 static shared_ptr<TI> make_dynamic_shared(Args &&... args)
 {
-    shared_ptr<TI> r(new T(forward<Args>(args)...));
+    shared_ptr<TI> r(new T(::std::forward<Args>(args)...));
     return r;
 }
 

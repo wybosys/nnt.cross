@@ -42,20 +42,20 @@ class NNT_API semaphore
 public:
 
     void notify() {
-        lock_guard<decltype(_mtx)> lck(_mtx);
+        ::std::lock_guard<decltype(_mtx)> lck(_mtx);
         ++_count;
         _cond.notify_one();
     }
 
     void wait() {
-        unique_lock<decltype(_mtx)> lck(_mtx);
+        ::std::unique_lock<decltype(_mtx)> lck(_mtx);
         while (!_count)
             _cond.wait(lck);
         --_count;
     }
 
     bool try_wait() {
-        lock_guard<decltype(_mtx)> lck(_mtx);
+        ::std::lock_guard<decltype(_mtx)> lck(_mtx);
         if (_count) {
             --_count;
             return true;
@@ -64,8 +64,8 @@ public:
     }
 
 private:
-    mutex _mtx;
-    condition_variable _cond;
+    ::std::mutex _mtx;
+    ::std::condition_variable _cond;
     size_t _count = 0;
 };
 

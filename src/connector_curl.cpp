@@ -78,7 +78,7 @@ public:
     int errcode;
     string errmsg;
 
-    ostringstream buffer;
+    ::std::ostringstream buffer;
     size_t buffersz;
 
     HttpConnector::args_type rspheaders;
@@ -98,7 +98,7 @@ CurlHttpConnector::~CurlHttpConnector()
 
 string escape(CURL* h, HttpConnector::arg_type const& arg)
 {
-    ostringstream oss;
+    ::std::ostringstream oss;
     oss << arg;
     auto str = oss.str();
     char* res = curl_easy_escape(h, str.c_str(), str.length());
@@ -110,9 +110,9 @@ string escape(CURL* h, HttpConnector::arg_type const& arg)
 
 string build_query(CURL* h, HttpConnector::args_type const& args)
 {
-    vector<string> fs;
+    ::std::vector<string> fs;
     for (auto& e : args) {
-        ostringstream oss;
+        ::std::ostringstream oss;
         oss << e.first << "=" << escape(h, e.second);
         fs.emplace_back(oss.str());
     }
@@ -207,7 +207,7 @@ bool CurlHttpConnector::send() const {
     curl_slist *headers = nullptr;
     if (!_reqheaders.empty()) {
         for (auto &e : _reqheaders) {
-            ostringstream oss;
+            ::std::ostringstream oss;
             oss << e.first << ": " << e.second;
             auto val = oss.str();
             headers = curl_slist_append(headers, val.c_str());
@@ -263,7 +263,7 @@ string const& CurlHttpConnector::errmsg() const {
     return d_ptr->errmsg;
 }
 
-stringbuf const& CurlHttpConnector::body() const {
+::std::stringbuf const& CurlHttpConnector::body() const {
     return *d_ptr->buffer.rdbuf();
 }
 

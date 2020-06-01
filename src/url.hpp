@@ -12,11 +12,11 @@ public:
     Url();
     Url(string const&);
 
-    typedef map<string, Property> args_type;
+    typedef ::std::map<string, Property> args_type;
 
     string protocol, host;
     unsigned short port = 0; // 端口0代表没有设置
-    vector<string> paths;
+    ::std::vector<string> paths;
     args_type args;
 
     void clear();

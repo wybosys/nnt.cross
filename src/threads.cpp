@@ -38,8 +38,8 @@ public:
     }
 #endif
 
-    mutex mtx_funcs;
-    vector<MainThread::func_type> funcs;
+    ::std::mutex mtx_funcs;
+    ::std::vector<MainThread::func_type> funcs;
 
     static thread_local bool ismainthread;
 };
@@ -129,10 +129,10 @@ public:
     SingleTaskDispatcher *owner;
     bool newthd = true; // 是否需要开一个新线程承载
     bool running = false, waitstop = false, waitwait = false;
-    shared_ptr<thread> thd;
+    shared_ptr<::std::thread> thd;
     semaphore smp_tasks;
-    mutex mtx_tasks;
-    set<ITask::task_type> tasks;
+    ::std::mutex mtx_tasks;
+    ::std::set<ITask::task_type> tasks;
 
     void start()
     {
@@ -144,7 +144,7 @@ public:
         waitstop = false;
 
         if (newthd) {
-            thd = make_shared<thread>(ThdProc, this);
+            thd = make_shared<::std::thread>(ThdProc, this);
         }
         else {
             for (auto e : tasks) {
@@ -282,12 +282,12 @@ class FixedTaskDispatcherPrivate
 public:
 
     FixedTaskDispatcher *owner;
-    mutex mtx_tasks;
-    set<ITask::task_type> tasks;
+    ::std::mutex mtx_tasks;
+    ::std::set<ITask::task_type> tasks;
     size_t maxcount;
     bool running = false, waitstop = false, waitwait = false;
 
-    vector<shared_ptr<thread>> thds;
+    ::std::vector<shared_ptr<::std::thread>> thds;
     semaphore smp_tasks;
 
     void start()
@@ -300,7 +300,7 @@ public:
         waitstop = false;
 
         for (size_t i = 0; i < maxcount; ++i) {
-            auto t = make_shared<thread>(ThdProc, this);
+            auto t = make_shared<::std::thread>(ThdProc, this);
             thds.emplace_back(t);
         }
     }
@@ -361,14 +361,14 @@ FixedTaskDispatcher::FixedTaskDispatcher()
 {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
-    d_ptr->maxcount = thread::hardware_concurrency();
+    d_ptr->maxcount = ::std::thread::hardware_concurrency();
 }
 
 FixedTaskDispatcher::FixedTaskDispatcher(size_t count)
 {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
-    d_ptr->maxcount = count < 1 ? thread::hardware_concurrency() : count;
+    d_ptr->maxcount = count < 1 ? ::std::thread::hardware_concurrency() : count;
 }
 
 FixedTaskDispatcher::~FixedTaskDispatcher()
@@ -434,12 +434,12 @@ class QueuedTaskDispatcherPrivate
 public:
 
     QueuedTaskDispatcher *owner;
-    mutex mtx_tasks;
-    set<ITask::task_type> tasks;
+    ::std::mutex mtx_tasks;
+    ::std::set<ITask::task_type> tasks;
     bool running = false, waitstop = false, waitwait = false;
-    atomic<size_t> thd_runnings;
+    ::std::atomic<size_t> thd_runnings;
 
-    vector<shared_ptr<thread>> thds;
+    ::std::vector<shared_ptr<::std::thread>> thds;
     semaphore smp_tasks;
 
     void start()
@@ -452,7 +452,7 @@ public:
         waitstop = false;
 
         for (size_t i = 0; i < mincount; ++i) {
-            auto t = make_shared<thread>(ThdProc, this);
+            auto t = make_shared<::std::thread>(ThdProc, this);
             thds.emplace_back(t);
         }
     }
@@ -514,7 +514,7 @@ public:
 
     void create_worker()
     {
-        auto t = make_shared<thread>(ThdProc, this);
+        auto t = make_shared<::std::thread>(ThdProc, this);
         thds.emplace_back(t);
     }
 
@@ -525,7 +525,7 @@ QueuedTaskDispatcher::QueuedTaskDispatcher()
 {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
-    d_ptr->mincount = thread::hardware_concurrency();
+    d_ptr->mincount = ::std::thread::hardware_concurrency();
     d_ptr->maxcount = d_ptr->mincount << 1;
 }
 
@@ -533,7 +533,7 @@ QueuedTaskDispatcher::QueuedTaskDispatcher(size_t min, size_t max)
 {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
-    d_ptr->mincount = min < 1 ? thread::hardware_concurrency() : min;
+    d_ptr->mincount = min < 1 ? ::std::thread::hardware_concurrency() : min;
     d_ptr->maxcount = min < max ? max : min;
 }
 

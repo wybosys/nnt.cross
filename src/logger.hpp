@@ -56,7 +56,8 @@ public:
     virtual string format(LogLevel, string const&);
 
     // ¾²Ì¬µÄ·½±ãº¯Êý
-#define _LOGGER_GO(func, imp) static void func(string const& msg) { Logger::shared().##imp(msg); }
+#define _LOGGER_GO(func, imp) static void func(string const& msg) { Logger::shared(). imp(msg); }
+
     _LOGGER_GO(Debug, debug);
     _LOGGER_GO(Info, info);
     _LOGGER_GO(Notice, notice);

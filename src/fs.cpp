@@ -51,9 +51,9 @@ bool isdirectory(string const &str)
     return INVALID_FILE_ATTRIBUTES != f && 0 != (f & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-vector<string> listdir(string const &str)
+::std::vector<string> listdir(string const& str)
 {
-    vector<string> r;
+    ::std::vector<string> r;
     if (!isdirectory(str))
         return r;
     auto tgt = normalize(str) + PATH_DELIMITER + "*.*";
@@ -194,7 +194,7 @@ string absolute(string const &str) {
 #endif
 
 string replace(string const &str, string const &match, string const &tgt) {
-    return regex_replace(str, regex(match), tgt);
+    return ::std::regex_replace(str, ::std::regex(match), tgt);
 }
 
 bool mkdirs(string const &str) {
@@ -247,7 +247,7 @@ bool file_get_contents(string const& file, string& result) {
     if (fp == nullptr)
         return false;
 
-    ostringstream oss;
+    ::std::ostringstream oss;
     char buf[BUFSIZ];
     while (1) {
         size_t readed = fread(buf, 1, BUFSIZ, fp);

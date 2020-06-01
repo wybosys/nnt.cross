@@ -27,10 +27,10 @@ public:
     static string USERAGENT;
 
     typedef Progress<unsigned long long> progress_type;
-    typedef Memory<stringbuf&, size_t> memory_type;
+    typedef Memory<::std::stringbuf&, size_t> memory_type;
     typedef shared_ptr<Property> arg_type;
-    typedef map<string, arg_type> args_type;
-    typedef map<string, string> files_type;
+    typedef ::std::map<string, arg_type> args_type;
+    typedef ::std::map<string, string> files_type;
 
 protected:
 
@@ -108,7 +108,7 @@ public:
     virtual string const& errmsg() const = 0;
 
     // 返回的消息主体
-    virtual stringbuf const& body() const = 0;
+    virtual ::std::stringbuf const& body() const = 0;
 
     // 返回的头
     virtual args_type const& respheaders() const = 0;

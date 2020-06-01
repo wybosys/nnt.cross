@@ -96,8 +96,8 @@ public:
     typedef double number;
     typedef COMXX_NS::Variant variant;
     typedef shared_ptr<Property> data_type;
-    typedef map<PropertyKey, data_type> map_type;
-    typedef vector<data_type> array_type;
+    typedef ::std::map<PropertyKey, data_type> map_type;
+    typedef ::std::vector<data_type> array_type;
 
     Property();
 
@@ -199,7 +199,7 @@ inline Property::data_type Property::array(size_t idx) const {
 }
 
 template<typename _CharT, typename _Traits>
-static basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Traits> &stm, Property const &v) {
+static ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <_CharT, _Traits> &stm, Property const &v) {
     switch (v.vt) {
     case Property::VT::STRING:
         stm << v.toString();
@@ -218,7 +218,7 @@ static basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Trait
 }
 
 template<typename _CharT, typename _Traits>
-static basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Traits> &stm, shared_ptr <Property> const &v) {
+static ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <_CharT, _Traits> &stm, shared_ptr <Property> const &v) {
     if (!v)
         return stm;
     return stm << *v;

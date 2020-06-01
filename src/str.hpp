@@ -1,10 +1,12 @@
 #ifndef __NNTCROSS_STR_H_INCLUDED
 #define __NNTCROSS_STR_H_INCLUDED
 
+#include <vector>
+
 CROSS_BEGIN
 
-extern NNT_API vector<string> explode(string const& str, string const& delimeter, bool skipempty = false);
-extern NNT_API string implode(vector<string> const&, string const& delimeter);
+extern NNT_API strings explode(string const& str, string const& delimeter, bool skipempty = false);
+extern NNT_API string implode(strings const&, string const& delimeter);
 extern NNT_API bool beginwith(string const& str, string const& tgt);
 extern NNT_API bool endwith(string const& str, string const& tgt);
 

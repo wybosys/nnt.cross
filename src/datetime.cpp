@@ -54,7 +54,7 @@ seconds_t Time::Now()
 
 void Time::Sleep(seconds_t sec)
 {
-    this_thread::sleep_for(chrono::milliseconds((long)(sec * 1e3)));
+    ::std::this_thread::sleep_for(::std::chrono::milliseconds((long)(sec * 1e3)));
 }
 
 CROSS_END

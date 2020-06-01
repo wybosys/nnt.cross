@@ -8,7 +8,7 @@ PropertyKey::PropertyKey(integer v)
     :vt(VT::INTEGER)  {
     _pod.i = v;
 
-    ostringstream oss;
+    ::std::ostringstream oss;
     oss << v;
     _k = oss.str();
 }
@@ -17,7 +17,7 @@ PropertyKey::PropertyKey(number v)
     :vt(VT::NUMBER) {
     _pod.n = v;
 
-    ostringstream oss;
+    ::std::ostringstream oss;
     oss << v;
     _k = oss.str();
 }
@@ -43,7 +43,7 @@ PropertyKey::operator integer() const {
         return _pod.b ? 1 : 0;
     }
 
-    istringstream iss(_k);
+    ::std::istringstream iss(_k);
     integer r;
     iss >> r;
     return r;
@@ -60,7 +60,7 @@ PropertyKey::operator number() const {
         return _pod.b ? 1 : 0;
     }
 
-    istringstream iss(_k);
+    ::std::istringstream iss(_k);
     number r;
     iss >> r;
     return r;
@@ -208,7 +208,7 @@ bool Property::toBool() const {
 string Property::toString() const {
     if (_var->vt == Property::variant::VT::STRING)
         return _var->toString();
-    ostringstream oss;
+    ::std::ostringstream oss;
     oss << *this;
     return oss.str();
 }

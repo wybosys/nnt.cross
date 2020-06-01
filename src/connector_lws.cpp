@@ -31,10 +31,10 @@ public:
     LibWebSocketConnector *owner = nullptr;
     struct lws_context *lws = nullptr;
     struct lws *client = nullptr;
-    mutex mtx_write, mtx_read, mtx_state;
+    ::std::mutex mtx_write, mtx_read, mtx_state;
     bool iswritable = false;
     bool waitquit = false;
-    shared_ptr<thread> thd_wait;
+    shared_ptr<::std::thread> thd_wait;
 
     void on_connected();
     void on_error();
@@ -82,7 +82,7 @@ bool LibWebSocketConnectorPrivate::connect() {
     string ads_port = url.host + ":" + tostr(url.port);
     int usessl = url.protocol == "ws:" ? 0 : 1;
 
-    vector<string> names;
+    ::std::vector<string> names;
     for (auto &e:PROTOCOLS) {
         if (e.callback)
             names.emplace_back(e.name);
@@ -133,7 +133,7 @@ bool LibWebSocketConnectorPrivate::write(Connector::memory_type const& mem)
     size_t left = mem.size;
     size_t tgtl = min(WS_RESERVE_WRITE_BUFFER_SIZE, left);
 
-    streampos partl = rd.sgetn(buf, tgtl);
+    ::std::streampos partl = rd.sgetn(buf, tgtl);
     left -= (size_t)partl;
 
     while (partl) {
@@ -151,7 +151,7 @@ bool LibWebSocketConnectorPrivate::write(Connector::memory_type const& mem)
         auto remains = (int)partl - writed;
         if (remains) {
             left += remains;
-            rd.pubseekoff(-remains, ios_base::cur, ios_base::out);
+            rd.pubseekoff(-remains, ::std::ios_base::cur, ::std::ios_base::out);
         }
 
         if (left) {
@@ -215,7 +215,7 @@ void LibWebSocketConnectorPrivate::on_connected()
     owner->on_connected();
 
     // Æô¶¯ÂÖÑ¯¼àÌýÏß³Ì
-    thd_wait = make_shared<thread>(ImpWait, this);
+    thd_wait = make_shared<::std::thread>(ImpWait, this);
 }
 
 void LibWebSocketConnectorPrivate::on_error()
@@ -249,7 +249,7 @@ void LibWebSocketConnectorPrivate::on_bytes(char const* buf, size_t len)
         return;
 
     NNT_AUTOGUARD(mtx_read);
-    stringstream stm;
+    ::std::stringstream stm;
     stm.write(buf, len);
 
     Connector::memory_type mem(*stm.rdbuf());
