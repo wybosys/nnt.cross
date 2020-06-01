@@ -75,19 +75,19 @@ public:
         :_msg(msg), _code((int)code)
     {}
 
-    virtual char const* what() const {
+    virtual char const* what() const noexcept {
         return _msg.c_str();
     }
 
-    virtual int code() const {
+    virtual int code() const noexcept {
         return _code;
     }
 
-    inline operator Code () const {
+    inline operator Code () const noexcept {
         return (Code)_code;
     }
 
-    inline operator int() const {
+    inline operator int() const noexcept {
         return _code;
     }
 
