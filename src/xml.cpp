@@ -51,7 +51,7 @@ void toxmlobj(Property const& po, XMLElement& cur)
     cur.SetAttribute("vt", (int)po.vt);
 
 #define CUR_SET_VALUE(toval) \
-        auto v = po.##toval(); \
+        auto v = po. toval(); \
     cur.SetAttribute("value", v); \
     SetText(cur, v);
 

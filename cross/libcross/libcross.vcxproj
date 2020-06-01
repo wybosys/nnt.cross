@@ -202,9 +202,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\fs.cpp" />
     <ClCompile Include="..\..\src\json.cpp" />
-    <ClCompile Include="..\..\src\jsoncpp\json_reader.cpp" />
-    <ClCompile Include="..\..\src\jsoncpp\json_value.cpp" />
-    <ClCompile Include="..\..\src\jsoncpp\json_writer.cpp" />
+    <ClCompile Include="..\..\src\jsoncpp\json_reader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jsoncpp\json_value.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jsoncpp\json_writer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\src\logger.cpp" />
     <ClCompile Include="..\..\src\digest.cpp" />
     <ClCompile Include="..\..\src\md5\md5.c">
