@@ -1,5 +1,5 @@
-#ifndef __NNTCROSS_XML_H_INCLUDED
-#define __NNTCROSS_XML_H_INCLUDED
+#ifndef __NNTCROSS_XMLOBJ_H_INCLUDED
+#define __NNTCROSS_XMLOBJ_H_INCLUDED
 
 #include "property.hpp"
 

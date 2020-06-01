@@ -3,8 +3,8 @@
 #include "str.hpp"
 #include <curl/curl.h>
 #include <sstream>
-#include "json.hpp"
-#include "xml.hpp"
+#include "jsonobj.hpp"
+#include "xmlobj.hpp"
 
 CROSS_BEGIN
 

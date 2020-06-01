@@ -90,9 +90,6 @@
     <ClInclude Include="..\..\src\fs.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\json.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\logger.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -109,9 +106,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\url.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\xml.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\digest.hpp">
@@ -138,6 +132,12 @@
     <ClInclude Include="..\..\src\minizip\ioapi_mem.h">
       <Filter>minizip</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\jsonobj.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xmlobj.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\fs.cpp">
@@ -153,12 +153,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\url.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\json.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\xml.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\jsoncpp\json_reader.cpp">
@@ -211,6 +205,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\minizip\ioapi_mem.c">
       <Filter>minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jsonobj.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xmlobj.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

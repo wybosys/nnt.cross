@@ -1,5 +1,5 @@
-#ifndef __NNTCROSS_JSON_H_INCLUDED
-#define __NNTCROSS_JSON_H_INCLUDED
+#ifndef __NNTCROSS_JSONOBJ_H_INCLUDED
+#define __NNTCROSS_JSONOBJ_H_INCLUDED
 
 #include "property.hpp"
 
