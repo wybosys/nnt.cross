@@ -131,7 +131,7 @@ public:
 
     operator bool() const;
 
-    operator string const& () const;
+    operator string () const;
 
     operator variant const &() const;
 
@@ -179,7 +179,7 @@ inline Property::operator bool() const {
     return toBool();
 }
 
-inline Property::operator string const& () const {
+inline Property::operator string () const {
     return toString();
 }
 
