@@ -19,8 +19,6 @@
 
 COMXX_BEGIN
 
-using namespace ::std;
-
 typedef struct {
     unsigned long d1;
     unsigned short d2;
@@ -40,8 +38,8 @@ static bool operator<(IID const &l, IID const &r) {
 
 class Variant {
 public:
-    typedef vector<unsigned char> bytes_t;
-    typedef function<Variant(initializer_list<Variant> const &)> func_t;
+    typedef ::std::vector<unsigned char> bytes_t;
+    typedef ::std::function<Variant(::std::initializer_list<Variant> const &)> func_t;
 
     enum struct VT {
         NIL = 0,
@@ -101,7 +99,7 @@ public:
 
     Variant(bytes_t const &);
 
-    Variant(string const &);
+    Variant(::std::string const &);
 
     Variant(char const *);
 
@@ -145,7 +143,7 @@ public:
 
     bytes_t const &toBytes() const;
 
-    string const &toString() const;
+    ::std::string const& toString() const;
 
     func_t const &toFunction() const;
 
@@ -153,9 +151,9 @@ public:
 
 private:
     union {
-        class IObject *o;
+        class IObject* o;
 
-        void *p;
+        void* p;
         int i;
         unsigned int ui;
         long l;
@@ -169,13 +167,14 @@ private:
         char c;
         unsigned char uc;
         bool b;
-    } _pod = {0};
-    shared_ptr<bytes_t> _bytes;
-    shared_ptr<string> _str;
-    shared_ptr<func_t> _func;
+    } _pod;
+
+    ::std::shared_ptr<bytes_t> _bytes;
+    ::std::shared_ptr<::std::string> _str;
+    ::std::shared_ptr<func_t> _func;
 };
 
-typedef initializer_list<Variant> args_t;
+typedef ::std::initializer_list<Variant> args_t;
 
 #define COMXX_PPARGS_0(args)
 #define COMXX_PPARGS_1(args) *args.begin()
@@ -202,7 +201,7 @@ public:
     virtual Variant query(IID const &) const = 0;
 
 private:
-    mutable atomic_long _referencedCount;
+    mutable ::std::atomic<long> _referencedCount;
 };
 
 template<typename T>
@@ -239,7 +238,7 @@ private:
 
 template<typename T, class... Args>
 inline shared_ref<T> make_shared_ref(Args &&... args) {
-    T *obj = new T(forward<Args>(args)...);
+    T *obj = new T(::std::forward<Args>(args)...);
     shared_ref<T> r(obj);
     obj->drop();
     return r;
@@ -261,12 +260,12 @@ public:
     virtual ~CustomObject();
 
     typedef struct {
-        string name;
+        ::std::string name;
         Variant::func_t func;
     } func_t;
 
-    typedef map<IID, IObject *> objects_t;
-    typedef map<IID, func_t> functions_t;
+    typedef ::std::map<IID, IObject *> objects_t;
+    typedef ::std::map<IID, func_t> functions_t;
 
     virtual Variant query(IID const &) const;
 
@@ -274,7 +273,7 @@ public:
 
     virtual void add(IID const &, IObject *);
 
-    virtual void add(IID const &, string const &name, Variant::func_t);
+    virtual void add(IID const &, ::std::string const &name, Variant::func_t);
 
     functions_t const &functions() const;
 
@@ -322,13 +321,13 @@ inline Variant::Variant(unsigned char v) : vt(VT::UCHAR) { _pod.uc = v; }
 
 inline Variant::Variant(bool v) : vt(VT::BOOLEAN) { _pod.b = v; }
 
-inline Variant::Variant(bytes_t const &v) : vt(VT::BYTES) { _bytes = make_shared<bytes_t>(v); }
+inline Variant::Variant(bytes_t const &v) : vt(VT::BYTES) { _bytes = ::std::make_shared<bytes_t>(v); }
 
-inline Variant::Variant(string const &v) : vt(VT::STRING) { _str = make_shared<string>(v); }
+inline Variant::Variant(::std::string const &v) : vt(VT::STRING) { _str = ::std::make_shared<::std::string>(v); }
 
-inline Variant::Variant(char const *v) : vt(VT::STRING) { _str = make_shared<string>(v); }
+inline Variant::Variant(char const *v) : vt(VT::STRING) { _str = ::std::make_shared<::std::string>(v); }
 
-inline Variant::Variant(func_t const &v) : vt(VT::FUNCTION) { _func = make_shared<func_t>(v); }
+inline Variant::Variant(func_t const &v) : vt(VT::FUNCTION) { _func = ::std::make_shared<func_t>(v); }
 
 inline Variant::Variant(Variant const& r) : vt(r.vt) {
     _pod = r._pod;
@@ -379,7 +378,7 @@ inline bool Variant::toBool() const { return _pod.b; }
 
 inline Variant::bytes_t const &Variant::toBytes() const { return *_bytes; }
 
-inline string const &Variant::toString() const { return *_str; }
+inline ::std::string const &Variant::toString() const { return *_str; }
 
 inline Variant::func_t const &Variant::toFunction() const { return *_func; }
 
@@ -459,7 +458,7 @@ inline void CustomObject::add(IID const &iid, IObject *obj) {
     _objects[iid] = obj;
 }
 
-inline void CustomObject::add(IID const &iid, string const &name, Variant::func_t func) {
+inline void CustomObject::add(IID const &iid, ::std::string const &name, Variant::func_t func) {
     _functions[iid] = {name, func};
 }
 
@@ -495,7 +494,7 @@ struct function_traits<R(Args...)> {
     template<size_t N>
     struct argument {
         static_assert(N < count, "参数数量错误");
-        using type = typename tuple_element<N, tuple<Args...>>::type;
+        using type = typename ::std::tuple_element<N, ::std::tuple<Args...>>::type;
     };
 };
 
