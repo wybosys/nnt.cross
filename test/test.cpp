@@ -46,6 +46,12 @@ TEST (fs) {
 #ifdef NNT_WINDOWS
     UNITTEST_CHECK_EQUAL(isabsolute("C://"), true);
 #endif
+
+    string str = "jfklsajfdlsajflajfdksjfkldsf";
+    string nstr;
+    file_put_contents("xx", str);
+    file_get_contents("xx", nstr);
+    UNITTEST_CHECK_EQUAL(str, nstr);
 }
 
 TEST(url)

@@ -2,6 +2,7 @@
 #include "fs.hpp"
 #include "str.hpp"
 #include <regex>
+#include <sstream>
 
 #ifdef NNT_WINDOWS
 
@@ -227,6 +228,58 @@ bool rmtree(string const &str) {
         }
     }
     return rmdir(str);
+}
+
+bool file_get_contents(string const& file, string& result) {
+#ifdef NNT_WINDOWS
+    FILE *fp = NULL;
+    fopen_s(&fp, file.c_str(), "rb");
+#else
+    FILE* fp = fopen(file.c_str(), "r");
+#endif
+
+    if (fp == nullptr)
+        return false;
+
+    ostringstream oss;
+    char buf[BUFSIZ];
+    while (1) {
+        size_t readed = fread(buf, 1, BUFSIZ, fp);
+        if (readed == 0) {
+            break;
+        }
+        oss.write(buf, readed);
+    }
+    fclose(fp);
+    result = oss.str();
+    return true;
+}
+
+bool file_put_contents(string const& file, string const& result) {
+#ifdef NNT_WINDOWS
+    FILE *fp = NULL;
+    fopen_s(&fp, file.c_str(), "wb");
+#else
+    FILE* fp = fopen(file.c_str(), "w");
+#endif
+
+    if (fp == nullptr)
+        return false;
+
+    char const* buf = result.c_str();
+    size_t full = result.length();
+
+    while (1) {
+        size_t writed = fwrite(buf, 1, full, fp);
+        if (writed == full) {
+            break;
+        }
+        buf += writed;
+        full -= writed;
+    }
+    
+    fclose(fp);
+    return true;
 }
 
 CROSS_END
