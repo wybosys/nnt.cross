@@ -1,5 +1,5 @@
 #include "cross.hpp"
-#include "xmlobj.hpp"
+#include "xml.hpp"
 #include <tinyxml2/tinyxml2.h>
 
 CROSS_BEGIN

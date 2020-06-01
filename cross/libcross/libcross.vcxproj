@@ -162,7 +162,7 @@
     <ClInclude Include="..\..\src\connector_lws.hpp" />
     <ClInclude Include="..\..\src\cross.hpp" />
     <ClInclude Include="..\..\src\fs.hpp" />
-    <ClInclude Include="..\..\src\jsonobj.hpp" />
+    <ClInclude Include="..\..\src\json.hpp" />
     <ClInclude Include="..\..\src\jsoncpp\json\allocator.h" />
     <ClInclude Include="..\..\src\jsoncpp\json\assertions.h" />
     <ClInclude Include="..\..\src\jsoncpp\json\config.h" />
@@ -189,7 +189,7 @@
     <ClInclude Include="..\..\src\datetime.hpp" />
     <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\..\src\url.hpp" />
-    <ClInclude Include="..\..\src\xmlobj.hpp" />
+    <ClInclude Include="..\..\src\xml.hpp" />
     <ClInclude Include="..\..\src\zip.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,7 +201,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\fs.cpp" />
-    <ClCompile Include="..\..\src\jsonobj.cpp" />
+    <ClCompile Include="..\..\src\json.cpp" />
     <ClCompile Include="..\..\src\jsoncpp\json_reader.cpp" />
     <ClCompile Include="..\..\src\jsoncpp\json_value.cpp" />
     <ClCompile Include="..\..\src\jsoncpp\json_writer.cpp" />
@@ -233,7 +233,7 @@
     <ClCompile Include="..\..\src\datetime.cpp" />
     <ClCompile Include="..\..\src\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\src\url.cpp" />
-    <ClCompile Include="..\..\src\xmlobj.cpp" />
+    <ClCompile Include="..\..\src\xml.cpp" />
     <ClCompile Include="..\..\src\zip.cpp" />
   </ItemGroup>
   <ItemGroup>

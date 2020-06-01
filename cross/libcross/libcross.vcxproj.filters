@@ -132,10 +132,10 @@
     <ClInclude Include="..\..\src\minizip\ioapi_mem.h">
       <Filter>minizip</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\jsonobj.hpp">
+    <ClInclude Include="..\..\src\xml.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\xmlobj.hpp">
+    <ClInclude Include="..\..\src\json.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -206,10 +206,10 @@
     <ClCompile Include="..\..\src\minizip\ioapi_mem.c">
       <Filter>minizip</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\jsonobj.cpp">
+    <ClCompile Include="..\..\src\xml.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\xmlobj.cpp">
+    <ClCompile Include="..\..\src\json.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
