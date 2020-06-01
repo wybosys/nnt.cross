@@ -7,9 +7,10 @@ CROSS_BEGIN
 md5_result md5(string const& str)
 {
     md5_result r = { 0 };
-    MD5_CTX ctx;
-    MD5Update(&ctx, (unsigned char*)str.c_str(), str.length());
-    MD5Final(r.hex, &ctx);
+    md5_state_t ctx;
+    md5_init(&ctx);
+    md5_append(&ctx, (unsigned char*)str.c_str(), str.length());
+    md5_finish(&ctx, r.hex);
     return r;
 }
 
