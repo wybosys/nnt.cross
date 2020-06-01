@@ -187,13 +187,13 @@ inline Property::operator variant const &() const {
     return *_var;
 }
 
-Property::data_type Property::map(string const& key) const {
+inline Property::data_type Property::map(string const& key) const {
     auto &m = map();
     auto fnd = m.find(key);
     return fnd == m.end() ? nullptr : fnd->second;
 }
 
-Property::data_type Property::array(size_t idx) const {
+inline Property::data_type Property::array(size_t idx) const {
     auto &l = array();
     return idx < l.size() ? l[idx] : nullptr;
 }

@@ -25,8 +25,8 @@
     <Filter Include="md5">
       <UniqueIdentifier>{64d5b080-d140-461d-bb6d-6b059a855cc2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="zip">
-      <UniqueIdentifier>{3efaed2c-df6c-42c9-be05-ee65e6144dde}</UniqueIdentifier>
+    <Filter Include="minizip">
+      <UniqueIdentifier>{80c5dd9e-8c01-4fcc-b308-6c3e98f522b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,26 +114,29 @@
     <ClInclude Include="..\..\src\xml.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\zip.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\digest.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\md5\md5.h">
       <Filter>md5</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\zip\unzip.h">
-      <Filter>zip</Filter>
+    <ClInclude Include="..\..\src\zip.hpp">
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\zip\ioapi.h">
-      <Filter>zip</Filter>
+    <ClInclude Include="..\..\src\minizip\crypt.h">
+      <Filter>minizip</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\zip\iowin32.h">
-      <Filter>zip</Filter>
+    <ClInclude Include="..\..\src\minizip\ioapi.h">
+      <Filter>minizip</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\zip\crypt.h">
-      <Filter>zip</Filter>
+    <ClInclude Include="..\..\src\minizip\iowin32.h">
+      <Filter>minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\minizip\unzip.h">
+      <Filter>minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\minizip\ioapi_mem.h">
+      <Filter>minizip</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,14 +200,17 @@
     <ClCompile Include="..\..\src\md5\md5.c">
       <Filter>md5</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\zip\unzip.c">
-      <Filter>zip</Filter>
+    <ClCompile Include="..\..\src\minizip\ioapi.c">
+      <Filter>minizip</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\zip\ioapi.c">
-      <Filter>zip</Filter>
+    <ClCompile Include="..\..\src\minizip\iowin32.c">
+      <Filter>minizip</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\zip\iowin32.c">
-      <Filter>zip</Filter>
+    <ClCompile Include="..\..\src\minizip\unzip.c">
+      <Filter>minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\minizip\ioapi_mem.c">
+      <Filter>minizip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

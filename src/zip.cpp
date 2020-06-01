@@ -6,16 +6,15 @@
 
 CROSS_BEGIN
 
-bool unzip(string const& ar, string const& dir) {
-    unzFile zf = unzOpen(ar.c_str());
+static bool doUnZip(unzFile zf, string const& dir) {
     if (zf == nullptr) {
-        Logger::Info("打开文件失败: " + ar);
+        Logger::Info("打开zip文件失败");
         return false;
     }
 
     unz_global_info ginfo;
     if (unzGetGlobalInfo(zf, &ginfo) != UNZ_OK) {
-        Logger::Info("读取zip文件信息失败: " + ar);
+        Logger::Info("读取zip文件信息失败");
         unzClose(zf);
         return false;
     }
@@ -25,7 +24,7 @@ bool unzip(string const& ar, string const& dir) {
         unz_file_info finfo;
         char fnmbuf[FILENAME_MAX];
         if (unzGetCurrentFileInfo(zf, &finfo, fnmbuf, FILENAME_MAX, nullptr, 0, nullptr, 0) != UNZ_OK) {
-            Logger::Info("读取zip内文件信息失败: " + ar);
+            Logger::Info("读取zip内文件信息失败");
             unzClose(zf);
             return false;
         }
@@ -94,7 +93,7 @@ bool unzip(string const& ar, string const& dir) {
         // 读取下一个
         if (++ni < ginfo.number_entry) {
             if (unzGoToNextFile(zf) != UNZ_OK) {
-                Logger::Info("读取zip内下一个文件失败: " + ar);
+                Logger::Info("读取zip内下一个文件失败");
                 unzClose(zf);
                 return false;
             }
@@ -105,6 +104,22 @@ bool unzip(string const& ar, string const& dir) {
     }
 
     unzClose(zf);
+    return true;
+}
+
+bool unzip(string const& ar, string const& dir) {
+    unzFile zf = unzOpen(ar.c_str());
+    if (doUnZip(zf, dir))
+        return true;
+    Logger::Info("解压zip文件失败: " + ar);
+    return false;
+}
+
+bool unzip(char const* buf, size_t lbuf, string const& dir) {
+    unzFile zf = unzOpenBuffer(buf, lbuf);
+    if (doUnZip(zf, dir))
+        return true;
+    Logger::Info("解压zip数据流失败");
     return true;
 }
 
