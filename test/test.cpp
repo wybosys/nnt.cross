@@ -36,6 +36,7 @@ TEST (fs) {
 
     Logger t;
     t.warn("hahaha");
+    t.info(pwd());
 
     UNITTEST_CHECK_EQUAL(dirname(""), "");
     UNITTEST_CHECK_EQUAL(dirname(dirname(dir)), normalize("xxx/abc"));

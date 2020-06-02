@@ -191,6 +191,16 @@ bool isabsolute(string const &str) {
     return false;
 }
 
+string pwd() {
+    char buf[PATH_MAX] = {0};
+    getcwd(buf, PATH_MAX);
+    return buf;
+}
+
+bool cd(string const &str) {
+    return ::chdir(str.c_str()) == 0;
+}
+
 #endif
 
 string dirname(string const &str) {

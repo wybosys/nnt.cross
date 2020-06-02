@@ -1,7 +1,7 @@
 #include "cross.hpp"
 #include "json.hpp"
 #include <sstream>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 
 CROSS_BEGIN
 

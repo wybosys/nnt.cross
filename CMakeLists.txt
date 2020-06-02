@@ -4,6 +4,8 @@ project(cross)
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(src)
+include_directories(src/jsoncpp)
+
 add_subdirectory(src/md5)
 add_subdirectory(src/minizip)
 add_subdirectory(src/jsoncpp)
