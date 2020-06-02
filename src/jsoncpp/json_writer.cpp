@@ -3,11 +3,9 @@
 // recognized in your jurisdiction.
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
-#include "cross.hpp"
-
 #if !defined(JSON_IS_AMALGAMATION)
 #include "json_tool.h"
-#include "json/writer.h"
+#include <json/writer.h>
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <algorithm>
 #include <cassert>
