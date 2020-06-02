@@ -1,6 +1,8 @@
 #ifndef __NNT_CROSS_LOGGER_H_INCLUDED
 #define __NNT_CROSS_LOGGER_H_INCLUDED
 
+#include "macro.hpp"
+
 CROSS_BEGIN
 
 enum struct LogLevel
@@ -17,7 +19,7 @@ enum struct LogLevel
     EMERGENCY = 0
 };
 
-class ILogger
+class ILogger : public IObject
 {
 public:
 
@@ -35,11 +37,9 @@ public:
 
 class NNT_API Logger : public ILogger
 {
-public:
-
     NNT_SINGLETON_DECL(Logger);
 
-    virtual ~Logger() = default;
+public:
 
     string prefix;
 

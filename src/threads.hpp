@@ -2,9 +2,6 @@
 #define __NNTCROSS_THREADS_H_INCLUDED
 
 #include <functional>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
 
 CROSS_BEGIN
 
@@ -37,37 +34,21 @@ public:
 // 当前是否在主线程
 extern bool IsMainThread();
 
+NNT_CLASS_PREPARE(semaphore);
+
 // 信号量
 class NNT_API semaphore
 {
+    NNT_CLASS_DECL(semaphore);
+
 public:
 
-    void notify() {
-        ::std::lock_guard<decltype(_mtx)> lck(_mtx);
-        ++_count;
-        _cond.notify_one();
-    }
+    semaphore();
+    ~semaphore();
 
-    void wait() {
-        ::std::unique_lock<decltype(_mtx)> lck(_mtx);
-        while (!_count)
-            _cond.wait(lck);
-        --_count;
-    }
-
-    bool try_wait() {
-        ::std::lock_guard<decltype(_mtx)> lck(_mtx);
-        if (_count) {
-            --_count;
-            return true;
-        }
-        return false;
-    }
-
-private:
-    ::std::mutex _mtx;
-    ::std::condition_variable _cond;
-    size_t _count = 0;
+    void notify();
+    void wait();
+    bool try_wait();
 };
 
 // 任务接口

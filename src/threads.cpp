@@ -4,6 +4,9 @@
 #include <list>
 #include <set>
 #include <csignal>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #ifdef NNT_WINDOWS
 #include <Windows.h>
@@ -91,6 +94,47 @@ void MainThread::invoke(func_type const& fn)
 bool IsMainThread()
 {
     return MainThreadPrivate::ismainthread;
+}
+
+class semaphorePrivate
+{
+public:
+    ::std::mutex _mtx;
+    ::std::condition_variable _cond;
+    size_t _count = 0;
+};
+
+semaphore::semaphore()
+{
+    NNT_CLASS_CONSTRUCT();
+}
+
+semaphore::~semaphore()
+{
+    NNT_CLASS_DESTORY();
+}
+
+void semaphore::notify() {
+    ::std::lock_guard<decltype(d_ptr->_mtx)> lck(d_ptr->_mtx);
+    ++d_ptr->_count;
+    d_ptr->_cond.notify_one();
+}
+
+void semaphore::wait() {
+    ::std::unique_lock<decltype(d_ptr->_mtx)> lck(d_ptr->_mtx);
+    while (!d_ptr->_count) {
+        d_ptr->_cond.wait(lck);
+    }
+    --d_ptr->_count;
+}
+
+bool semaphore::try_wait() {
+    ::std::lock_guard<decltype(d_ptr->_mtx)> lck(d_ptr->_mtx);
+    if (d_ptr->_count) {
+        --d_ptr->_count;
+        return true;
+    }
+    return false;
 }
 
 ITask::ITask(func_type fn)
