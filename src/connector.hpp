@@ -23,6 +23,7 @@ public:
     static unsigned int TIMEOUT;
 
     // ua
+
     static string USERAGENT;
 
     typedef Progress<unsigned long long> progress_type;
