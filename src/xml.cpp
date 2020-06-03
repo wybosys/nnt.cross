@@ -45,12 +45,10 @@ XMLElement *InsertNewChildElement(XMLElement &cur, char const *name) {
 void toxmlobj(Property const &po, XMLElement &cur) {
     cur.SetAttribute("vt", (int) po.vt);
 
-#define CUR_SET_VALUE(toval) \
-        auto v = po. toval(); \
+#define CUR_SET_VALUE(toval, typ) \
+        auto v = (typ)po. toval(); \
     cur.SetAttribute("value", v); \
     SetText(cur, v);
-
-    // cur.SetText(v); // ����cc�е��ϰ汾
 
     switch (po.vt) {
         default:
@@ -58,15 +56,15 @@ void toxmlobj(Property const &po, XMLElement &cur) {
         }
             break;
         case Property::VT::INTEGER: {
-            CUR_SET_VALUE(toInteger);
+            CUR_SET_VALUE(toInteger, int);
         }
             break;
         case Property::VT::NUMBER: {
-            CUR_SET_VALUE(toNumber);
+            CUR_SET_VALUE(toNumber, double);
         }
             break;
         case Property::VT::BOOLEAN: {
-            CUR_SET_VALUE(toBool);
+            CUR_SET_VALUE(toBool, bool);
         }
             break;
         case Property::VT::STRING: {
