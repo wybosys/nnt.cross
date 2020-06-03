@@ -72,7 +72,7 @@ public:
         self->rspheaders[key] = make_property(val);
         return lbuf;
     }
-    
+
     CURL *h = nullptr;
 
     int errcode;
@@ -102,7 +102,7 @@ string escape(CURL* h, HttpConnector::arg_type const& arg)
     oss << arg;
     auto str = oss.str();
     char* res = curl_easy_escape(h, str.c_str(), str.length());
-    // ²»ÐèÒªÊÍ·Åres
+    // ï¿½ï¿½ï¿½ï¿½Òªï¿½Í·ï¿½res
     if (res)
         str = res;
     return str;
@@ -122,7 +122,7 @@ string build_query(CURL* h, HttpConnector::args_type const& args)
 void CurlHttpConnector::close()
 {
     if (d_ptr->h) {
-        // ÊÍ·ÅÕýÔÚ½øÐÐµÄÁ¬½Ó
+        // ï¿½Í·ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
         curl_easy_cleanup(d_ptr->h);
         d_ptr->h = nullptr;
     }
@@ -137,7 +137,7 @@ bool CurlHttpConnector::send() const {
     d_ptr->h = curl_easy_init();
     auto h = d_ptr->h;
 
-    // ´¦ÀígetÇëÇó
+    // ï¿½ï¿½ï¿½ï¿½getï¿½ï¿½ï¿½ï¿½
     if (method == METHOD_GET) {
         if (!_reqargs.empty()) {
             if (url.find('?') == -1) {
@@ -158,11 +158,11 @@ bool CurlHttpConnector::send() const {
     curl_easy_setopt(h, CURLOPT_TIMEOUT, timeout);
     curl_easy_setopt(h, CURLOPT_NOSIGNAL, 1);
 
-    // Ìø¹ýhttpsÖ¤ÊéÑéÖ¤
+    // ï¿½ï¿½ï¿½ï¿½httpsÖ¤ï¿½ï¿½ï¿½ï¿½Ö¤
     curl_easy_setopt(h, CURLOPT_SSL_VERIFYHOST, 0);
     curl_easy_setopt(h, CURLOPT_SSL_VERIFYPEER, 0);
 
-    // ´¦ÀípostÇëÇó
+    // ï¿½ï¿½ï¿½ï¿½postï¿½ï¿½ï¿½ï¿½
     curl_httppost *form = nullptr;
     if ((method & METHOD_POST) == METHOD_POST) {
         curl_easy_setopt(h, CURLOPT_POST, 1);
@@ -203,7 +203,7 @@ bool CurlHttpConnector::send() const {
         }
     }
 
-    // ÉèÖÃÇëÇóÍ·
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·
     curl_slist *headers = nullptr;
     if (!_reqheaders.empty()) {
         for (auto &e : _reqheaders) {
@@ -215,11 +215,11 @@ bool CurlHttpConnector::send() const {
         curl_easy_setopt(h, CURLOPT_HTTPHEADER, headers);
     }
 
-    // Ìø¹ýhttpsÖ¤ÊéÑéÖ¤
+    // ï¿½ï¿½ï¿½ï¿½httpsÖ¤ï¿½ï¿½ï¿½ï¿½Ö¤
     curl_easy_setopt(h, CURLOPT_SSL_VERIFYHOST, 0);
     curl_easy_setopt(h, CURLOPT_SSL_VERIFYPEER, 0);
 
-    // ÉèÖÃ·µ»ØµÄ´¦Àí
+    // ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ØµÄ´ï¿½ï¿½ï¿½
     curl_easy_setopt(h, CURLOPT_WRITEFUNCTION, private_class_type::ImpReceiveData);
     curl_easy_setopt(h, CURLOPT_WRITEDATA, d_ptr);
     curl_easy_setopt(h, CURLOPT_NOPROGRESS, 0);
@@ -228,12 +228,12 @@ bool CurlHttpConnector::send() const {
     curl_easy_setopt(h, CURLOPT_HEADERFUNCTION, private_class_type::ImpReceiveHeader);
     curl_easy_setopt(h, CURLOPT_HEADERDATA, d_ptr);
 
-    // ·¢ÆðÇëÇó
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     auto st = curl_easy_perform(h);
     bool suc = false;
     if (st == CURLE_OK) {
         curl_easy_getinfo(h, CURLINFO_RESPONSE_CODE, &d_ptr->respcode);
-        // È«²¿Êý¾Ý¶ÁÈ¡Íê³É»Øµ÷
+        // È«ï¿½ï¿½ï¿½ï¿½ï¿½Ý¶ï¿½È¡ï¿½ï¿½É»Øµï¿½
         on_completed();
         suc = true;
     }
@@ -244,7 +244,7 @@ bool CurlHttpConnector::send() const {
         on_error(error(Code::FAILED, msg));
     }
 
-    // ÇåÀí
+    // ï¿½ï¿½ï¿½ï¿½
     if (form)
         curl_formfree(form);
     if (headers)
