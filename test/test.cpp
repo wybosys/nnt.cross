@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cross.hpp>
 #include <fs.hpp>
+#include <str.hpp>
 #include <datetime.hpp>
 #include <logger.hpp>
 #include <json.hpp>
@@ -16,6 +17,11 @@
 #include <zip.hpp>
 
 USE_CROSS;
+
+TEST (str) {
+    string str = " a b c ";
+    UNITTEST_CHECK_EQUAL(replace(str, " ", "/"), "/a/b/c/");
+}
 
 TEST (test) {
     ::std::stringstream ss;

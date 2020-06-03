@@ -1,7 +1,6 @@
 ﻿#include "cross.hpp"
 #include "fs.hpp"
 #include "str.hpp"
-#include <regex>
 #include <sstream>
 
 #ifdef NNT_WINDOWS
@@ -210,10 +209,6 @@ string dirname(string const &str) {
         return nstr;
     ps.pop_back();
     return implode(ps, PATH_DELIMITER);
-}
-
-string replace(string const &str, string const &match, string const &tgt) {
-    return ::std::regex_replace(str, ::std::regex(match), tgt);
 }
 
 bool mkdirs(string const &str) {

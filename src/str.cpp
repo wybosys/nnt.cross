@@ -1,6 +1,7 @@
 #include "cross.hpp"
 #include "str.hpp"
 #include <sstream>
+#include <regex>
 
 CROSS_BEGIN
 
@@ -44,8 +45,8 @@ bool endwith(string const &str, string const &tgt) {
     return str.substr(str.length() - tgt.length(), tgt.length()) == tgt;
 }
 
-template <typename T>
-inline T fromstr(string const& str) {
+template<typename T>
+inline T fromstr(string const &str) {
     ::std::istringstream iss(str);
     T v;
     iss >> v;
@@ -64,7 +65,7 @@ double todouble(string const &str) {
     return fromstr<double>(str);
 }
 
-template <typename T>
+template<typename T>
 inline string tostr(T v) {
     ::std::ostringstream oss;
     oss << v;
@@ -81,6 +82,10 @@ string tostr(float v) {
 
 string tostr(double v) {
     return tostr<double>(v);
+}
+
+string replace(string const &str, string const &pat, string const &tgt) {
+    return ::std::regex_replace(str, ::std::regex(pat), tgt);
 }
 
 CROSS_END
