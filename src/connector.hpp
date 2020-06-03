@@ -7,8 +7,7 @@
 
 CROSS_BEGIN
 
-class NNT_API Connector : public Object
-{
+class NNT_API Connector : virtual public Object {
 public:
 
     // 关闭连接
@@ -27,7 +26,7 @@ public:
     static string USERAGENT;
 
     typedef Progress<unsigned long long> progress_type;
-    typedef Memory<::std::stringbuf&, size_t> memory_type;
+    typedef Memory<::std::stringbuf &, size_t> memory_type;
     typedef shared_ptr<Property> arg_type;
     typedef ::std::map<string, arg_type> args_type;
     typedef ::std::map<string, string> files_type;
@@ -35,16 +34,15 @@ public:
 protected:
 
     virtual void on_connected() const {} // 连接成功
-    virtual void on_progress(progress_type const&) const {} // 传输进度
-    virtual void on_bytes(memory_type const&) const {} // 收到部分数据
+    virtual void on_progress(progress_type const &) const {} // 传输进度
+    virtual void on_bytes(memory_type const &) const {} // 收到部分数据
     virtual void on_completed() const {} // 完成数据传输
-    virtual void on_error(error const&) const {} // 遇到错误
+    virtual void on_error(error const &) const {} // 遇到错误
     virtual void on_disconnected() const {} // 断开连接
 
 };
 
-class NNT_API HttpConnector : public Connector
-{
+class NNT_API HttpConnector : virtual public Connector {
 public:
 
     // 请求形式
@@ -71,47 +69,50 @@ public:
     unsigned int timeout = TIMEOUT; // timeout
 
     // 设置参数
-    virtual HttpConnector& setarg(string const&, arg_type const&);
-    virtual HttpConnector& setargs(args_type const&);
+    virtual HttpConnector &setarg(string const &, arg_type const &);
 
-    template <typename T>
-    inline HttpConnector& setarg(string const& key, T const& v) {
+    virtual HttpConnector &setargs(args_type const &);
+
+    template<typename T>
+    inline HttpConnector &setarg(string const &key, T const &v) {
         return setarg(key, make_shared<Property>(v));
     }
 
     // 获得参数值
-    virtual arg_type const& getarg(string const&);
+    virtual arg_type const &getarg(string const &);
 
     // 是否存在参数
-    virtual bool hasarg(string const&);
+    virtual bool hasarg(string const &);
 
     // 设置请求头
-    virtual HttpConnector& setheader(string const&, arg_type const&);
-    virtual HttpConnector& setheaders(args_type const&);
+    virtual HttpConnector &setheader(string const &, arg_type const &);
 
-    template <typename T>
-    inline HttpConnector& setheader(string const& key, T const& v) {
+    virtual HttpConnector &setheaders(args_type const &);
+
+    template<typename T>
+    inline HttpConnector &setheader(string const &key, T const &v) {
         return setheader(key, make_shared<Property>(v));
     }
 
     // 读取请求头
-    virtual arg_type const& getheader(string const&);
+    virtual arg_type const &getheader(string const &);
 
     // 是否存在请求头
-    virtual bool hasheader(string const&);
+    virtual bool hasheader(string const &);
 
     // 执行请求
     virtual bool send() const = 0;
 
     // 如果请求错误，保存错误信息
     virtual int errcode() const = 0;
-    virtual string const& errmsg() const = 0;
+
+    virtual string const &errmsg() const = 0;
 
     // 返回的消息主体
-    virtual ::std::stringbuf const& body() const = 0;
+    virtual ::std::stringbuf const &body() const = 0;
 
     // 返回的头
-    virtual args_type const& respheaders() const = 0;
+    virtual args_type const &respheaders() const = 0;
 
     // 返回的错误码
     virtual unsigned short respcode() const = 0;
@@ -119,8 +120,9 @@ public:
 protected:
 
     // 分开上传下载进度回调，默认on_progress为下载进度回调
-    virtual void on_progress_upload(progress_type const&) const {}
-    virtual void on_progress_download(progress_type const& range) const {
+    virtual void on_progress_upload(progress_type const &) const {}
+
+    virtual void on_progress_download(progress_type const &range) const {
         on_progress(range);
     }
 
@@ -129,15 +131,14 @@ protected:
 };
 
 // websocket连接器
-class NNT_API WebSocketConnector : public Connector
-{
+class NNT_API WebSocketConnector : virtual public Connector {
 public:
 
     // 连接服务器
     virtual bool connect() = 0;
 
     // 发送数据
-    virtual bool write(memory_type const&) = 0;
+    virtual bool write(memory_type const &) = 0;
 
     // 等待数据
     virtual void wait() = 0;
@@ -156,12 +157,14 @@ protected:
 
     // 正在连接
     virtual void on_connecting() const {}
+
     virtual void on_reconnecting() const {}
+
     virtual void on_reconnected() const {}
 };
 
 // 转换args到property，之后既可以使用property的序列化方法
-extern Connector::arg_type Combine(Connector::args_type const&);
+extern Connector::arg_type Combine(Connector::args_type const &);
 
 CROSS_END
 
