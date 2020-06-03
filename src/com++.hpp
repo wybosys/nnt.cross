@@ -170,8 +170,7 @@ public:
 
 private:
     union {
-        class IObject *o;
-
+        object_type *o;
         void *p;
         int i;
         unsigned int ui;
@@ -477,7 +476,7 @@ inline Variant<Types> &Variant<Types>::operator=(Variant const &r) {
         _str = r._str;
         _func = r._func;
 
-        IObject *old = nullptr;
+        object_type *old = nullptr;
         if (vt == VT::OBJECT && _pod.o) {
             old = _pod.o;
         }
