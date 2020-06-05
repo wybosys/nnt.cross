@@ -102,9 +102,12 @@ TEST (download) {
     CurlDownloadConnector cnt;
     cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
     cnt.target = "sample-0.zip";
-    cnt.send();
-    size_t sz = stat(cnt.target)->size;
-    UNITTEST_CHECK_EQUAL(sz, 190567);
+    if (cnt.send()) {
+        size_t sz = stat(cnt.target)->size;
+        UNITTEST_CHECK_EQUAL(sz, 190567);
+    } else {
+        UNITTEST_CHECK_EQUAL(false, true);
+    }
 }
 
 TEST (prop) {

@@ -46,6 +46,8 @@ protected:
 class NNT_API HttpConnector : virtual public Connector {
 public:
 
+    typedef unsigned short respondcode_type;
+
     // 请求形式
     enum {
         METHOD_GET = 0x1000,
@@ -116,7 +118,10 @@ public:
     virtual args_type const &respheaders() const = 0;
 
     // 返回的错误码
-    virtual unsigned short respcode() const = 0;
+    virtual respondcode_type respcode() const = 0;
+
+    // 根据错误码计算请求是否成功
+    static bool RespondCodeIsOk(respondcode_type);
 
 protected:
 

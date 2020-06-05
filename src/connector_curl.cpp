@@ -215,11 +215,9 @@ bool CurlHttpConnector::send() const {
     curl_easy_setopt(h, CURLOPT_HEADERDATA, d_ptr);
 
     auto st = curl_easy_perform(h);
-    bool suc = false;
     if (st == CURLE_OK) {
         curl_easy_getinfo(h, CURLINFO_RESPONSE_CODE, &d_ptr->respcode);
         on_completed();
-        suc = true;
     } else {
         d_ptr->errcode = st;
         char const *msg = curl_easy_strerror(st);
@@ -234,7 +232,7 @@ bool CurlHttpConnector::send() const {
     curl_easy_cleanup(h);
     d_ptr->h = nullptr;
 
-    return suc;
+    return RespondCodeIsOk(d_ptr->respcode);
 }
 
 int CurlHttpConnector::errcode() const {
@@ -464,13 +462,11 @@ bool CurlDownloadConnector::send() const {
     curl_easy_setopt(h, CURLOPT_HEADERDATA, d_ptr);
 
     auto st = curl_easy_perform(h);
-    bool suc = false;
     if (st == CURLE_OK) {
         curl_easy_getinfo(h, CURLINFO_RESPONSE_CODE, &d_ptr->respcode);
         // 刷缓存中的数据
         d_ptr->flush();
         on_completed();
-        suc = true;
     } else {
         d_ptr->errcode = st;
         char const *msg = curl_easy_strerror(st);
@@ -485,7 +481,7 @@ bool CurlDownloadConnector::send() const {
     curl_easy_cleanup(h);
     d_ptr->h = nullptr;
 
-    return suc;
+    return RespondCodeIsOk(d_ptr->respcode);
 }
 
 int CurlDownloadConnector::errcode() const {
