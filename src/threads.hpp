@@ -7,93 +7,96 @@ CROSS_BEGIN
 
 NNT_CLASS_PREPARE(MainThread);
 
-// ÒµÎñÖ÷Ïß³Ì
-class NNT_API MainThread
-{
-    NNT_CLASS_DECL(MainThread);
+// ä¸šåŠ¡ä¸»çº¿ç¨‹
+class NNT_API MainThread {
+NNT_CLASS_DECL(MainThread);
 
     MainThread();
+
     ~MainThread();
 
 public:
 
-    NNT_SINGLETON_DECL(MainThread);
+NNT_SINGLETON_DECL(MainThread);
 
     typedef function<void()> func_type;
 
-    // ´óÑ­»·ÖĞÖ´ĞĞ
-    void invoke(func_type const&);
+    // å¤§å¾ªç¯ä¸­æ‰§è¡Œ
+    void invoke(func_type const &);
 
-    // ´óÑ­»·
+    // å¤§å¾ªç¯
     void exec();
 
-    // »òÕßÔÚÒÑÓĞ´óÑ­»·ÖĞ½øĞĞ»Øµ÷
+    // æˆ–è€…åœ¨å·²æœ‰å¤§å¾ªç¯ä¸­è¿›è¡Œå›è°ƒ
     void tick();
 };
 
-// µ±Ç°ÊÇ·ñÔÚÖ÷Ïß³Ì
+// å½“å‰æ˜¯å¦åœ¨ä¸»çº¿ç¨‹
 extern bool IsMainThread();
 
 NNT_CLASS_PREPARE(semaphore);
 
-// ĞÅºÅÁ¿
-class NNT_API semaphore
-{
-    NNT_CLASS_DECL(semaphore);
+// ä¿¡å·é‡
+class NNT_API semaphore {
+NNT_CLASS_DECL(semaphore);
 
 public:
 
     semaphore();
+
     ~semaphore();
 
     void notify();
+
     void wait();
+
     bool try_wait();
 };
 
-// ÈÎÎñ½Ó¿Ú
-class NNT_API ITask : public IObject
-{
-    NNT_NOCOPY(ITask);
+// ä»»åŠ¡æ¥å£
+class NNT_API ITask : public IObject {
+NNT_NOCOPY(ITask);
 
 public:
 
-    typedef function<void(ITask*)> func_type;
-    typedef shared_ptr<ITask> task_type;
+    typedef function<void(ITask &)> func_type;
+    typedef shared_ptr <ITask> task_type;
 
     ITask(func_type fn = nullptr);
 
-    // ¼Ì³Ğ·½Ê½ÊµÏÖÔËĞĞ
+    // ç»§æ‰¿æ–¹å¼å®ç°è¿è¡Œ
     virtual void main() {}
-    
-    // »òÕßÉè¶¨ÔËĞĞº¯Êı
+
+    // æˆ–è€…è®¾å®šè¿è¡Œå‡½æ•°
     func_type proc;
 
-    // ÊÇ·ñÔÚÔËĞĞ
+    // æ˜¯å¦åœ¨è¿è¡Œ
     bool isrunning() const;
 
-    // Á¥ÊôµÄµ÷¶ÈÆ÷
+    // éš¶å±çš„è°ƒåº¦å™¨
     class ITaskDispatcher *dispatcher() const;
 
-    // ¸´ÖÆÒ»¸öÈÎÎñ
+    // å¤åˆ¶ä¸€ä¸ªä»»åŠ¡
     virtual task_type copy() const = 0;
 
-    // È¡ÏûÈÎÎñ
+    // å–æ¶ˆä»»åŠ¡
     virtual void cancel() {}
 
 private:
     void _main();
+
     bool _running;
+
     class ITaskDispatcher *_dispatcher = nullptr;
+
     friend class ITaskDispatcher;
 };
 
-template <typename TImpl>
-class TaskImpl : public ITask
-{
+template<typename TImpl>
+class TaskImpl : public ITask {
 public:
     TaskImpl(func_type fn = nullptr) : ITask(fn) {}
-    
+
     virtual task_type copy() const {
         auto r = make_dynamic_shared<TImpl, ITask>();
         r->proc = proc;
@@ -103,113 +106,148 @@ public:
 
 class NNT_API Task : public TaskImpl<Task> {
 public:
-    Task(func_type fn = nullptr) :TaskImpl<Task>(fn) {}
+    Task(func_type fn = nullptr) : TaskImpl<Task>(fn) {}
 };
 
-// ½Ó¿ÚÏß³Ìµ÷¶ÈÆ÷
-class NNT_API ITaskDispatcher : public IObject
-{
+// æ¥å£çº¿ç¨‹è°ƒåº¦å™¨
+class NNT_API ITaskDispatcher : public IObject {
 public:
 
     typedef ITask::task_type task_type;
-    
-    // Ìí¼ÓÒ»¸öÈÎÎñ
-    virtual bool add(task_type&&) = 0;
 
-    // ¿ªÊ¼µ÷¶È
+    // æ·»åŠ ä¸€ä¸ªä»»åŠ¡
+    virtual bool add(task_type &&) = 0;
+
+    virtual bool add(ITask::func_type fn) {
+        return add(make_shared<Task>(fn));
+    }
+
+    // å¼€å§‹è°ƒåº¦
     virtual void start() = 0;
 
-    // ½áÊøµ÷¶È
+    // ç»“æŸè°ƒåº¦
     virtual void stop() = 0;
 
-    // ÊÇ·ñÔÚÔËĞĞ
+    // æ˜¯å¦åœ¨è¿è¡Œ
     virtual bool isrunning() const = 0;
 
-    // Çå¿ÕÈÎÎñ
+    // æ¸…ç©ºä»»åŠ¡
     virtual void clear() = 0;
 
-    // µÈ´ıËùÓĞÈÎÎñÔËĞĞÍê³É
+    // ç­‰å¾…æ‰€æœ‰ä»»åŠ¡è¿è¡Œå®Œæˆ
     virtual void wait() = 0;
 
-    // È¡ÏûËùÓĞÈÎÎñ
+    // å–æ¶ˆæ‰€æœ‰ä»»åŠ¡
     virtual void cancel() = 0;
 
 protected:
 
-    // Ö´ĞĞÒ»´ÎÈÎÎñ
-    void _run(task_type& tsk);
+    // æ‰§è¡Œä¸€æ¬¡ä»»åŠ¡
+    void _run(task_type &tsk);
 };
 
 NNT_CLASS_PREPARE(SingleTaskDispatcher);
 
-// µ¥Ïß³ÌÈÎÎñµ÷¶È
-class NNT_API SingleTaskDispatcher : public ITaskDispatcher
-{
-    NNT_CLASS_DECL(SingleTaskDispatcher);
+// å•çº¿ç¨‹ä»»åŠ¡è°ƒåº¦
+class NNT_API SingleTaskDispatcher : public ITaskDispatcher {
+NNT_CLASS_DECL(SingleTaskDispatcher);
 
 public:
 
     SingleTaskDispatcher();
+
     virtual ~SingleTaskDispatcher();
 
-    virtual bool add(task_type&&);
+    virtual bool add(task_type &&);
+
+    virtual bool add(ITask::func_type fn) {
+        return ITaskDispatcher::add(fn);
+    }
+
     virtual void start();
+
     virtual void stop();
+
     virtual bool isrunning() const;
+
     virtual void clear();
+
     virtual void wait();
+
     virtual void cancel();
 
-    // Á¬½Óµ½µ±Ç°ÔËĞĞÏß³Ì
+    // è¿æ¥åˆ°å½“å‰è¿è¡Œçº¿ç¨‹
     bool attach();
 };
 
 NNT_CLASS_PREPARE(FixedTaskDispatcher);
 
-// ¶¨³¤Ïß³ÌÈÎÎñµ÷¶È
-class NNT_API FixedTaskDispatcher : public ITaskDispatcher
-{
-    NNT_CLASS_DECL(FixedTaskDispatcher);
+// å®šé•¿çº¿ç¨‹ä»»åŠ¡è°ƒåº¦
+class NNT_API FixedTaskDispatcher : public ITaskDispatcher {
+NNT_CLASS_DECL(FixedTaskDispatcher);
 
 public:
 
-    // \@count Ê¹ÓÃ¶àÉÙ¸öÏß³ÌÖ´ĞĞÈÎÎñ£¬ Ä¬ÈÏÎªcpuºËĞÄÏß³ÌÊı
+    // \@count ä½¿ç”¨å¤šå°‘ä¸ªçº¿ç¨‹æ‰§è¡Œä»»åŠ¡ï¼Œ é»˜è®¤ä¸ºcpuæ ¸å¿ƒçº¿ç¨‹æ•°
     FixedTaskDispatcher();
+
     FixedTaskDispatcher(size_t count);
+
     virtual ~FixedTaskDispatcher();
 
-    virtual bool add(task_type&&);
+    virtual bool add(task_type &&);
+
+    virtual bool add(ITask::func_type fn) {
+        return ITaskDispatcher::add(fn);
+    }
+
     virtual void start();
+
     virtual void stop();
+
     virtual bool isrunning() const;
+
     virtual void clear();
+
     virtual void wait();
+
     virtual void cancel();
 };
 
 NNT_CLASS_PREPARE(QueuedTaskDispatcher);
 
-// ¶ÓÁĞÏß³ÌÈÎÎñµ÷¶È
-class NNT_API QueuedTaskDispatcher : public ITaskDispatcher
-{
-    NNT_CLASS_DECL(QueuedTaskDispatcher);
+// é˜Ÿåˆ—çº¿ç¨‹ä»»åŠ¡è°ƒåº¦
+class NNT_API QueuedTaskDispatcher : public ITaskDispatcher {
+NNT_CLASS_DECL(QueuedTaskDispatcher);
 
 public:
 
     /*
-    \@min ×îĞ¡¶àÉÙ¸öÏß³Ì£¬Ä¬ÈÏcpuºËĞÄÏß³ÌÊı
-    \@max ³¬¹ımaxÏß³Ìºó£¬ÆäËûÈÎÎñÅÅ¶ÓµÈ´ıÖ´ĞĞ£¬Ä¬ÈÏÎª2±¶cpuºËĞÄÏß³ÌÊı
+    \@min æœ€å°å¤šå°‘ä¸ªçº¿ç¨‹ï¼Œé»˜è®¤cpuæ ¸å¿ƒçº¿ç¨‹æ•°
+    \@max è¶…è¿‡maxçº¿ç¨‹åï¼Œå…¶ä»–ä»»åŠ¡æ’é˜Ÿç­‰å¾…æ‰§è¡Œï¼Œé»˜è®¤ä¸º2å€cpuæ ¸å¿ƒçº¿ç¨‹æ•°
     */
     QueuedTaskDispatcher();
+
     QueuedTaskDispatcher(size_t min, size_t max);
+
     virtual ~QueuedTaskDispatcher();
 
-    virtual bool add(task_type&&);
+    virtual bool add(task_type &&);
+
+    virtual bool add(ITask::func_type fn) {
+        return ITaskDispatcher::add(fn);
+    }
+
     virtual void start();
+
     virtual void stop();
+
     virtual bool isrunning() const;
+
     virtual void clear();
+
     virtual void wait();
+
     virtual void cancel();
 };
 

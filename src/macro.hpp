@@ -112,6 +112,16 @@ public:                                     \
     }                         \
     while (0)
 
+#define NNT_HEAP_OBJECT_EXPRESS(cls, var, express) \
+struct _NNT_COMBINE(__heap_object_, __LINE__) { \
+inline cls &operator()() noexcept { \
+    static cls self; \
+    express; \
+    return self;\
+} \
+}; \
+cls& var = _NNT_COMBINE(__heap_object_, __LINE__)()();
+
 #ifdef NNT_STATIC
 #define NNT_LIBRARY 1
 #endif
@@ -193,35 +203,29 @@ using ::std::endl;
 
 typedef ::std::vector<string> strings;
 
-template <typename T>
-static T const &Nil()
-{
+template<typename T>
+static T const &Nil() {
     static const T __s;
     return __s;
 };
 
-class Object
-{
+class Object {
 public:
     virtual ~Object() = default;
 };
 
 typedef Object IObject;
 
-class RefObject : public IObject
-{
+class RefObject : public IObject {
 public:
     RefObject() : _referencedCount(1) {}
 
-    virtual void grab() const
-    {
+    virtual void grab() const {
         ++_referencedCount;
     }
 
-    virtual bool drop() const
-    {
-        if (--_referencedCount == 0)
-        {
+    virtual bool drop() const {
+        if (--_referencedCount == 0) {
             delete this;
             return true;
         }
@@ -232,41 +236,34 @@ private:
     mutable ::std::atomic<size_t> _referencedCount;
 };
 
-template <typename T>
-class shared_ref
-{
+template<typename T>
+class shared_ref {
 public:
     shared_ref()
-        : _ptr(new T())
-    {
+            : _ptr(new T()) {
     }
 
     shared_ref(shared_ref<T> const &r)
-        : _ptr(const_cast<T *>(r.get()))
-    {
+            : _ptr(const_cast<T *>(r.get())) {
         if (_ptr)
             _ptr->grab();
     }
 
-    template <typename R>
+    template<typename R>
     shared_ref(shared_ref<R> const &r)
-        : _ptr(dynamic_cast<T *>(const_cast<R *>(r.get())))
-    {
+            : _ptr(dynamic_cast<T *>(const_cast<R *>(r.get()))) {
         if (_ptr)
             _ptr->grab();
     }
 
-    ~shared_ref()
-    {
-        if (_ptr)
-        {
+    ~shared_ref() {
+        if (_ptr) {
             _ptr->drop();
             _ptr = nullptr;
         }
     }
 
-    shared_ref<T> &operator=(T const *r)
-    {
+    shared_ref<T> &operator=(T const *r) {
         if (_ptr == r)
             return *this;
         if (_ptr)
@@ -277,50 +274,41 @@ public:
         return *this;
     }
 
-    template <typename R>
-    inline operator R *()
-    {
+    template<typename R>
+    inline operator R *() {
         return dynamic_cast<R *>(_ptr);
     }
 
-    template <typename R>
-    inline operator R const *() const
-    {
+    template<typename R>
+    inline operator R const *() const {
         return dynamic_cast<R const *>(_ptr);
     }
 
-    inline T &operator*()
-    {
+    inline T &operator*() {
         return *_ptr;
     }
 
-    inline T const &operator*() const
-    {
+    inline T const &operator*() const {
         return *_ptr;
     }
 
-    inline T *operator->()
-    {
+    inline T *operator->() {
         return _ptr;
     }
 
-    inline T const *operator->() const
-    {
+    inline T const *operator->() const {
         return _ptr;
     }
 
-    inline bool operator<(shared_ref<T> const &r) const
-    {
+    inline bool operator<(shared_ref<T> const &r) const {
         return _ptr < r._ptr;
     }
 
-    inline T *get()
-    {
+    inline T *get() {
         return _ptr;
     }
 
-    inline T const *get() const
-    {
+    inline T const *get() const {
         return _ptr;
     }
 
@@ -329,26 +317,23 @@ private:
 
     shared_ref(nullptr_t) : _ptr(nullptr) {}
 
-    static shared_ref<T> _assign(T *ptr)
-    {
+    static shared_ref<T> _assign(T *ptr) {
         auto r = shared_ref<T>(nullptr);
         r._ptr = ptr;
         return r;
     }
 
-    template <typename TT, typename... Args>
+    template<typename TT, typename... Args>
     friend shared_ref<TT> make_ref(Args &&...);
 };
 
-template <typename T, typename... Args>
-static shared_ref<T> make_ref(Args &&... args)
-{
+template<typename T, typename... Args>
+static shared_ref<T> make_ref(Args &&... args) {
     return shared_ref<T>::_assign(new T(::std::forward<Args>(args)...));
 };
 
-template <typename T, typename TI, typename... Args>
-static shared_ptr<TI> make_dynamic_shared(Args &&... args)
-{
+template<typename T, typename TI, typename... Args>
+static shared_ptr<TI> make_dynamic_shared(Args &&... args) {
     shared_ptr<TI> r(new T(::std::forward<Args>(args)...));
     return r;
 }

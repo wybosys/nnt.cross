@@ -16,8 +16,7 @@ CROSS_BEGIN
 
 NNT_SINGLETON_IMPL(MainThread);
 
-class MainThreadPrivate
-{
+class MainThreadPrivate {
 public:
 
     MainThreadPrivate() {
@@ -35,10 +34,11 @@ public:
         return TRUE;
     }
 #else
-    static void FnQuit()
-    {
+
+    static void FnQuit() {
         waitquit = true;
     }
+
 #endif
 
     ::std::mutex mtx_funcs;
@@ -50,26 +50,22 @@ public:
 bool MainThreadPrivate::waitquit = false;
 bool thread_local MainThreadPrivate::ismainthread = false;
 
-MainThread::MainThread()
-{
+MainThread::MainThread() {
     NNT_CLASS_CONSTRUCT();
 }
 
-MainThread::~MainThread()
-{
+MainThread::~MainThread() {
     NNT_CLASS_DESTORY();
 }
 
-void MainThread::exec()
-{
+void MainThread::exec() {
     while (!private_class_type::waitquit) {
         tick();
         Time::Sleep(1);
     }
 }
 
-void MainThread::tick()
-{
+void MainThread::tick() {
     MainThreadPrivate::ismainthread = true;
 
     NNT_AUTOGUARD(d_ptr->mtx_funcs);
@@ -79,38 +75,32 @@ void MainThread::tick()
     d_ptr->funcs.clear();
 }
 
-void MainThread::invoke(func_type const& fn)
-{
+void MainThread::invoke(func_type const &fn) {
     if (MainThreadPrivate::ismainthread) {
-        // Èç¹ûÒÑ¾­ÔÚÖ÷Ïß³Ì£¬ÔòÖ±½ÓÔËĞĞ
+        // å¦‚æœå·²ç»åœ¨ä¸»çº¿ç¨‹ï¼Œåˆ™ç›´æ¥è¿è¡Œ
         fn();
-    }
-    else {
+    } else {
         NNT_AUTOGUARD(d_ptr->mtx_funcs);
         d_ptr->funcs.emplace_back(fn);
     }
 }
 
-bool IsMainThread()
-{
+bool IsMainThread() {
     return MainThreadPrivate::ismainthread;
 }
 
-class semaphorePrivate
-{
+class semaphorePrivate {
 public:
     ::std::mutex _mtx;
     ::std::condition_variable _cond;
     size_t _count = 0;
 };
 
-semaphore::semaphore()
-{
+semaphore::semaphore() {
     NNT_CLASS_CONSTRUCT();
 }
 
-semaphore::~semaphore()
-{
+semaphore::~semaphore() {
     NNT_CLASS_DESTORY();
 }
 
@@ -138,17 +128,15 @@ bool semaphore::try_wait() {
 }
 
 ITask::ITask(func_type fn)
-    :proc(move(fn))
-{
+        : proc(move(fn)) {
     // pass
 }
 
-void ITask::_main()
-{
+void ITask::_main() {
     _running = true;
     main();
     if (proc)
-        proc(this);
+        proc(*this);
     _running = false;
 }
 
@@ -160,26 +148,23 @@ ITaskDispatcher *ITask::dispatcher() const {
     return _dispatcher;
 }
 
-void ITaskDispatcher::_run(task_type& tsk)
-{
+void ITaskDispatcher::_run(task_type &tsk) {
     if (tsk)
         tsk->_main();
 }
 
-class SingleTaskDispatcherPrivate 
-{
+class SingleTaskDispatcherPrivate {
 public:
 
     SingleTaskDispatcher *owner;
-    bool newthd = true; // ÊÇ·ñĞèÒª¿ªÒ»¸öĞÂÏß³Ì³ĞÔØ
+    bool newthd = true; // æ˜¯å¦éœ€è¦å¼€ä¸€ä¸ªæ–°çº¿ç¨‹æ‰¿è½½
     bool running = false, waitstop = false, waitwait = false;
     shared_ptr<::std::thread> thd;
     semaphore smp_tasks;
     ::std::mutex mtx_tasks;
     ::std::set<ITask::task_type> tasks;
 
-    void start()
-    {
+    void start() {
         if (running)
             return;
         running = true;
@@ -189,8 +174,7 @@ public:
 
         if (newthd) {
             thd = make_shared<::std::thread>(ThdProc, this);
-        }
-        else {
+        } else {
             for (auto e : tasks) {
                 owner->_run(e);
             }
@@ -198,41 +182,39 @@ public:
         }
     }
 
-    static void ThdProc(SingleTaskDispatcherPrivate *self)
-    {
-        // cout << "¿ªÊ¼Ö´ĞĞÈÎÎñ" << endl;
-         
+    static void ThdProc(SingleTaskDispatcherPrivate *self) {
+        // cout << "å¼€å§‹æ‰§è¡Œä»»åŠ¡" << endl;
+
         self->mtx_tasks.lock();
         auto snap = self->tasks;
         self->tasks.clear();
-        // cout << "ÈÎÎñÊıÁ¿:" << snap.size() << endl;
+        // cout << "ä»»åŠ¡æ•°é‡:" << snap.size() << endl;
         self->mtx_tasks.unlock();
 
         for (auto e : snap) {
             self->owner->_run(e);
         }
 
-        // ÒÆ³ıËùÓĞÖ´ĞĞÍê³ÉµÄÈÎÎñ
+        // ç§»é™¤æ‰€æœ‰æ‰§è¡Œå®Œæˆçš„ä»»åŠ¡
         self->mtx_tasks.lock();
         const size_t left = self->tasks.size();
         snap.clear();
         self->mtx_tasks.unlock();
-            
+
         if (self->waitwait && left == 0) {
-            // ËùÓĞÈÎÎñÒÑ¾­ÔËĞĞ½áÊø
+            // æ‰€æœ‰ä»»åŠ¡å·²ç»è¿è¡Œç»“æŸ
             return;
         }
 
-        // Æô¶¯µÈ´ı£¬²¢¿ªÊ¼ÏÂÒ»´Îµü´ú
-        // cout << "µÈ´ıÌí¼ÓÈÎÎñ" << endl;
+        // å¯åŠ¨ç­‰å¾…ï¼Œå¹¶å¼€å§‹ä¸‹ä¸€æ¬¡è¿­ä»£
+        // cout << "ç­‰å¾…æ·»åŠ ä»»åŠ¡" << endl;
         self->smp_tasks.wait();
 
         if (!self->waitstop)
             ThdProc(self);
     }
 
-    void stop()
-    {
+    void stop() {
         if (!running)
             return;
 
@@ -248,45 +230,38 @@ public:
     }
 };
 
-SingleTaskDispatcher::SingleTaskDispatcher()
-{
+SingleTaskDispatcher::SingleTaskDispatcher() {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
 }
 
-SingleTaskDispatcher::~SingleTaskDispatcher()
-{
+SingleTaskDispatcher::~SingleTaskDispatcher() {
     d_ptr->stop();
     NNT_CLASS_DESTORY();
 }
 
-bool SingleTaskDispatcher::add(task_type&& tsk)
-{
+bool SingleTaskDispatcher::add(task_type &&tsk) {
     if (tsk->dispatcher())
         return false;
     if (d_ptr->newthd) {
         d_ptr->tasks.emplace(tsk);
-        // cout << "Ìí¼ÓÒ»¸öÈÎÎñ" << endl;
+        // cout << "æ·»åŠ ä¸€ä¸ªä»»åŠ¡" << endl;
         d_ptr->smp_tasks.notify();
-    }
-    else {
+    } else {
         _run(tsk);
     }
     return true;
 }
 
-void SingleTaskDispatcher::start()
-{
+void SingleTaskDispatcher::start() {
     d_ptr->start();
 }
 
-void SingleTaskDispatcher::stop()
-{
+void SingleTaskDispatcher::stop() {
     d_ptr->stop();
 }
 
-void SingleTaskDispatcher::wait()
-{
+void SingleTaskDispatcher::wait() {
     d_ptr->waitwait = true;
     if (d_ptr->thd && d_ptr->thd->joinable()) {
         d_ptr->thd->join();
@@ -294,35 +269,30 @@ void SingleTaskDispatcher::wait()
     }
 }
 
-void SingleTaskDispatcher::cancel()
-{
+void SingleTaskDispatcher::cancel() {
     for (auto &e : d_ptr->tasks) {
         e->cancel();
     }
     clear();
 }
 
-bool SingleTaskDispatcher::isrunning() const
-{
+bool SingleTaskDispatcher::isrunning() const {
     return d_ptr->running;
 }
 
-void SingleTaskDispatcher::clear()
-{
+void SingleTaskDispatcher::clear() {
     NNT_AUTOGUARD(d_ptr->mtx_tasks);
     d_ptr->tasks.clear();
 }
 
-bool SingleTaskDispatcher::attach()
-{
+bool SingleTaskDispatcher::attach() {
     if (d_ptr->thd)
         return false;
     d_ptr->newthd = false;
     return true;
 }
 
-class FixedTaskDispatcherPrivate
-{
+class FixedTaskDispatcherPrivate {
 public:
 
     FixedTaskDispatcher *owner;
@@ -334,8 +304,7 @@ public:
     ::std::vector<shared_ptr<::std::thread>> thds;
     semaphore smp_tasks;
 
-    void start()
-    {
+    void start() {
         if (running)
             return;
         running = true;
@@ -349,8 +318,7 @@ public:
         }
     }
 
-    void stop()
-    {
+    void stop() {
         if (!running)
             return;
 
@@ -368,9 +336,8 @@ public:
         running = false;
     }
 
-    static void ThdProc(FixedTaskDispatcherPrivate *self)
-    {
-        // cout << "¿ªÊ¼Ö´ĞĞÈÎÎñ" << endl;
+    static void ThdProc(FixedTaskDispatcherPrivate *self) {
+        // cout << "å¼€å§‹æ‰§è¡Œä»»åŠ¡" << endl;
 
         self->mtx_tasks.lock();
         ITask::task_type tsk;
@@ -382,18 +349,18 @@ public:
 
         self->owner->_run(tsk);
 
-        // ÒÆ³ıËùÓĞÖ´ĞĞÍê³ÉµÄÈÎÎñ
+        // ç§»é™¤æ‰€æœ‰æ‰§è¡Œå®Œæˆçš„ä»»åŠ¡
         self->mtx_tasks.lock();
         const size_t left = self->tasks.size();
         self->mtx_tasks.unlock();
 
         if (self->waitwait && left == 0) {
-            // ËùÓĞÈÎÎñÒÑ¾­ÔËĞĞ½áÊø
+            // æ‰€æœ‰ä»»åŠ¡å·²ç»è¿è¡Œç»“æŸ
             return;
         }
 
-        // Æô¶¯µÈ´ı£¬²¢¿ªÊ¼ÏÂÒ»´Îµü´ú
-        // cout << "µÈ´ıÌí¼ÓÈÎÎñ" << endl;
+        // å¯åŠ¨ç­‰å¾…ï¼Œå¹¶å¼€å§‹ä¸‹ä¸€æ¬¡è¿­ä»£
+        // cout << "ç­‰å¾…æ·»åŠ ä»»åŠ¡" << endl;
         self->smp_tasks.wait();
 
         if (!self->waitstop)
@@ -401,28 +368,24 @@ public:
     }
 };
 
-FixedTaskDispatcher::FixedTaskDispatcher()
-{
+FixedTaskDispatcher::FixedTaskDispatcher() {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
     d_ptr->maxcount = ::std::thread::hardware_concurrency();
 }
 
-FixedTaskDispatcher::FixedTaskDispatcher(size_t count)
-{
+FixedTaskDispatcher::FixedTaskDispatcher(size_t count) {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
     d_ptr->maxcount = count < 1 ? ::std::thread::hardware_concurrency() : count;
 }
 
-FixedTaskDispatcher::~FixedTaskDispatcher()
-{
+FixedTaskDispatcher::~FixedTaskDispatcher() {
     d_ptr->stop();
     NNT_CLASS_DESTORY();
 }
 
-bool FixedTaskDispatcher::add(task_type&& tsk)
-{
+bool FixedTaskDispatcher::add(task_type &&tsk) {
     if (tsk->dispatcher())
         return false;
 
@@ -432,18 +395,15 @@ bool FixedTaskDispatcher::add(task_type&& tsk)
     return true;
 }
 
-void FixedTaskDispatcher::start()
-{
+void FixedTaskDispatcher::start() {
     d_ptr->start();
 }
 
-void FixedTaskDispatcher::stop()
-{
+void FixedTaskDispatcher::stop() {
     d_ptr->stop();
 }
 
-void FixedTaskDispatcher::wait()
-{
+void FixedTaskDispatcher::wait() {
     d_ptr->waitwait = true;
     for (auto &e : d_ptr->thds) {
         if (e->joinable()) {
@@ -454,27 +414,23 @@ void FixedTaskDispatcher::wait()
     d_ptr->thds.clear();
 }
 
-void FixedTaskDispatcher::cancel()
-{
+void FixedTaskDispatcher::cancel() {
     for (auto &e : d_ptr->tasks) {
         e->cancel();
     }
     clear();
 }
 
-bool FixedTaskDispatcher::isrunning() const
-{
+bool FixedTaskDispatcher::isrunning() const {
     return d_ptr->running;
 }
 
-void FixedTaskDispatcher::clear()
-{
+void FixedTaskDispatcher::clear() {
     NNT_AUTOGUARD(d_ptr->mtx_tasks);
     d_ptr->tasks.clear();
 }
 
-class QueuedTaskDispatcherPrivate
-{
+class QueuedTaskDispatcherPrivate {
 public:
 
     QueuedTaskDispatcher *owner;
@@ -486,8 +442,7 @@ public:
     ::std::vector<shared_ptr<::std::thread>> thds;
     semaphore smp_tasks;
 
-    void start()
-    {
+    void start() {
         if (running)
             return;
         running = true;
@@ -501,8 +456,7 @@ public:
         }
     }
 
-    void stop()
-    {
+    void stop() {
         if (!running)
             return;
 
@@ -520,9 +474,8 @@ public:
         running = false;
     }
 
-    static void ThdProc(QueuedTaskDispatcherPrivate *self)
-    {
-        // cout << "¿ªÊ¼Ö´ĞĞÈÎÎñ" << endl;
+    static void ThdProc(QueuedTaskDispatcherPrivate *self) {
+        // cout << "å¼€å§‹æ‰§è¡Œä»»åŠ¡" << endl;
 
         ++self->thd_runnings;
 
@@ -536,7 +489,7 @@ public:
 
         self->owner->_run(tsk);
 
-        // ÒÆ³ıËùÓĞÖ´ĞĞÍê³ÉµÄÈÎÎñ
+        // ç§»é™¤æ‰€æœ‰æ‰§è¡Œå®Œæˆçš„ä»»åŠ¡
         self->mtx_tasks.lock();
         const size_t left = self->tasks.size();
         self->mtx_tasks.unlock();
@@ -544,20 +497,19 @@ public:
         --self->thd_runnings;
 
         if (self->waitwait && left == 0) {
-            // ËùÓĞÈÎÎñÒÑ¾­ÔËĞĞ½áÊø
+            // æ‰€æœ‰ä»»åŠ¡å·²ç»è¿è¡Œç»“æŸ
             return;
         }
 
-        // Æô¶¯µÈ´ı£¬²¢¿ªÊ¼ÏÂÒ»´Îµü´ú
-        // cout << "µÈ´ıÌí¼ÓÈÎÎñ" << endl;
+        // å¯åŠ¨ç­‰å¾…ï¼Œå¹¶å¼€å§‹ä¸‹ä¸€æ¬¡è¿­ä»£
+        // cout << "ç­‰å¾…æ·»åŠ ä»»åŠ¡" << endl;
         self->smp_tasks.wait();
 
         if (!self->waitstop)
             ThdProc(self);
     }
 
-    void create_worker()
-    {
+    void create_worker() {
         auto t = make_shared<::std::thread>(ThdProc, this);
         thds.emplace_back(t);
     }
@@ -565,30 +517,26 @@ public:
     size_t mincount, maxcount;
 };
 
-QueuedTaskDispatcher::QueuedTaskDispatcher()
-{
+QueuedTaskDispatcher::QueuedTaskDispatcher() {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
     d_ptr->mincount = ::std::thread::hardware_concurrency();
     d_ptr->maxcount = d_ptr->mincount << 1;
 }
 
-QueuedTaskDispatcher::QueuedTaskDispatcher(size_t min, size_t max)
-{
+QueuedTaskDispatcher::QueuedTaskDispatcher(size_t min, size_t max) {
     NNT_CLASS_CONSTRUCT();
     d_ptr->owner = this;
     d_ptr->mincount = min < 1 ? ::std::thread::hardware_concurrency() : min;
     d_ptr->maxcount = min < max ? max : min;
 }
 
-QueuedTaskDispatcher::~QueuedTaskDispatcher()
-{
+QueuedTaskDispatcher::~QueuedTaskDispatcher() {
     d_ptr->stop();
     NNT_CLASS_DESTORY();
 }
 
-bool QueuedTaskDispatcher::add(task_type&& tsk)
-{
+bool QueuedTaskDispatcher::add(task_type &&tsk) {
     if (tsk->dispatcher())
         return false;
 
@@ -597,7 +545,7 @@ bool QueuedTaskDispatcher::add(task_type&& tsk)
 
     if (d_ptr->thd_runnings == d_ptr->thds.size()) {
         if (d_ptr->thds.size() < d_ptr->maxcount) {
-            // ´´½¨Ò»¸öĞÂ¹¤×÷Ïß³Ì
+            // åˆ›å»ºä¸€ä¸ªæ–°å·¥ä½œçº¿ç¨‹
             d_ptr->create_worker();
         }
     }
@@ -606,18 +554,15 @@ bool QueuedTaskDispatcher::add(task_type&& tsk)
     return true;
 }
 
-void QueuedTaskDispatcher::start()
-{
+void QueuedTaskDispatcher::start() {
     d_ptr->start();
 }
 
-void QueuedTaskDispatcher::stop()
-{
+void QueuedTaskDispatcher::stop() {
     d_ptr->stop();
 }
 
-void QueuedTaskDispatcher::wait() 
-{
+void QueuedTaskDispatcher::wait() {
     d_ptr->waitwait = true;
     for (auto &e : d_ptr->thds) {
         if (e->joinable()) {
@@ -628,21 +573,18 @@ void QueuedTaskDispatcher::wait()
     d_ptr->thds.clear();
 }
 
-void QueuedTaskDispatcher::cancel()
-{
+void QueuedTaskDispatcher::cancel() {
     for (auto &e : d_ptr->tasks) {
         e->cancel();
     }
     clear();
 }
 
-bool QueuedTaskDispatcher::isrunning() const
-{
+bool QueuedTaskDispatcher::isrunning() const {
     return d_ptr->running;
 }
 
-void QueuedTaskDispatcher::clear()
-{
+void QueuedTaskDispatcher::clear() {
     NNT_AUTOGUARD(d_ptr->mtx_tasks);
     d_ptr->tasks.clear();
 }

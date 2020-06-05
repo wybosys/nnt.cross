@@ -98,7 +98,14 @@ TEST (rest) {
     }
 }
 
+NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_download, {
+    self.start();
+});
+
 TEST (download) {
+    dis_download.start();
+
+    // 阻塞模式
     CurlDownloadConnector cnt;
     cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
     cnt.target = "sample-0.zip";
@@ -108,6 +115,19 @@ TEST (download) {
     } else {
         UNITTEST_CHECK_EQUAL(false, true);
     }
+
+    // 非阻塞模式
+    dis_download.add([=](ITask &) {
+        CurlDownloadConnector cnt;
+        cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
+        cnt.target = "sample-0.zip";
+        if (cnt.send()) {
+            size_t sz = stat(cnt.target)->size;
+            UNITTEST_CHECK_EQUAL(sz, 190567);
+        } else {
+            UNITTEST_CHECK_EQUAL(false, true);
+        }
+    });
 }
 
 TEST (prop) {
@@ -157,14 +177,14 @@ TEST (task) {
     ::std::atomic<int> count(0);
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask *) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &) {
             cout << ++count << endl;
             Time::Sleep(1);
         }));
     }
     dis.start();
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask *) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &) {
             cout << ++count << endl;
             Time::Sleep(1);
         }));
@@ -180,7 +200,7 @@ TEST (async_task) {
     dis.start();
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask *) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &) {
             if (IsMainThread()) {
                 cout << "主线程: " << ++async_count << endl;
             } else {
@@ -190,7 +210,7 @@ TEST (async_task) {
     }
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask *) {
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &) {
             MainThread::shared().invoke([&]() {
                 if (IsMainThread()) {
                     cout << "主线程: " << ++async_count << endl;
