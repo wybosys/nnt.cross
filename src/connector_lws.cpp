@@ -7,6 +7,7 @@
 #include <sstream>
 #include <thread>
 #include <algorithm>
+#include <threads.hpp>
 
 #include <libwebsockets.h>
 
@@ -22,10 +23,18 @@ public:
     LibWebSocketConnector *owner = nullptr;
     struct lws_context *lws = nullptr;
     struct lws *client = nullptr;
-    ::std::mutex mtx_write, mtx_read, mtx_state;
     bool iswritable = false;
     bool waitquit = false;
+
+    // 执行监听循环
     shared_ptr<::std::thread> thd_wait;
+
+    // 锁
+    ::std::mutex mtx_write, mtx_read;
+    semaphore sema_connect, sema_read;
+
+    // 临时读取对象
+    ::std::ostringstream stm_read;
 
     bool connect() {
         const struct lws_protocols PROTOCOLS[] = {
@@ -79,17 +88,20 @@ public:
 
         // 创建连接线程，和http不同，ws每个连接均会开一a个新线程，但是对外如果不放到线程池中，则表现出阻塞的特性
         thd_wait = make_shared<::std::thread>(ImpWait, this);
+        sema_connect.wait();
 
         return true;
     }
 
     void close() {
-        NNT_AUTOGUARD(mtx_state);
-
-        clear();
+        if (thd_wait && thd_wait->joinable()) {
+            waitquit = true;
+            thd_wait->join();
+            thd_wait = nullptr;
+        }
 
         if (client) {
-            // lws_close_reason(client, LWS_CLOSE_STATUS_NORMAL, nullptr, 0);
+            lws_close_reason(client, LWS_CLOSE_STATUS_NORMAL, nullptr, 0);
             client = nullptr;
         }
 
@@ -141,28 +153,22 @@ public:
         return true;
     }
 
-    void clear() {
-        if (thd_wait && thd_wait->joinable()) {
-            thd_wait->join();
-            thd_wait = nullptr;
-        }
-    }
-
     static void ImpWait(LibWebSocketConnectorPrivate *self) {
         while (!self->waitquit) {
-            self->owner->wait();
+            if (self->lws) {
+                lws_service(self->lws, 30);
+                lws_callback_on_writable(self->client);
+            }
         }
     }
 
     void on_connected() {
         owner->on_connected();
+        sema_connect.notify();
     }
 
     void on_error(string const &msg) {
         iswritable = false;
-        waitquit = true;
-
-        clear();
 
         Logger::Error(msg);
         owner->on_error(error(Code::FAILED, msg));
@@ -170,9 +176,6 @@ public:
 
     void on_disconnected() {
         iswritable = false;
-        waitquit = true;
-
-        clear();
 
         Logger::Info("lws断开连接");
         owner->on_disconnected();
@@ -183,18 +186,19 @@ public:
             return;
 
         NNT_AUTOGUARD(mtx_read);
-        ::std::stringstream stm;
-        stm.write(buf, len);
 
-        Connector::memory_type mem(*stm.rdbuf());
+        stm_read.clear();
+        stm_read.write(buf, len);
+
+        Connector::memory_type mem(*stm_read.rdbuf());
         mem.from = 0;
         mem.size = len;
 
         owner->on_bytes(mem);
+        sema_read.notify();
     }
 
     void on_writeable() {
-        NNT_AUTOGUARD(mtx_write);
         iswritable = true;
     }
 
@@ -243,13 +247,10 @@ LibWebSocketConnector::~LibWebSocketConnector() {
 
 bool LibWebSocketConnector::connect() {
     close();
-
-    d_ptr->waitquit = false;
     return d_ptr->connect();
 }
 
 void LibWebSocketConnector::close() {
-    d_ptr->waitquit = true;
     d_ptr->close();
 }
 
@@ -258,12 +259,11 @@ bool LibWebSocketConnector::write(memory_type const &mem) {
     return d_ptr->write(mem);
 }
 
-void LibWebSocketConnector::wait() {
-    NNT_AUTOGUARD(d_ptr->mtx_state);
-    if (d_ptr->lws) {
-        lws_service(d_ptr->lws, 30);
-        lws_callback_on_writable(d_ptr->client);
-    }
+Connector::stream_type const &LibWebSocketConnector::wait() {
+    d_ptr->sema_read.wait();
+
+    NNT_AUTOGUARD(d_ptr->mtx_read);
+    return *d_ptr->stm_read.rdbuf();
 }
 
 CROSS_END

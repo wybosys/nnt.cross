@@ -66,10 +66,28 @@ TEST (url) {
     UNITTEST_CHECK_EQUAL(u.toString(), str);
 }
 
+NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_ws, {
+    self.start();
+});
+
 TEST (ws) {
-    LibWebSocketConnector *cnt = new LibWebSocketConnector();
-    cnt->url = "wss://echo.websocket.org:443";
-    cnt->connect();
+    LibWebSocketConnector cnt;
+    cnt.url = "wss://echo.websocket.org:443";
+    cnt.connect();
+    cnt.write("hello");
+    auto &body = cnt.wait();
+    auto receive = ((::std::stringbuf const &) body).str();
+    UNITTEST_CHECK_EQUAL(receive, "hello");
+
+    dis_ws.add([](ITask &) {
+        LibWebSocketConnector cnt;
+        cnt.url = "wss://echo.websocket.org:443";
+        cnt.connect();
+        cnt.write("hello");
+        auto &body = cnt.wait();
+        auto receive = ((::std::stringbuf const &) body).str();
+        cout << "收到" + receive << endl;
+    });
 }
 
 TEST (md5) {

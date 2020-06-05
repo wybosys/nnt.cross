@@ -22,9 +22,11 @@ public:
 
     virtual bool write(memory_type const &);
 
-private:
+    virtual bool write(string const &str) {
+        return WebSocketConnector::write(str);
+    }
 
-    virtual void wait();
+    virtual stream_type const &wait();
 
 };
 

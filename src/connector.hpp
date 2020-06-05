@@ -4,6 +4,7 @@
 #include "code.hpp"
 #include "property.hpp"
 #include <map>
+#include <functional>
 
 CROSS_BEGIN
 
@@ -146,8 +147,10 @@ public:
     // 发送数据
     virtual bool write(memory_type const &) = 0;
 
+    virtual bool write(string const &str);
+
     // 等待数据
-    virtual void wait() = 0;
+    virtual stream_type const &wait() = 0;
 
     // 自动重试的最大次数，-1代表持续重试
     int maxretrys = MAXRETRYS;
