@@ -80,9 +80,9 @@ TEST (zip) {
     mkdir("test-file");
     mkdir("test-dir");
 
-    bool suc = unzip("../../test/test-file.zip", "test-file");
+    bool suc = unzip("../test/test-file.zip", "test-file");
     UNITTEST_CHECK_EQUAL(suc, true);
-    suc = unzip("../../test/test-dir.zip", "test-dir");
+    suc = unzip("../test/test-dir.zip", "test-dir");
     UNITTEST_CHECK_EQUAL(suc, true);
 }
 
@@ -103,6 +103,8 @@ TEST (download) {
     cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
     cnt.target = "sample-0.zip";
     cnt.send();
+    size_t sz = stat(cnt.target)->size;
+    UNITTEST_CHECK_EQUAL(sz, 190567);
 }
 
 TEST (prop) {

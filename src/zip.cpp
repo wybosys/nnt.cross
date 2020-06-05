@@ -8,43 +8,43 @@ CROSS_BEGIN
 
 static bool doUnZip(unzFile zf, string const& dir) {
     if (zf == nullptr) {
-        Logger::Info("´ò¿ªzipÎÄ¼şÊ§°Ü");
+        Logger::Info("æ‰“å¼€zipæ–‡ä»¶å¤±è´¥");
         return false;
     }
 
     unz_global_info ginfo;
     if (unzGetGlobalInfo(zf, &ginfo) != UNZ_OK) {
-        Logger::Info("¶ÁÈ¡zipÎÄ¼şĞÅÏ¢Ê§°Ü");
+        Logger::Info("è¯»å–zipæ–‡ä»¶ä¿¡æ¯å¤±è´¥");
         unzClose(zf);
         return false;
     }
 
-    // ½âÑ¹ÎÄ¼ş
+    // è§£å‹æ–‡ä»¶
     for (size_t ni = 0;;) {
         unz_file_info finfo;
         char fnmbuf[FILENAME_MAX];
         if (unzGetCurrentFileInfo(zf, &finfo, fnmbuf, FILENAME_MAX, nullptr, 0, nullptr, 0) != UNZ_OK) {
-            Logger::Info("¶ÁÈ¡zipÄÚÎÄ¼şĞÅÏ¢Ê§°Ü");
+            Logger::Info("è¯»å–zipå†…æ–‡ä»¶ä¿¡æ¯å¤±è´¥");
             unzClose(zf);
             return false;
         }
 
-        // µ±Ç°Â·¾¶
+        // å½“å‰è·¯å¾„
         string cur_name(fnmbuf, finfo.size_filename);
         if (*cur_name.rbegin() == '/') {
-            // µ±Ç°ÎªÎÄ¼ş¼Ğ
+            // å½“å‰ä¸ºæ–‡ä»¶å¤¹
             string cur_dir = absolute(dir + '/' + cur_name);
             mkdirs(cur_dir);
             if (!exists(cur_dir)) {
-                Logger::Info("ÊÍ·ÅzipÊ§°Ü£¬²»ÄÜ´´½¨ÎÄ¼ş¼Ğ: " + cur_dir);
+                Logger::Info("é‡Šæ”¾zipå¤±è´¥ï¼Œä¸èƒ½åˆ›å»ºæ–‡ä»¶å¤¹: " + cur_dir);
                 unzClose(zf);
                 return false;
             }
         }
         else {
-            // ÊÍ·ÅÎÄ¼ş
+            // é‡Šæ”¾æ–‡ä»¶
             if (unzOpenCurrentFile(zf) != UNZ_OK) {
-                Logger::Info("´ò¿ªzipÄÚÎÄ¼şÊ§°Ü: " + cur_name);
+                Logger::Info("æ‰“å¼€zipå†…æ–‡ä»¶å¤±è´¥: " + cur_name);
                 unzClose(zf);
                 return false;
             }
@@ -59,19 +59,19 @@ static bool doUnZip(unzFile zf, string const& dir) {
 #endif
 
             if (fp == nullptr) {
-                Logger::Info("ÊÍ·ÅzipÄÚÎÄ¼şÊ§°Ü: ÎŞ·¨´ò¿ªÄ¿±êÎÄ¼ş " + cur_file);
+                Logger::Info("é‡Šæ”¾zipå†…æ–‡ä»¶å¤±è´¥: æ— æ³•æ‰“å¼€ç›®æ ‡æ–‡ä»¶ " + cur_file);
                 unzCloseCurrentFile(zf);
                 unzClose(zf);
                 return false;
             }
 
-            // ¶ÁÈ¡Êı¾İ
+            // è¯»å–æ•°æ®
             while (1) {
                 char buf[BUFSIZ];
                 int readed = unzReadCurrentFile(zf, buf, BUFSIZ);
 
                 if (readed < 0) {
-                    Logger::Info("ÊÍ·ÅzipÄÚÎÄ¼şÊ§°Ü: ¶ÁÈ¡ÎÄ¼şÄÚÈİ " + cur_file);
+                    Logger::Info("é‡Šæ”¾zipå†…æ–‡ä»¶å¤±è´¥: è¯»å–æ–‡ä»¶å†…å®¹ " + cur_file);
                     unzCloseCurrentFile(zf);
                     unzClose(zf);
                     fclose(fp);
@@ -90,10 +90,10 @@ static bool doUnZip(unzFile zf, string const& dir) {
             unzCloseCurrentFile(zf);
         }
 
-        // ¶ÁÈ¡ÏÂÒ»¸ö
+        // è¯»å–ä¸‹ä¸€ä¸ª
         if (++ni < ginfo.number_entry) {
             if (unzGoToNextFile(zf) != UNZ_OK) {
-                Logger::Info("¶ÁÈ¡zipÄÚÏÂÒ»¸öÎÄ¼şÊ§°Ü");
+                Logger::Info("è¯»å–zipå†…ä¸‹ä¸€ä¸ªæ–‡ä»¶å¤±è´¥");
                 unzClose(zf);
                 return false;
             }
@@ -111,7 +111,7 @@ bool unzip(string const& ar, string const& dir) {
     unzFile zf = unzOpen(ar.c_str());
     if (doUnZip(zf, dir))
         return true;
-    Logger::Info("½âÑ¹zipÎÄ¼şÊ§°Ü: " + ar);
+    Logger::Info("è§£å‹zipæ–‡ä»¶å¤±è´¥: " + ar);
     return false;
 }
 
@@ -119,7 +119,7 @@ bool unzip(char const* buf, size_t lbuf, string const& dir) {
     unzFile zf = unzOpenBuffer(buf, lbuf);
     if (doUnZip(zf, dir))
         return true;
-    Logger::Info("½âÑ¹zipÊı¾İÁ÷Ê§°Ü");
+    Logger::Info("è§£å‹zipæ•°æ®æµå¤±è´¥");
     return true;
 }
 
