@@ -92,10 +92,17 @@ TEST (rest) {
     cnt.method = HttpConnector::METHOD_POST;
     cnt.setarg("q", "abc");
     UNITTEST_CHECK_EQUAL(cnt.send(), true);
-    cout << cnt.body().str() << endl;
+    cout << ((::std::stringbuf const &) cnt.body()).str() << endl;
     for (auto &e : cnt.respheaders()) {
         cout << e.first << ":" << e.second << endl;
     }
+}
+
+TEST (download) {
+    CurlDownloadConnector cnt;
+    cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
+    cnt.target = "sample-0.zip";
+    cnt.send();
 }
 
 TEST (prop) {

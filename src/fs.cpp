@@ -131,19 +131,19 @@ bool mkdir(string const &str) {
 
 bool exists(string const &str) {
     struct stat st = {0};
-    return stat(str.c_str(), &st) == 0;
+    return ::stat(str.c_str(), &st) == 0;
 }
 
 bool isfile(string const &str) {
     struct stat st = {0};
-    if (stat(str.c_str(), &st))
+    if (::stat(str.c_str(), &st))
         return false;
     return S_ISREG(st.st_mode);
 }
 
 bool isdirectory(string const &str) {
     struct stat st = {0};
-    if (stat(str.c_str(), &st))
+    if (::stat(str.c_str(), &st))
         return false;
     return S_ISDIR(st.st_mode);
 }
@@ -199,6 +199,17 @@ string pwd() {
 
 bool cd(string const &str) {
     return ::chdir(str.c_str()) == 0;
+}
+
+shared_ptr<Stat> stat(string const &target) {
+    struct stat st = {0};
+    if (::stat(target.c_str(), &st) != 0)
+        return nullptr;
+    auto r = make_shared<Stat>();
+    r->size = st.st_size;
+    r->tm_created = st.st_ctim.tv_sec;
+    r->tm_modified = st.st_mtim.tv_sec;
+    return r;
 }
 
 #endif

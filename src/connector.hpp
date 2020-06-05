@@ -10,23 +10,23 @@ CROSS_BEGIN
 class NNT_API Connector : virtual public Object {
 public:
 
-    // ¹Ø±ÕÁ¬½Ó
+    // å…³é—­å½“å‰é“¾æ¥
     virtual void close() = 0;
 
-    // ·ÃÎÊµØÖ·
+    // åœ°å€
     string url;
 
-    // connection time out
+    // å…¨å±€å»ºç«‹è¿æ¥è¶…æ—¶
     static unsigned int CTIMEOUT;
 
-    // timeout
+    // å…¨å±€æ•°æ®è¶…æ—¶
     static unsigned int TIMEOUT;
 
-    // ua
-
+    // å…¨å±€å®¢æˆ·ç«¯æ ‡è®°
     static string USERAGENT;
 
     typedef Progress<unsigned long long> progress_type;
+    typedef ::std::streambuf stream_type;
     typedef Memory<::std::stringbuf &, size_t> memory_type;
     typedef shared_ptr<Property> arg_type;
     typedef ::std::map<string, arg_type> args_type;
@@ -34,19 +34,19 @@ public:
 
 protected:
 
-    virtual void on_connected() const {} // Á¬½Ó³É¹¦
-    virtual void on_progress(progress_type const &) const {} // ´«Êä½ø¶È
-    virtual void on_bytes(memory_type const &) const {} // ÊÕµ½²¿·ÖÊı¾İ
-    virtual void on_completed() const {} // Íê³ÉÊı¾İ´«Êä
-    virtual void on_error(error const &) const {} // Óöµ½´íÎó
-    virtual void on_disconnected() const {} // ¶Ï¿ªÁ¬½Ó
+    virtual void on_connected() const {} // è¿æ¥æˆåŠŸ
+    virtual void on_progress(progress_type const &) const {} // ä¼ è¾“è¿›åº¦
+    virtual void on_bytes(memory_type const &) const {} // æ”¶åˆ°éƒ¨åˆ†æ•°æ®
+    virtual void on_completed() const {} // å®Œæˆæ•°æ®ä¼ è¾“
+    virtual void on_error(error const &) const {} // é‡åˆ°é”™è¯¯
+    virtual void on_disconnected() const {} // æ–­å¼€è¿æ¥
 
 };
 
 class NNT_API HttpConnector : virtual public Connector {
 public:
 
-    // ÇëÇóĞÎÊ½
+    // è¯·æ±‚å½¢å¼
     enum {
         METHOD_GET = 0x1000,
         METHOD_POST = 0x1000000,
@@ -59,17 +59,17 @@ public:
 
     const string HEADER_CONTENT_TYPE = "Content-Type";
 
-    // ÊÇ·ñÍêÕû»ñÈ¡·µ»ØÊı¾İ
+    // æ˜¯å¦å®Œæ•´è·å–è¿”å›æ•°æ®
     bool full = false;
 
-    // ´úÀí
+    // ä»£ç†
     string ua = USERAGENT;
 
-    // ³¬Ê±s
+    // è¶…æ—¶s
     unsigned int ctimeout = CTIMEOUT; // connection time out
     unsigned int timeout = TIMEOUT; // timeout
 
-    // ÉèÖÃ²ÎÊı
+    // è®¾ç½®å‚æ•°
     virtual HttpConnector &setarg(string const &, arg_type const &);
 
     virtual HttpConnector &setargs(args_type const &);
@@ -79,13 +79,13 @@ public:
         return setarg(key, make_shared<Property>(v));
     }
 
-    // »ñµÃ²ÎÊıÖµ
+    // è·å¾—å‚æ•°å€¼
     virtual arg_type const &getarg(string const &);
 
-    // ÊÇ·ñ´æÔÚ²ÎÊı
+    // æ˜¯å¦å­˜åœ¨å‚æ•°
     virtual bool hasarg(string const &);
 
-    // ÉèÖÃÇëÇóÍ·
+    // è®¾ç½®è¯·æ±‚å¤´
     virtual HttpConnector &setheader(string const &, arg_type const &);
 
     virtual HttpConnector &setheaders(args_type const &);
@@ -95,32 +95,32 @@ public:
         return setheader(key, make_shared<Property>(v));
     }
 
-    // ¶ÁÈ¡ÇëÇóÍ·
+    // è¯»å–è¯·æ±‚å¤´
     virtual arg_type const &getheader(string const &);
 
-    // ÊÇ·ñ´æÔÚÇëÇóÍ·
+    // æ˜¯å¦å­˜åœ¨è¯·æ±‚å¤´
     virtual bool hasheader(string const &);
 
-    // Ö´ĞĞÇëÇó
+    // æ‰§è¡Œè¯·æ±‚
     virtual bool send() const = 0;
 
-    // Èç¹ûÇëÇó´íÎó£¬±£´æ´íÎóĞÅÏ¢
+    // å¦‚æœè¯·æ±‚é”™è¯¯ï¼Œä¿å­˜é”™è¯¯ä¿¡æ¯
     virtual int errcode() const = 0;
 
     virtual string const &errmsg() const = 0;
 
-    // ·µ»ØµÄÏûÏ¢Ö÷Ìå
-    virtual ::std::stringbuf const &body() const = 0;
+    // è¿”å›çš„æ¶ˆæ¯ä¸»ä½“
+    virtual stream_type const &body() const = 0;
 
-    // ·µ»ØµÄÍ·
+    // è¿”å›çš„å¤´
     virtual args_type const &respheaders() const = 0;
 
-    // ·µ»ØµÄ´íÎóÂë
+    // è¿”å›çš„é”™è¯¯ç 
     virtual unsigned short respcode() const = 0;
 
 protected:
 
-    // ·Ö¿ªÉÏ´«ÏÂÔØ½ø¶È»Øµ÷£¬Ä¬ÈÏon_progressÎªÏÂÔØ½ø¶È»Øµ÷
+    // åˆ†å¼€ä¸Šä¼ ä¸‹è½½è¿›åº¦å›è°ƒï¼Œé»˜è®¤on_progressä¸ºä¸‹è½½è¿›åº¦å›è°ƒ
     virtual void on_progress_upload(progress_type const &) const {}
 
     virtual void on_progress_download(progress_type const &range) const {
@@ -131,40 +131,49 @@ protected:
     args_type _reqargs;
 };
 
-// websocketÁ¬½ÓÆ÷
+// websocketè¿æ¥å™¨
 class NNT_API WebSocketConnector : virtual public Connector {
 public:
 
-    // Á¬½Ó·şÎñÆ÷
+    // è¿æ¥æœåŠ¡å™¨
     virtual bool connect() = 0;
 
-    // ·¢ËÍÊı¾İ
+    // å‘é€æ•°æ®
     virtual bool write(memory_type const &) = 0;
 
-    // µÈ´ıÊı¾İ
+    // ç­‰å¾…æ•°æ®
     virtual void wait() = 0;
 
-    // ×Ô¶¯ÖØÊÔµÄ×î´ó´ÎÊı£¬-1´ú±í³ÖĞøÖØÊÔ
+    // è‡ªåŠ¨é‡è¯•çš„æœ€å¤§æ¬¡æ•°ï¼Œ-1ä»£è¡¨æŒç»­é‡è¯•
     int maxretrys = MAXRETRYS;
 
     static int MAXRETRYS;
 
 protected:
 
-    // ÖØÁ¬·şÎñÆ÷
+    // å°è¯•é‡è¿æœåŠ¡å™¨
     virtual void reconnect() {
         connect();
     }
 
-    // ÕıÔÚÁ¬½Ó
-    virtual void on_connecting() const {}
-
-    virtual void on_reconnecting() const {}
-
-    virtual void on_reconnected() const {}
+    // æ­£åœ¨è¿æ¥
+    virtual void on_connecting() const {} // æ­£åœ¨è¿æ¥
+    virtual void on_reconnecting() const {} // æ­£åœ¨é‡è¿
+    virtual void on_reconnected() const {} // å·²ç»é‡è¿ä¸Š
 };
 
-// ×ª»»argsµ½property£¬Ö®ºó¼È¿ÉÒÔÊ¹ÓÃpropertyµÄĞòÁĞ»¯·½·¨
+// ä¸‹è½½è¿æ¥å™¨
+class NNT_API DownloadConnector : virtual public HttpConnector {
+public:
+
+    // ä¸‹è½½åä¿å­˜çš„æ–‡ä»¶ä½ç½®
+    string target;
+
+    // æ˜¯å¦æ”¯æŒæ–­ç‚¹ç»­ä¼ 
+    bool resumable = false;
+};
+
+// è½¬æ¢argsåˆ°propertyï¼Œä¹‹åæ—¢å¯ä»¥ä½¿ç”¨propertyçš„åºåˆ—åŒ–æ–¹æ³•
 extern Connector::arg_type Combine(Connector::args_type const &);
 
 CROSS_END
