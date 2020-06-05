@@ -138,7 +138,7 @@ public:
             auto remains = (int) partl - writed;
             if (remains) {
                 left += remains;
-                rd.pubseekoff(-remains, ::std::ios_base::cur, ::std::ios_base::out);
+                rd.pubseekoff(-remains, ::std::ios::cur, ::std::ios::out);
             }
 
             if (left) {

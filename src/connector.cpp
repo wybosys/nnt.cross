@@ -52,8 +52,6 @@ bool HttpConnector::hasheader(string const &key) {
     return fnd != _reqheaders.end();
 }
 
-int WebSocketConnector::MAXRETRYS = -1;
-
 Connector::arg_type Combine(Connector::args_type const &args) {
     auto r = make_shared<Property>();
     r->map();

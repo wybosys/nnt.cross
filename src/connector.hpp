@@ -152,22 +152,10 @@ public:
     // 等待数据
     virtual stream_type const &wait() = 0;
 
-    // 自动重试的最大次数，-1代表持续重试
-    int maxretrys = MAXRETRYS;
-
-    static int MAXRETRYS;
-
 protected:
-
-    // 尝试重连服务器
-    virtual void reconnect() {
-        connect();
-    }
 
     // 正在连接
     virtual void on_connecting() const {} // 正在连接
-    virtual void on_reconnecting() const {} // 正在重连
-    virtual void on_reconnected() const {} // 已经重连上
 };
 
 // 下载连接器
