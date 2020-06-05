@@ -5,12 +5,12 @@
 
 CROSS_BEGIN
 
-class Url
-{
+class Url {
 public:
 
     Url();
-    Url(string const&);
+
+    Url(string const &);
 
     typedef ::std::map<string, Property> args_type;
 
@@ -20,20 +20,25 @@ public:
     args_type args;
 
     void clear();
-    bool parse(string const&);
+
+    bool parse(string const &);
 
     string toString() const;
 
-    inline operator string () const {
+    inline operator string() const {
         return toString();
     }
 
+    // 调用路径
     string path() const;
+
+    // 调用url
+    string url() const;
 };
 
-typedef string(fn_url_encoder)(Property const&);
+typedef string(fn_url_encoder)(Property const &);
 
-extern NNT_API string build_querystring(Url::args_type const&, fn_url_encoder = nullptr);
+extern NNT_API string build_querystring(Url::args_type const &, fn_url_encoder = nullptr);
 
 CROSS_END
 

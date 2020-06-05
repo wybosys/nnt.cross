@@ -7,24 +7,19 @@ CROSS_BEGIN
 
 Url::Url() {}
 
-Url::Url(string const& str)
-{
+Url::Url(string const &str) {
     parse(str);
 }
 
-void Url::clear()
-{
+void Url::clear() {
     protocol.clear();
     host.clear();
     paths.clear();
     args.clear();
 }
 
-bool Url::parse(string const& str)
-{
+bool Url::parse(string const &str) {
     auto qss = explode(str, "?");
-    if (qss.size() != 2)
-        return false;
 
     auto lefts = explode(qss[0], "/", true);
     protocol = lefts[0];
@@ -33,35 +28,34 @@ bool Url::parse(string const& str)
     if (dms.size() == 1) {
         host = dms[0];
         port = 0;
-    }
-    else {
+    } else {
         host = dms[0];
-        port = (unsigned short)toint(dms[1]);
+        port = (unsigned short) toint(dms[1]);
     }
 
     paths = ::std::vector<string>(lefts.begin() + 2, lefts.end());
 
-    auto rights = explode(qss[1], "&");
-    for (auto &e : rights) {
-        auto kv = explode(e, "=");
-        if (kv.size() != 2)
-            continue;
-        args[kv[0]] = kv[1];
+    if (qss.size() > 1) {
+        auto rights = explode(qss[1], "&");
+        for (auto &e : rights) {
+            auto kv = explode(e, "=");
+            if (kv.size() != 2)
+                continue;
+            args[kv[0]] = kv[1];
+        }
     }
 
     return true;
 }
 
-string Url::toString() const
-{
+string Url::toString() const {
     ::std::vector<string> strs;
     if (!protocol.empty())
         strs.emplace_back(protocol + "/");
     if (!host.empty()) {
         if (port > 0) {
             strs.emplace_back(host + ":" + tostr(port));
-        }
-        else {
+        } else {
             strs.emplace_back(host);
         }
     }
@@ -78,8 +72,14 @@ string Url::path() const {
     return "/" + implode(paths, "/");
 }
 
-string build_querystring(Url::args_type const& args, fn_url_encoder url_encoder)
-{
+string Url::url() const {
+    string r = host;
+    if (port > 0)
+        r += ":" + tostr(port);
+    return r;
+}
+
+string build_querystring(Url::args_type const &args, fn_url_encoder url_encoder) {
     ::std::vector<string> strs;
     strs.reserve(args.size());
 
@@ -88,10 +88,9 @@ string build_querystring(Url::args_type const& args, fn_url_encoder url_encoder)
         oss << e.first << "=";
         if (url_encoder) {
             oss << url_encoder(e.second);
-        }
-        else {
+        } else {
             oss << e.second;
-        }      
+        }
         strs.emplace_back(oss.str());
     }
 

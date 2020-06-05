@@ -67,9 +67,9 @@ TEST (url) {
 }
 
 TEST (ws) {
-    LibWebSocketConnector cnt;
-    cnt.url = "ws://192.168.102.200:60304";
-    //cnt.connect();
+    LibWebSocketConnector *cnt = new LibWebSocketConnector();
+    cnt->url = "wss://echo.websocket.org:443";
+    cnt->connect();
 }
 
 TEST (md5) {
