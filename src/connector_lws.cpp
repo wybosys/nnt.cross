@@ -10,6 +10,7 @@
 #include <threads.hpp>
 
 #include <libwebsockets.h>
+#include <lws_config.h>
 
 CROSS_BEGIN
 
@@ -47,7 +48,10 @@ public:
         lws_context_creation_info info = {0};
         info.port = CONTEXT_PORT_NO_LISTEN;
         info.protocols = PROTOCOLS;
-        info.options = LWS_SERVER_OPTION_DISABLE_IPV6 | LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+        info.options = LWS_SERVER_OPTION_DISABLE_IPV6;
+#if LWS_LIBRARY_VERSION_MAJOR > 1
+        info.options |= LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+#endif
         info.user = this;
 
         lws = lws_create_context(&info);
@@ -72,7 +76,11 @@ public:
         cinfo.host = url.host.c_str();
         cinfo.origin = url.host.c_str();
         if (url.protocol == "wss:") {
+#if LWS_LIBRARY_VERSION_MAJOR > 1
             cinfo.ssl_connection = LCCSCF_USE_SSL | LCCSCF_ALLOW_SELFSIGNED | LCCSCF_ALLOW_INSECURE;
+#else
+            cinfo.ssl_connection = 1;
+#endif
         } else {
             cinfo.ssl_connection = 0;
         }

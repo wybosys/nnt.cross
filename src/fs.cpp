@@ -115,6 +115,17 @@ bool cd(string const& str)
     return SetCurrentDirectoryA(str.c_str()) == S_OK;
 }
 
+shared_ptr<Stat> stat(string const &target) {
+    struct stat st = { 0 };
+    if (::stat(target.c_str(), &st) != 0)
+        return nullptr;
+    auto r = make_shared<Stat>();
+    r->size = st.st_size;
+    r->tm_created = st.st_ctime;
+    r->tm_modified = st.st_mtime;
+    return r;
+}
+
 #endif
 
 #ifdef NNT_UNIXLIKE
