@@ -229,6 +229,11 @@ inline shared_ptr <Property> make_property(V &v) {
     return make_shared<Property>(v);
 }
 
+template<typename V>
+inline shared_ptr <Property> _P(V const &v) {
+    return make_shared<Property>(v);
+}
+
 CROSS_END
 
 #endif
