@@ -221,7 +221,7 @@ public:
         : _stm(stm), _flow(0), _fsize(stm.size())
     {}
 
-    ByteStreamReader(ByteStreamReader &r)
+    ByteStreamReader(ByteStreamReader const& r)
         : _stm(r._stm), _flow(r._flow), _fsize(r._fsize)
     {}
 

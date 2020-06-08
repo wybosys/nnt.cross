@@ -81,7 +81,7 @@ bool WebSocketConnector::write(string const &str) {
 }
 
 HttpConnector::body_stream_type DownloadConnector::body() const {
-    return ::NNT_NS::Nil<stream_type>();
+    return body_stream_type(::NNT_NS::Nil<stream_type>());
 }
 
 CROSS_END
