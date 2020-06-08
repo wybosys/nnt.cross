@@ -234,6 +234,10 @@ inline shared_ptr <Property> _P(V const &v) {
     return make_shared<Property>(v);
 }
 
+static shared_ptr <Property> _PV(::COMXX_NS::Variant<> const& v) {
+    return make_shared<Property>(v);
+}
+
 CROSS_END
 
 #endif
