@@ -5,8 +5,44 @@
 #include "property.hpp"
 #include <map>
 #include <functional>
+#include <mutex>
 
 CROSS_BEGIN
+
+template <typename TStm>
+class ReturnStreamType
+{
+    NNT_NOCOPY(ReturnStreamType);
+
+public:
+
+    typedef TStm stream_type;
+    typedef ::std::mutex mutex_type;
+
+    ReturnStreamType(stream_type &stm, mutex_type &mtx)
+        : _stm(stm), _mtx(mtx)
+    {
+        _mtx.lock();
+    }
+
+    ~ReturnStreamType()
+    {
+        _mtx.unlock();
+    }
+
+    inline operator stream_type & () {
+        return _stm;
+    }
+
+    inline operator stream_type const& () const {
+        return _stm;
+    }
+
+private:
+    stream_type &_stm;
+    mutex_type &_mtx;
+};
+
 
 class NNT_API Connector : virtual public ::NNT_NS::Object {
 public:
@@ -28,6 +64,7 @@ public:
 
     typedef Progress<unsigned long long> progress_type;
     typedef ::std::streambuf stream_type;
+    typedef shared_ptr<ReturnStreamType<stream_type> > return_stream_type;
     typedef Memory<::std::stringbuf &, size_t> memory_type;
     typedef shared_ptr<Property> arg_type;
     typedef ::std::map<string, arg_type> args_type;
@@ -161,7 +198,7 @@ public:
     virtual bool write(string const &str);
 
     // 等待数据
-    virtual stream_type const &wait() = 0;
+    virtual return_stream_type wait() = 0;
 
 protected:
 

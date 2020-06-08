@@ -2,6 +2,7 @@
 #define __NNTCROSS_THREADS_H_INCLUDED
 
 #include <functional>
+#include <mutex>
 
 CROSS_BEGIN
 

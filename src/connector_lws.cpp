@@ -267,11 +267,9 @@ bool LibWebSocketConnector::write(memory_type const &mem) {
     return d_ptr->write(mem);
 }
 
-Connector::stream_type const &LibWebSocketConnector::wait() {
+Connector::return_stream_type LibWebSocketConnector::wait() {
     d_ptr->sema_read.wait();
-
-    NNT_AUTOGUARD(d_ptr->mtx_read);
-    return *d_ptr->stm_read.rdbuf();
+    return make_shared<ReturnStreamType<stream_type> >(*d_ptr->stm_read.rdbuf(), d_ptr->mtx_read);
 }
 
 CROSS_END

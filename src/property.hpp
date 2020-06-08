@@ -6,11 +6,11 @@
 
 CROSS_BEGIN
 
-// key������
-class PropertyKey {
+class PropertyKey
+{
 public:
-
-    enum struct VT {
+    enum struct VT
+    {
         INTEGER,
         NUMBER,
         STRING,
@@ -30,27 +30,33 @@ public:
 
     PropertyKey(bool);
 
-    inline bool operator==(PropertyKey const &r) const {
+    inline bool operator==(PropertyKey const &r) const
+    {
         return _k == r._k;
     }
 
-    inline bool operator!=(PropertyKey const &r) const {
+    inline bool operator!=(PropertyKey const &r) const
+    {
         return _k == r._k;
     }
 
-    inline bool operator<(PropertyKey const &r) const {
+    inline bool operator<(PropertyKey const &r) const
+    {
         return _k < r._k;
     }
 
-    inline bool operator<=(PropertyKey const &r) const {
+    inline bool operator<=(PropertyKey const &r) const
+    {
         return _k <= r._k;
     }
 
-    inline bool operator>(PropertyKey const &r) const {
+    inline bool operator>(PropertyKey const &r) const
+    {
         return _k > r._k;
     }
 
-    inline bool operator>=(PropertyKey const &r) const {
+    inline bool operator>=(PropertyKey const &r) const
+    {
         return _k >= r._k;
     }
 
@@ -71,18 +77,19 @@ private:
     string _k;
 };
 
-class PropertyDeclaration {
+class PropertyDeclaration
+{
 public:
-
     // like xml
     string ns, scheme;
     string encoding;
 };
 
-class Property {
+class Property
+{
 public:
-
-    enum struct VT {
+    enum struct VT
+    {
         NIL,
         INTEGER,
         NUMBER,
@@ -95,7 +102,7 @@ public:
     typedef ptrdiff_t integer;
     typedef double number;
     typedef COMXX_NS::Variant<> variant;
-    typedef shared_ptr <Property> data_type;
+    typedef shared_ptr<Property> data_type;
     typedef ::std::map<PropertyKey, data_type> map_type;
     typedef ::std::vector<data_type> array_type;
 
@@ -141,7 +148,7 @@ public:
     string name;
 
     // node decl like xml
-    shared_ptr <PropertyDeclaration> declaration;
+    shared_ptr<PropertyDeclaration> declaration;
 
     // use as map
     map_type &map();
@@ -162,79 +169,92 @@ public:
     data_type array(size_t) const;
 
 private:
-    shared_ptr <variant> _var;
-    shared_ptr <map_type> _map;
-    shared_ptr <array_type> _array;
+    shared_ptr<variant> _var;
+    shared_ptr<map_type> _map;
+    shared_ptr<array_type> _array;
 };
 
-inline Property::operator integer() const {
+inline Property::operator integer() const
+{
     return toInteger();
 }
 
-inline Property::operator number() const {
+inline Property::operator number() const
+{
     return toNumber();
 }
 
-inline Property::operator bool() const {
+inline Property::operator bool() const
+{
     return toBool();
 }
 
-inline Property::operator string() const {
+inline Property::operator string() const
+{
     return toString();
 }
 
-inline Property::operator variant const &() const {
+inline Property::operator variant const &() const
+{
     return *_var;
 }
 
-inline Property::data_type Property::map(string const &key) const {
+inline Property::data_type Property::map(string const &key) const
+{
     auto &m = map();
     auto fnd = m.find(key);
     return fnd == m.end() ? nullptr : fnd->second;
 }
 
-inline Property::data_type Property::array(size_t idx) const {
+inline Property::data_type Property::array(size_t idx) const
+{
     auto &l = array();
     return idx < l.size() ? l[idx] : nullptr;
 }
 
-template<typename _CharT, typename _Traits>
-static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, Property const &v) {
-    switch (v.vt) {
-        case Property::VT::STRING:
-            stm << v.toString();
-            break;
-        case Property::VT::INTEGER:
-            stm << v.toInteger();
-            break;
-        case Property::VT::NUMBER:
-            stm << v.toNumber();
-            break;
-        case Property::VT::BOOLEAN:
-            stm << v.toBool();
-            break;
+template <typename _CharT, typename _Traits>
+static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, Property const &v)
+{
+    switch (v.vt)
+    {
+    case Property::VT::STRING:
+        stm << v.toString();
+        break;
+    case Property::VT::INTEGER:
+        stm << v.toInteger();
+        break;
+    case Property::VT::NUMBER:
+        stm << v.toNumber();
+        break;
+    case Property::VT::BOOLEAN:
+        stm << v.toBool();
+        break;
     }
     return stm;
 }
 
-template<typename _CharT, typename _Traits>
-static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr <Property> const &v) {
+template <typename _CharT, typename _Traits>
+static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr<Property> const &v)
+{
     if (!v)
         return stm;
     return stm << *v;
 }
 
-template<typename V>
-inline shared_ptr <Property> make_property(V &v) {
+template <typename V>
+inline shared_ptr<Property> make_property(V &v)
+{
     return make_shared<Property>(v);
 }
 
-template<typename V>
-inline shared_ptr <Property> _P(V const &v) {
+template <typename V>
+inline shared_ptr<Property> _P(V const &v)
+{
     return make_shared<Property>(v);
 }
 
-static shared_ptr <Property> _PV(::COMXX_NS::Variant<> const& v) {
+static shared_ptr<Property> _PV(::COMXX_NS::Variant<> const &v)
+{
     return make_shared<Property>(v);
 }
 
