@@ -35,12 +35,23 @@ public:
 
 protected:
 
-    virtual void on_connected() const {} // 连接成功
-    virtual void on_progress(progress_type const &) const {} // 传输进度
-    virtual void on_bytes(memory_type const &) const {} // 收到部分数据
-    virtual void on_completed() const {} // 完成数据传输
-    virtual void on_error(error const &) const {} // 遇到错误
-    virtual void on_disconnected() const {} // 断开连接
+    // 连接成功
+    virtual void on_connected() const {}
+
+    // 传输进度
+    virtual void on_progress(progress_type const &) const {}
+
+    // 收到部分数据
+    virtual void on_bytes(memory_type const &) const {}
+
+    // 完成数据传输
+    virtual void on_completed() const {} 
+
+    // 遇到错误
+    virtual void on_error(error const &) const {} 
+
+    // 断开连接
+    virtual void on_disconnected() const {} 
 
 };
 
