@@ -214,6 +214,8 @@ bool CurlHttpConnector::send() const {
     curl_easy_setopt(h, CURLOPT_HEADERFUNCTION, private_class_type::ImpReceiveHeader);
     curl_easy_setopt(h, CURLOPT_HEADERDATA, d_ptr);
 
+    on_connected();
+
     auto st = curl_easy_perform(h);
     if (st == CURLE_OK) {
         curl_easy_getinfo(h, CURLINFO_RESPONSE_CODE, &d_ptr->respcode);
@@ -231,6 +233,8 @@ bool CurlHttpConnector::send() const {
         curl_slist_free_all(headers);
     curl_easy_cleanup(h);
     d_ptr->h = nullptr;
+
+    on_disconnected();
 
     return RespondCodeIsOk(d_ptr->respcode);
 }
