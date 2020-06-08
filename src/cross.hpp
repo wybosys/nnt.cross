@@ -41,6 +41,28 @@ struct Memory : Range <V>
     MemT buffer;
 };
 
+class Mask
+{
+public:
+
+    template <typename T>
+    static bool IsSet(T const& val, T const& mask) {
+        return ((int)val & (int)mask) == (int)mask;
+    }
+
+    template <typename T>
+    static void Set(T& val, T const& mask) {
+        if (((int)val & (int)mask) == (int)mask)
+            (int&)val |= (int)mask;
+    }
+
+    template <typename T>
+    static void UnSet(T& val, T const& mask) {
+        if (((int)val & (int)mask) == (int)mask)
+            (int&)val &= ~(int)mask;
+    }
+};
+
 CROSS_END
 
 #endif

@@ -108,7 +108,7 @@ TEST (zip) {
 TEST (rest) {
     CurlHttpConnector cnt;
     cnt.url = "https://cn.bing.com/search";
-    cnt.method = HttpConnector::METHOD_POST;
+    cnt.method = HttpConnector::Method::POST;
     cnt.setarg("q", "abc");
     UNITTEST_CHECK_EQUAL(cnt.send(), true);
     cout << ((::std::stringbuf const &) cnt.body()).str() << endl;

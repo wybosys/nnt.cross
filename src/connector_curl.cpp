@@ -128,7 +128,7 @@ bool CurlHttpConnector::send() const {
     d_ptr->h = curl_easy_init();
     auto h = d_ptr->h;
 
-    if (method == METHOD_GET) {
+    if (method == Method::GET) {
         if (!_reqargs.empty()) {
             if (url.find('?') == -1) {
                 url += "/?";
@@ -152,11 +152,11 @@ bool CurlHttpConnector::send() const {
     curl_easy_setopt(h, CURLOPT_SSL_VERIFYPEER, 0);
 
     curl_httppost *form = nullptr;
-    if ((method & METHOD_POST) == METHOD_POST) {
+    if (Mask::IsSet(method, Method::POST)) {
         curl_easy_setopt(h, CURLOPT_POST, 1);
 
         switch (method) {
-            case METHOD_POST: {
+        case Method::POST: {
                 _reqheaders[HEADER_CONTENT_TYPE] = make_property("multipart/form-data");
                 curl_httppost *last = nullptr;
                 for (auto &e : _reqargs) {
@@ -169,14 +169,14 @@ bool CurlHttpConnector::send() const {
                 curl_easy_setopt(h, CURLOPT_HTTPPOST, form);
             }
                 break;
-            case METHOD_POST_URLENCODED: {
+            case Method::POST_URLENCODED: {
                 _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/x-www-form-urlencoded; charset=utf-8;");
                 auto val = build_query(h, _reqargs);
                 curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
                 curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
             }
                 break;
-            case METHOD_POST_JSON: {
+            case Method::POST_JSON: {
                 _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/json; charset=utf-8;");
                 auto p = Combine(_reqargs);
                 auto val = json_encode(*tojsonobj(*p));
@@ -184,7 +184,7 @@ bool CurlHttpConnector::send() const {
                 curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
             }
                 break;
-            case METHOD_POST_XML: {
+            case Method::POST_XML: {
                 _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/xml; charset=utf-8;");
                 auto p = Combine(_reqargs);
                 auto val = xml_encode(*toxmlobj(*p));
@@ -379,7 +379,7 @@ bool CurlDownloadConnector::send() const {
     d_ptr->h = curl_easy_init();
     auto h = d_ptr->h;
 
-    if (method == METHOD_GET) {
+    if (method == Method::GET) {
         if (!_reqargs.empty()) {
             if (url.find('?') == -1) {
                 url += "/?";
@@ -403,11 +403,11 @@ bool CurlDownloadConnector::send() const {
     curl_easy_setopt(h, CURLOPT_SSL_VERIFYPEER, 0);
 
     curl_httppost *form = nullptr;
-    if ((method & METHOD_POST) == METHOD_POST) {
+    if (Mask::IsSet(method, Method::POST)) {
         curl_easy_setopt(h, CURLOPT_POST, 1);
 
         switch (method) {
-            case METHOD_POST: {
+        case Method::POST: {
                 _reqheaders[HEADER_CONTENT_TYPE] = make_property("multipart/form-data");
                 curl_httppost *last = nullptr;
                 for (auto &e : _reqargs) {
@@ -420,14 +420,14 @@ bool CurlDownloadConnector::send() const {
                 curl_easy_setopt(h, CURLOPT_HTTPPOST, form);
             }
                 break;
-            case METHOD_POST_URLENCODED: {
+            case Method::POST_URLENCODED: {
                 _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/x-www-form-urlencoded; charset=utf-8;");
                 auto val = build_query(h, _reqargs);
                 curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
                 curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
             }
                 break;
-            case METHOD_POST_JSON: {
+            case Method::POST_JSON: {
                 _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/json; charset=utf-8;");
                 auto p = Combine(_reqargs);
                 auto val = json_encode(*tojsonobj(*p));
@@ -435,7 +435,7 @@ bool CurlDownloadConnector::send() const {
                 curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
             }
                 break;
-            case METHOD_POST_XML: {
+            case Method::POST_XML: {
                 _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/xml; charset=utf-8;");
                 auto p = Combine(_reqargs);
                 auto val = xml_encode(*toxmlobj(*p));

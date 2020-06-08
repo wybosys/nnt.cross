@@ -50,15 +50,15 @@ public:
     typedef unsigned short respondcode_type;
 
     // 请求形式
-    enum {
-        METHOD_GET = 0x1000,
-        METHOD_POST = 0x1000000,
-        METHOD_POST_URLENCODED = METHOD_POST | 1,
-        METHOD_POST_XML = METHOD_POST | 2,
-        METHOD_POST_JSON = METHOD_POST | 3,
+    enum struct Method {
+        GET = 0x1000,
+        POST = 0x1000000,
+        POST_URLENCODED = POST | 1,
+        POST_XML = POST | 2,
+        POST_JSON = POST | 3,
     };
 
-    unsigned int method = METHOD_GET;
+    Method method = Method::GET;
 
     const string HEADER_CONTENT_TYPE = "Content-Type";
 
