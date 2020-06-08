@@ -24,7 +24,7 @@ public:
 
     virtual string const &errmsg() const;
 
-    virtual ByteStreamReader<stream_type> body() const;
+    virtual body_stream_type body() const;
 
     virtual args_type const &respheaders() const;
 
