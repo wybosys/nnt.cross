@@ -39,12 +39,6 @@ protected:
     // 连接成功
     virtual void on_connected() const {}
 
-    // 传输进度
-    virtual void on_progress(progress_type const &) const {}
-
-    // 完成数据传输
-    virtual void on_completed() const {} 
-
     // 遇到错误
     virtual void on_error(error const &) const {} 
 
@@ -139,6 +133,12 @@ protected:
 
     // 收到部分数据
     virtual void on_bytes(memory_type const &) const {}
+
+    // 传输进度
+    virtual void on_progress(progress_type const &) const {}
+
+    // 完成数据传输(只运行正确时回调)
+    virtual void on_completed() const {}
 
     // 分开上传下载进度回调，默认on_progress为下载进度回调
     virtual void on_progress_upload(progress_type const &) const {}
