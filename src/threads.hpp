@@ -19,7 +19,7 @@ public:
 
 NNT_SINGLETON_DECL(MainThread);
 
-    typedef function<void()> func_type;
+    typedef ::std::function<void()> func_type;
 
     // 大循环中执行
     void invoke(func_type const &);
@@ -54,12 +54,12 @@ public:
 };
 
 // 任务接口
-class NNT_API ITask : public IObject {
+class NNT_API ITask : public ::NNT_NS::IObject {
 NNT_NOCOPY(ITask);
 
 public:
 
-    typedef function<void(ITask &)> func_type;
+    typedef ::std::function<void(ITask &)> func_type;
     typedef shared_ptr <ITask> task_type;
 
     ITask(func_type fn = nullptr);
@@ -98,7 +98,7 @@ public:
     TaskImpl(func_type fn = nullptr) : ITask(fn) {}
 
     virtual task_type copy() const {
-        auto r = make_dynamic_shared<TImpl, ITask>();
+        auto r = ::NNT_NS::make_dynamic_shared<TImpl, ITask>();
         r->proc = proc;
         return r;
     }
@@ -110,7 +110,7 @@ public:
 };
 
 // 接口线程调度器
-class NNT_API ITaskDispatcher : public IObject {
+class NNT_API ITaskDispatcher : public ::NNT_NS::IObject {
 public:
 
     typedef ITask::task_type task_type;

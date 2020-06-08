@@ -16,6 +16,7 @@
 #include <digest.hpp>
 #include <zip.hpp>
 
+USE_NNT;
 USE_CROSS;
 
 TEST (str) {

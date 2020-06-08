@@ -8,7 +8,7 @@
 
 CROSS_BEGIN
 
-class NNT_API Connector : virtual public Object {
+class NNT_API Connector : virtual public ::NNT_NS::Object {
 public:
 
     // 关闭当前链接

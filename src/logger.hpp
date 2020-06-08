@@ -19,20 +19,19 @@ enum struct LogLevel
     EMERGENCY = 0
 };
 
-class ILogger : public IObject
+class ILogger : public ::NNT_NS::IObject
 {
 public:
+    virtual void debug(string const &) = 0;
+    virtual void info(string const &) = 0;
+    virtual void notice(string const &) = 0;
+    virtual void warn(string const &) = 0;
+    virtual void error(string const &) = 0;
+    virtual void alert(string const &) = 0;
+    virtual void critical(string const &) = 0;
+    virtual void emergency(string const &) = 0;
 
-    virtual void debug(string const&) = 0;
-    virtual void info(string const&) = 0;
-    virtual void notice(string const&) = 0;
-    virtual void warn(string const&) = 0;
-    virtual void error(string const&) = 0;
-    virtual void alert(string const&) = 0;
-    virtual void critical(string const&) = 0;
-    virtual void emergency(string const&) = 0;
-
-    virtual void log(LogLevel, string const&) = 0;
+    virtual void log(LogLevel, string const &) = 0;
 };
 
 class NNT_API Logger : public ILogger
@@ -40,23 +39,23 @@ class NNT_API Logger : public ILogger
     NNT_SINGLETON_DECL(Logger);
 
 public:
-
     string prefix;
 
-    virtual void debug(string const&);
-    virtual void info(string const&);
-    virtual void notice(string const&);
-    virtual void warn(string const&);
-    virtual void error(string const&);
-    virtual void alert(string const&);
-    virtual void critical(string const&);
-    virtual void emergency(string const&);
+    virtual void debug(string const &);
+    virtual void info(string const &);
+    virtual void notice(string const &);
+    virtual void warn(string const &);
+    virtual void error(string const &);
+    virtual void alert(string const &);
+    virtual void critical(string const &);
+    virtual void emergency(string const &);
 
-    virtual void log(LogLevel, string const&);
-    virtual string format(LogLevel, string const&);
+    virtual void log(LogLevel, string const &);
+    virtual string format(LogLevel, string const &);
 
-    // 静态的方便函数
-#define _LOGGER_GO(func, imp) static void func(string const& msg) { Logger::shared(). imp(msg); }
+    // 闈欐�佺殑鏂逛究鍑芥暟
+#define _LOGGER_GO(func, imp) \
+    static void func(string const &msg) { Logger::shared().imp(msg); }
 
     _LOGGER_GO(Debug, debug);
     _LOGGER_GO(Info, info);

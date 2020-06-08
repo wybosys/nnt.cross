@@ -7,11 +7,19 @@
 #define CROSS_NS cross
 #endif
 
-#define CROSS_BEGIN NNT_BEGIN_NS(CROSS_NS)
-#define CROSS_END NNT_END_NS()
-#define USE_CROSS USE_NNT_NS(CROSS_NS)
+#define CROSS_BEGIN namespace CROSS_NS {
+#define CROSS_END }
+#define USE_CROSS using namespace CROSS_NS;
 
 CROSS_BEGIN
+
+using ::std::string;
+using ::NNT_NS::strings;
+using ::std::shared_ptr;
+using ::std::make_shared;
+using ::std::cout;
+using ::std::endl;
+using ::std::cerr;
 
 template <typename V>
 struct Range
