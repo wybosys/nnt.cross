@@ -38,17 +38,17 @@ int JniHttpConnector::errcode() const
 
 string const& JniHttpConnector::errmsg() const
 {
-    return Nil<string>();
+    return ::NNT_NS::Nil<string>();
 }
 
-Connector::stream_type const& JniHttpConnector::body() const
+HttpConnector::body_stream_type JniHttpConnector::body() const
 {
-    return Nil<::std::stringbuf>();
+    return ::NNT_NS::Nil<stream_type>();
 }
 
 JniHttpConnector::args_type const& JniHttpConnector::respheaders() const
 {
-    return Nil<args_type>();
+    return ::NNT_NS::Nil<args_type>();
 }
 
 unsigned short JniHttpConnector::respcode() const
@@ -87,9 +87,9 @@ bool JniWebSocketConnector::write(memory_type const& mem)
     return false;
 }
 
-Connector::stream_type const& JniWebSocketConnector::wait()
+WebSocketConnector::buffer_type JniWebSocketConnector::wait()
 {
-    return Nil<::std::stringbuf>();
+    return ::NNT_NS::Nil<buffer_type>();
 }
 
 CROSS_END

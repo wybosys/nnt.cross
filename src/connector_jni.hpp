@@ -21,7 +21,7 @@ public:
 
     virtual int errcode() const;
     virtual string const& errmsg() const;
-    virtual stream_type const& body() const;
+    virtual body_stream_type body() const;
     virtual args_type const& respheaders() const;
     virtual unsigned short respcode() const;
 };
@@ -40,7 +40,7 @@ public:
     virtual void close();
     virtual bool connect();
     virtual bool write(memory_type const&);
-    virtual stream_type const& wait();
+    virtual buffer_type wait();
 };
 
 CROSS_END
