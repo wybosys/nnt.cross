@@ -77,7 +77,7 @@ TEST (ws) {
     cnt.connect();
     cnt.write("hello");
     auto body = cnt.wait();
-    auto receive = ((::std::stringbuf const &) *body).str();
+    auto receive = body.str();
     UNITTEST_CHECK_EQUAL(receive, "hello");
 
     dis_ws.add([](ITask &) {
@@ -86,7 +86,7 @@ TEST (ws) {
         cnt.connect();
         cnt.write("hello");
         auto body = cnt.wait();
-        auto receive = ((::std::stringbuf const &) *body).str();
+        auto receive = body.str();
         cout << "收到" + receive << endl;
     });
 }
@@ -111,7 +111,7 @@ TEST (rest) {
     cnt.method = HttpConnector::Method::POST;
     cnt.setarg("q", "abc");
     UNITTEST_CHECK_EQUAL(cnt.send(), true);
-    cout << ((::std::stringbuf const &) cnt.body()).str() << endl;
+    cout << cnt.body().str() << endl;
     for (auto &e : cnt.respheaders()) {
         cout << e.first << ":" << e.second << endl;
     }

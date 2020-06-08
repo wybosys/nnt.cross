@@ -76,11 +76,12 @@ bool HttpConnector::RespondCodeIsOk(respondcode_type code) {
 }
 
 bool WebSocketConnector::write(string const &str) {
-    ::std::stringbuf t(str);
-    memory_type mem(t);
-    mem.from = 0;
-    mem.size = str.length();
+    memory_type mem(str.c_str(), str.length());
     return write(mem);
+}
+
+HttpConnector::body_stream_type DownloadConnector::body() const {
+    return ::NNT_NS::Nil<stream_type>();
 }
 
 CROSS_END

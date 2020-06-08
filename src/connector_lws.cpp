@@ -35,7 +35,7 @@ public:
     semaphore sema_connect, sema_read;
 
     // 临时读取对象
-    ::std::ostringstream stm_read;
+    ByteStream<> stm_read;
 
     bool connect() {
         const struct lws_protocols PROTOCOLS[] = {
@@ -123,39 +123,18 @@ public:
         if (!iswritable)
             return false;
 
-        char buf[WS_RESERVE_WRITE_BUFFER_SIZE];
-        auto &rd = mem.buffer;
-
-        size_t left = mem.size;
-        size_t tgtl = ::std::min<size_t>(WS_RESERVE_WRITE_BUFFER_SIZE, left);
-
-        ::std::streampos partl = rd.sgetn(buf, tgtl);
-        left -= (size_t) partl;
-
-        while (partl) {
+        ByteStreamReader<Connector::memory_type> reader(mem);
+        while (!reader.eof())
+        {
+            auto rd = reader.read(WS_RESERVE_WRITE_BUFFER_SIZE);
 
             int p = LWS_WRITE_BINARY;
-            if (left)
+            if (reader.eof())
                 p |= LWS_WRITE_NO_FIN;
 
-            auto writed = lws_write(client, (unsigned char *) buf, (size_t) partl, (lws_write_protocol) p);
-            if (!writed && !iswritable) {
-                return false;
-            }
-
-            auto remains = (int) partl - writed;
-            if (remains) {
-                left += remains;
-                rd.pubseekoff(-remains, ::std::ios::cur, ::std::ios::out);
-            }
-
-            if (left) {
-                tgtl = ::std::min<size_t>(WS_RESERVE_WRITE_BUFFER_SIZE, left);
-                partl = rd.sgetn(buf, tgtl);
-                left -= (size_t) partl;
-            } else {
-                break;
-            }
+            auto writed = lws_write(client, (unsigned char*)rd.buf(), rd.size(), (lws_write_protocol)p);
+            auto remains = rd.size() - writed;
+            reader.pos -= remains;
         }
 
         return true;
@@ -198,11 +177,9 @@ public:
         stm_read.clear();
         stm_read.write(buf, len);
 
-        Connector::memory_type mem(*stm_read.rdbuf());
-        mem.from = 0;
-        mem.size = len;
-
+        Connector::memory_type mem(buf, len);
         owner->on_bytes(mem);
+
         sema_read.notify();
     }
 
@@ -267,9 +244,10 @@ bool LibWebSocketConnector::write(memory_type const &mem) {
     return d_ptr->write(mem);
 }
 
-Connector::return_stream_type LibWebSocketConnector::wait() {
+WebSocketConnector::buffer_type LibWebSocketConnector::wait() {
     d_ptr->sema_read.wait();
-    return make_shared<ReturnStreamType<stream_type> >(*d_ptr->stm_read.rdbuf(), d_ptr->mtx_read);
+    NNT_AUTOGUARD(d_ptr->mtx_read);
+    return buffer_type(d_ptr->stm_read.buf(), d_ptr->stm_read.size());
 }
 
 CROSS_END

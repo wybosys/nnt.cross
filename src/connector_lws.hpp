@@ -26,7 +26,7 @@ public:
         return WebSocketConnector::write(str);
     }
 
-    virtual return_stream_type wait();
+    virtual buffer_type wait();
 
 };
 

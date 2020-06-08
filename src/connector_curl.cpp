@@ -18,7 +18,6 @@ public:
     typedef CurlHttpConnectorPrivate private_type;
 
     void clear() {
-        buffersz = 0;
         buffer.clear();
         rspheaders.clear();
     }
@@ -31,11 +30,7 @@ public:
 
         self->buffer.write(buf, lbuf);
 
-        CurlHttpConnector::memory_type mem(*self->buffer.rdbuf());
-        mem.from = self->buffersz;
-        mem.size = lbuf;
-        self->buffersz += lbuf;
-
+        CurlHttpConnector::memory_type mem(buf, lbuf);
         self->owner->on_bytes(mem);
 
         return lbuf;
@@ -76,8 +71,7 @@ public:
     int errcode = -1;
     string errmsg;
 
-    ::std::ostringstream buffer;
-    size_t buffersz = -1;
+    HttpConnector::stream_type buffer;
 
     HttpConnector::args_type rspheaders;
     unsigned short respcode;
@@ -247,8 +241,8 @@ string const &CurlHttpConnector::errmsg() const {
     return d_ptr->errmsg;
 }
 
-Connector::stream_type const &CurlHttpConnector::body() const {
-    return *d_ptr->buffer.rdbuf();
+CurlHttpConnector::body_stream_type CurlHttpConnector::body() const {
+    return d_ptr->buffer;
 }
 
 HttpConnector::args_type const &CurlHttpConnector::respheaders() const {
@@ -294,11 +288,7 @@ public:
 
         self->buffer.write(buf, lbuf);
 
-        ::std::stringbuf t(buf);
-        CurlHttpConnector::memory_type mem(t);
-        mem.from = 0;
-        mem.size = lbuf;
-
+        Connector::memory_type mem(buf, lbuf);
         self->owner->on_bytes(mem);
 
         return lbuf;
@@ -494,10 +484,6 @@ int CurlDownloadConnector::errcode() const {
 
 string const &CurlDownloadConnector::errmsg() const {
     return d_ptr->errmsg;
-}
-
-Connector::stream_type const &CurlDownloadConnector::body() const {
-    return *d_ptr->file->rdbuf();
 }
 
 HttpConnector::args_type const &CurlDownloadConnector::respheaders() const {

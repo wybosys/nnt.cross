@@ -178,6 +178,7 @@
     <ClInclude Include="..\..\src\macro.hpp" />
     <ClInclude Include="..\..\src\digest.hpp" />
     <ClInclude Include="..\..\src\md5\md5.h" />
+    <ClInclude Include="..\..\src\memory.hpp" />
     <ClInclude Include="..\..\src\minizip\ioapi_mem.h" />
     <ClInclude Include="..\..\src\minizip\crypt.h" />
     <ClInclude Include="..\..\src\minizip\ioapi.h" />

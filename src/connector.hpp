@@ -6,43 +6,9 @@
 #include <map>
 #include <functional>
 #include <mutex>
+#include "memory.hpp"
 
 CROSS_BEGIN
-
-template <typename TStm>
-class ReturnStreamType
-{
-    NNT_NOCOPY(ReturnStreamType);
-
-public:
-
-    typedef TStm stream_type;
-    typedef ::std::mutex mutex_type;
-
-    ReturnStreamType(stream_type &stm, mutex_type &mtx)
-        : _stm(stm), _mtx(mtx)
-    {
-        _mtx.lock();
-    }
-
-    ~ReturnStreamType()
-    {
-        _mtx.unlock();
-    }
-
-    inline operator stream_type & () {
-        return _stm;
-    }
-
-    inline operator stream_type const& () const {
-        return _stm;
-    }
-
-private:
-    stream_type &_stm;
-    mutex_type &_mtx;
-};
-
 
 class NNT_API Connector : virtual public ::NNT_NS::Object {
 public:
@@ -63,9 +29,7 @@ public:
     static string USERAGENT;
 
     typedef Progress<unsigned long long> progress_type;
-    typedef ::std::streambuf stream_type;
-    typedef shared_ptr<ReturnStreamType<stream_type> > return_stream_type;
-    typedef Memory<::std::stringbuf &, size_t> memory_type;
+    typedef CasualByteBuffer memory_type;
     typedef shared_ptr<Property> arg_type;
     typedef ::std::map<string, arg_type> args_type;
     typedef ::std::map<string, string> files_type;
@@ -77,9 +41,6 @@ protected:
 
     // 传输进度
     virtual void on_progress(progress_type const &) const {}
-
-    // 收到部分数据
-    virtual void on_bytes(memory_type const &) const {}
 
     // 完成数据传输
     virtual void on_completed() const {} 
@@ -96,6 +57,8 @@ class NNT_API HttpConnector : virtual public Connector {
 public:
 
     typedef unsigned short respondcode_type;
+    typedef ByteStream<> stream_type;
+    typedef ByteStreamReader<stream_type> body_stream_type;
 
     // 请求形式
     enum struct Method {
@@ -161,7 +124,7 @@ public:
     virtual string const &errmsg() const = 0;
 
     // 返回的消息主体
-    virtual stream_type const &body() const = 0;
+    virtual body_stream_type body() const = 0;
 
     // 返回的头
     virtual args_type const &respheaders() const = 0;
@@ -173,6 +136,9 @@ public:
     static bool RespondCodeIsOk(respondcode_type);
 
 protected:
+
+    // 收到部分数据
+    virtual void on_bytes(memory_type const &) const {}
 
     // 分开上传下载进度回调，默认on_progress为下载进度回调
     virtual void on_progress_upload(progress_type const &) const {}
@@ -189,6 +155,8 @@ protected:
 class NNT_API WebSocketConnector : virtual public Connector {
 public:
 
+    typedef ByteBuffer buffer_type;
+
     // 连接服务器
     virtual bool connect() = 0;
 
@@ -198,9 +166,12 @@ public:
     virtual bool write(string const &str);
 
     // 等待数据
-    virtual return_stream_type wait() = 0;
+    virtual buffer_type wait() = 0;
 
 protected:
+
+    // 收到部分数据
+    virtual void on_bytes(memory_type const &) const {}
 
     // 正在连接
     virtual void on_connecting() const {} // 正在连接
@@ -215,6 +186,11 @@ public:
 
     // 是否支持断点续传
     bool resumable = false;
+
+private:
+
+    // 禁止访问下载的body内容
+    virtual body_stream_type body() const;
 };
 
 // 转换args到property，之后既可以使用property的序列化方法
