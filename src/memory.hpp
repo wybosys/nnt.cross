@@ -88,6 +88,8 @@ class ByteBuffer
 {
 public:
 
+    ByteBuffer() {}
+
     ByteBuffer(char const* buf, size_t lbuf)
     {
         _init(buf, lbuf);
