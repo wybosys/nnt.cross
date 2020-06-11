@@ -23,6 +23,9 @@ public:
 #ifdef NNT_WINDOWS
         ::SetConsoleCtrlHandler(FnQuit, TRUE);
 #endif
+
+        // 实例化的线程定义为主线程（一般如此）
+        ismainthread = true;
     }
 
     static bool waitquit;
@@ -66,8 +69,6 @@ void MainThread::exec() {
 }
 
 void MainThread::tick() {
-    MainThreadPrivate::ismainthread = true;
-
     NNT_AUTOGUARD(d_ptr->mtx_funcs);
     for (auto &e : d_ptr->funcs) {
         e();
