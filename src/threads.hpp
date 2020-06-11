@@ -25,6 +25,9 @@ NNT_SINGLETON_DECL(MainThread);
     // 大循环中执行
     void invoke(func_type const &);
 
+    // 业务层实现的大循环接口，如果!=null则 invoke函数直接使用业务层定义的大循环实现
+    static ::std::function<void(func_type const&)> PreferredInvokeImpl;
+
     // 大循环
     void exec();
 

@@ -59,7 +59,12 @@ MainThread::MainThread() {
 
 MainThread::~MainThread() {
     NNT_CLASS_DESTORY();
+
+    // 清理
+    PreferredInvokeImpl = nullptr;
 }
+
+::std::function<void(MainThread::func_type const&)> MainThread::PreferredInvokeImpl = nullptr;
 
 void MainThread::exec() {
     while (!private_class_type::waitquit) {
@@ -77,6 +82,12 @@ void MainThread::tick() {
 }
 
 void MainThread::invoke(func_type const &fn) {
+    if (PreferredInvokeImpl) {
+        // 使用业务层的实现
+        PreferredInvokeImpl(fn);
+        return;
+    }
+
     if (MainThreadPrivate::ismainthread) {
         // 如果已经在主线程，则直接运行
         fn();
