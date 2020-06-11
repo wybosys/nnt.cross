@@ -50,10 +50,16 @@ public:
 
     ~semaphore();
 
+    // 唤醒一个
     void notify();
 
+    // 唤醒所有
+    void notify_all();
+
+    // 等待
     void wait();
 
+    // 尝试等待
     bool try_wait();
 };
 

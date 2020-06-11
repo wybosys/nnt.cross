@@ -103,9 +103,9 @@ bool IsMainThread() {
 
 class semaphorePrivate {
 public:
-    ::std::mutex _mtx;
-    ::std::condition_variable _cond;
-    size_t _count = 0;
+    ::std::mutex mtx;
+    ::std::condition_variable cond;
+    size_t count = 0, waits = 0;
 };
 
 semaphore::semaphore() {
@@ -117,23 +117,31 @@ semaphore::~semaphore() {
 }
 
 void semaphore::notify() {
-    ::std::lock_guard<decltype(d_ptr->_mtx)> lck(d_ptr->_mtx);
-    ++d_ptr->_count;
-    d_ptr->_cond.notify_one();
+    ::std::lock_guard<decltype(d_ptr->mtx)> lck(d_ptr->mtx);
+    ++d_ptr->count;
+    d_ptr->cond.notify_one();
+}
+
+void semaphore::notify_all() {
+    ::std::lock_guard<decltype(d_ptr->mtx)> lck(d_ptr->mtx);
+    d_ptr->count = d_ptr->waits;
+    d_ptr->cond.notify_all();
 }
 
 void semaphore::wait() {
-    ::std::unique_lock<decltype(d_ptr->_mtx)> lck(d_ptr->_mtx);
-    while (!d_ptr->_count) {
-        d_ptr->_cond.wait(lck);
+    ::std::unique_lock<decltype(d_ptr->mtx)> lck(d_ptr->mtx);
+    while (!d_ptr->count) {
+        d_ptr->waits += 1;
+        d_ptr->cond.wait(lck);
+        d_ptr->waits -= 1;
     }
-    --d_ptr->_count;
+    --d_ptr->count;
 }
 
 bool semaphore::try_wait() {
-    ::std::lock_guard<decltype(d_ptr->_mtx)> lck(d_ptr->_mtx);
-    if (d_ptr->_count) {
-        --d_ptr->_count;
+    ::std::lock_guard<decltype(d_ptr->mtx)> lck(d_ptr->mtx);
+    if (d_ptr->count) {
+        --d_ptr->count;
         return true;
     }
     return false;
@@ -231,7 +239,7 @@ public:
             return;
 
         waitstop = true;
-        smp_tasks.notify();
+        smp_tasks.notify_all();
 
         if (thd && thd->joinable()) {
             thd->join();
@@ -335,7 +343,7 @@ public:
             return;
 
         waitstop = true;
-        smp_tasks.notify();
+        smp_tasks.notify_all();
 
         for (auto &e : thds) {
             if (e->joinable()) {
@@ -473,7 +481,7 @@ public:
             return;
 
         waitstop = true;
-        smp_tasks.notify();
+        smp_tasks.notify_all();
 
         for (auto &e : thds) {
             if (e->joinable()) {
