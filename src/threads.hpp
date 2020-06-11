@@ -22,6 +22,9 @@ NNT_SINGLETON_DECL(MainThread);
 
     typedef ::std::function<void()> func_type;
 
+    // 便利性函数
+    static void Invoke(func_type const&);
+
     // 大循环中执行
     void invoke(func_type const &);
 

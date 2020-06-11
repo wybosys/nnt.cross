@@ -81,6 +81,10 @@ void MainThread::tick() {
     d_ptr->funcs.clear();
 }
 
+void MainThread::Invoke(func_type const& fn) {
+    shared().invoke(fn);
+}
+
 void MainThread::invoke(func_type const &fn) {
     if (PreferredInvokeImpl) {
         // 使用业务层的实现
