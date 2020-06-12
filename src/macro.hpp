@@ -351,6 +351,60 @@ private:
     friend shared_ref<TT> make_ref(Args &&...);
 };
 
+template <typename TShared>
+class shared_object
+{
+public:
+    typedef TShared shared_type;
+    typedef typename shared_type::element_type element_type;
+
+    shared_object() {}
+    shared_object(shared_type const &v) : _so(v) {}
+
+    inline operator shared_type &()
+    {
+        return _so;
+    }
+
+    inline operator shared_type const &() const
+    {
+        return _so;
+    }
+
+    inline element_type *operator->()
+    {
+        return _so.operator->();
+    }
+
+    inline element_type const *operator->() const
+    {
+        return _so.operator->();
+    }
+
+    inline element_type &operator*()
+    {
+        return _so.operator*();
+    }
+
+    inline element_type const &operator*() const
+    {
+        return _so.operator*();
+    }
+
+    inline shared_type &get()
+    {
+        return _so;
+    }
+
+    inline shared_type const &get() const
+    {
+        return _so;
+    }
+
+private:
+    shared_type _so;
+};
+
 template <typename T, typename... Args>
 static shared_ref<T> make_ref(Args &&... args)
 {
