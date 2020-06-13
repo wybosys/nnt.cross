@@ -21,9 +21,13 @@ extern NNT_API double todouble(string const &);
 
 extern NNT_API string tostr(int);
 
+extern NNT_API string tostr(unsigned int);
+
 extern NNT_API string tostr(float);
 
 extern NNT_API string tostr(double);
+
+extern NNT_API string tostr(unsigned long long);
 
 extern NNT_API string replace(string const &, string const &pat, string const &tgt);
 

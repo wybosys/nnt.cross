@@ -76,12 +76,20 @@ string tostr(int v) {
     return tostr<int>(v);
 }
 
+string tostr(unsigned int v) {
+    return tostr<unsigned int>(v);
+}
+
 string tostr(float v) {
     return tostr<float>(v);
 }
 
 string tostr(double v) {
     return tostr<double>(v);
+}
+
+string tostr(unsigned long long v) {
+    return tostr<unsigned long long>(v);
 }
 
 string replace(string const &str, string const &pat, string const &tgt) {

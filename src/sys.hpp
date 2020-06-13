@@ -3,7 +3,7 @@
 
 CROSS_BEGIN
 
-typedef ptrdiff_t pid_t;
+typedef unsigned long long pid_t;
 
 extern pid_t get_thread_id();
 
