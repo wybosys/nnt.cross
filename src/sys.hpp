@@ -1,0 +1,9 @@
+#ifndef __CROSS_SYS_H_INCLUDED
+#define __CROSS_SYS_H_INCLUDED
+
+CROSS_BEGIN
+
+
+CROSS_END
+
+#endif
