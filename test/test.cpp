@@ -15,13 +15,16 @@
 #include <connector_lws.hpp>
 #include <digest.hpp>
 #include <zip.hpp>
+#include <sys.hpp>
 
 USE_NNT;
 USE_CROSS;
 
-TEST (str) {
+TEST (sys) {
     string str = " a b c ";
     UNITTEST_CHECK_EQUAL(replace(str, " ", "/"), "/a/b/c/");
+
+    cout << "当前线程号 " << get_thread_id() << endl;
 }
 
 TEST (test) {
