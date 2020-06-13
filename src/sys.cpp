@@ -1,5 +1,7 @@
 #include "cross.hpp"
 #include "sys.hpp"
+#include <sstream>
+#include <thread>
 
 #ifdef NNT_WINDOWS
 
@@ -18,7 +20,7 @@ CROSS_BEGIN
 
 #ifdef NNT_WINDOWS
 
-pid_t get_thread_id()
+pid_t get_process_id()
 {
     return ::GetCurrentThreadId();
 }
@@ -27,11 +29,18 @@ pid_t get_thread_id()
 
 #ifdef NNT_UNIXLIKE
 
-pid_t get_thread_id()
+pid_t get_process_id()
 {
     return ::getpid();
 }
 
 #endif
+
+tid_t get_thread_id()
+{
+    ::std::ostringstream oss;
+    oss << ::std::this_thread::get_id();
+    return ::std::stoull(oss.str());
+}
 
 CROSS_END
