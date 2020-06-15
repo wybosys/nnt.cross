@@ -189,6 +189,7 @@
     <ClInclude Include="..\..\src\sys.hpp" />
     <ClInclude Include="..\..\src\threads.hpp" />
     <ClInclude Include="..\..\src\datetime.hpp" />
+    <ClInclude Include="..\..\src\timer.hpp" />
     <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\..\src\url.hpp" />
     <ClInclude Include="..\..\src\xml.hpp" />
@@ -243,6 +244,7 @@
     <ClCompile Include="..\..\src\sys.cpp" />
     <ClCompile Include="..\..\src\threads.cpp" />
     <ClCompile Include="..\..\src\datetime.cpp" />
+    <ClCompile Include="..\..\src\timer.cpp" />
     <ClCompile Include="..\..\src\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\src\url.cpp" />
     <ClCompile Include="..\..\src\xml.cpp" />
