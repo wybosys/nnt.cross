@@ -3,33 +3,34 @@
 
 #include <functional>
 #include <mutex>
+#include <thread>
 
 CROSS_BEGIN
 
 NNT_CLASS_PREPARE(MainThread);
 
 // 业务主线程
-class NNT_API MainThread {
-NNT_CLASS_DECL(MainThread);
+class NNT_API MainThread
+{
+    NNT_CLASS_DECL(MainThread);
 
     MainThread();
 
     ~MainThread();
 
 public:
-
-NNT_SINGLETON_DECL(MainThread);
+    NNT_SINGLETON_DECL(MainThread);
 
     typedef ::std::function<void()> func_type;
 
     // 便利性函数
-    static void Invoke(func_type const&);
+    static void Invoke(func_type const &);
 
     // 大循环中执行
     void invoke(func_type const &);
 
     // 业务层实现的大循环接口，如果!=null则 invoke函数直接使用业务层定义的大循环实现
-    static ::std::function<void(func_type const&)> PreferredInvokeImpl;
+    static ::std::function<void(func_type const &)> PreferredInvokeImpl;
 
     // 大循环
     void exec();
@@ -44,11 +45,11 @@ extern bool IsMainThread();
 NNT_CLASS_PREPARE(semaphore);
 
 // 信号量
-class NNT_API semaphore {
-NNT_CLASS_DECL(semaphore);
+class NNT_API semaphore
+{
+    NNT_CLASS_DECL(semaphore);
 
 public:
-
     semaphore();
 
     ~semaphore();
@@ -67,13 +68,13 @@ public:
 };
 
 // 任务接口
-class NNT_API ITask : public ::NNT_NS::IObject {
-NNT_NOCOPY(ITask);
+class NNT_API ITask : public ::NNT_NS::IObject
+{
+    NNT_NOCOPY(ITask);
 
 public:
-
     typedef ::std::function<void(ITask &)> func_type;
-    typedef shared_ptr <ITask> task_type;
+    typedef shared_ptr<ITask> task_type;
 
     ITask(func_type fn = nullptr);
 
@@ -105,33 +106,37 @@ private:
     friend class ITaskDispatcher;
 };
 
-template<typename TImpl>
-class TaskImpl : public ITask {
+template <typename TImpl>
+class TaskImpl : public ITask
+{
 public:
     TaskImpl(func_type fn = nullptr) : ITask(fn) {}
 
-    virtual task_type copy() const {
+    virtual task_type copy() const
+    {
         auto r = ::NNT_NS::make_dynamic_shared<TImpl, ITask>();
         r->proc = proc;
         return r;
     }
 };
 
-class NNT_API Task : public TaskImpl<Task> {
+class NNT_API Task : public TaskImpl<Task>
+{
 public:
     Task(func_type fn = nullptr) : TaskImpl<Task>(fn) {}
 };
 
 // 接口线程调度器
-class NNT_API ITaskDispatcher : public ::NNT_NS::IObject {
+class NNT_API ITaskDispatcher : public ::NNT_NS::IObject
+{
 public:
-
     typedef ITask::task_type task_type;
 
     // 添加一个任务
     virtual bool add(task_type &&) = 0;
 
-    virtual bool add(ITask::func_type fn) {
+    virtual bool add(ITask::func_type fn)
+    {
         return add(make_shared<Task>(fn));
     }
 
@@ -154,7 +159,6 @@ public:
     virtual void cancel() = 0;
 
 protected:
-
     // 执行一次任务
     void _run(task_type &tsk);
 };
@@ -162,18 +166,19 @@ protected:
 NNT_CLASS_PREPARE(SingleTaskDispatcher);
 
 // 单线程任务调度
-class NNT_API SingleTaskDispatcher : public ITaskDispatcher {
-NNT_CLASS_DECL(SingleTaskDispatcher);
+class NNT_API SingleTaskDispatcher : public ITaskDispatcher
+{
+    NNT_CLASS_DECL(SingleTaskDispatcher);
 
 public:
-
     SingleTaskDispatcher();
 
     virtual ~SingleTaskDispatcher();
 
     virtual bool add(task_type &&);
 
-    virtual bool add(ITask::func_type fn) {
+    virtual bool add(ITask::func_type fn)
+    {
         return ITaskDispatcher::add(fn);
     }
 
@@ -196,11 +201,11 @@ public:
 NNT_CLASS_PREPARE(FixedTaskDispatcher);
 
 // 定长线程任务调度
-class NNT_API FixedTaskDispatcher : public ITaskDispatcher {
-NNT_CLASS_DECL(FixedTaskDispatcher);
+class NNT_API FixedTaskDispatcher : public ITaskDispatcher
+{
+    NNT_CLASS_DECL(FixedTaskDispatcher);
 
 public:
-
     // \@count 使用多少个线程执行任务， 默认为cpu核心线程数
     FixedTaskDispatcher();
 
@@ -210,7 +215,8 @@ public:
 
     virtual bool add(task_type &&);
 
-    virtual bool add(ITask::func_type fn) {
+    virtual bool add(ITask::func_type fn)
+    {
         return ITaskDispatcher::add(fn);
     }
 
@@ -230,11 +236,11 @@ public:
 NNT_CLASS_PREPARE(QueuedTaskDispatcher);
 
 // 队列线程任务调度
-class NNT_API QueuedTaskDispatcher : public ITaskDispatcher {
-NNT_CLASS_DECL(QueuedTaskDispatcher);
+class NNT_API QueuedTaskDispatcher : public ITaskDispatcher
+{
+    NNT_CLASS_DECL(QueuedTaskDispatcher);
 
 public:
-
     /*
     \@min 最小多少个线程，默认cpu核心线程数
     \@max 超过max线程后，其他任务排队等待执行，默认为2倍cpu核心线程数
@@ -247,7 +253,8 @@ public:
 
     virtual bool add(task_type &&);
 
-    virtual bool add(ITask::func_type fn) {
+    virtual bool add(ITask::func_type fn)
+    {
         return ITaskDispatcher::add(fn);
     }
 
@@ -268,7 +275,6 @@ public:
 class NNT_API _ThreadResourceProvider
 {
 public:
-
     virtual ~_ThreadResourceProvider();
 
     // 开始提供
@@ -278,52 +284,53 @@ public:
     void stop();
 
 protected:
-
-    ::std::function<void*()> _init;
-    ::std::function<void(void*)> _delete;
+    ::std::function<void *()> _init;
+    ::std::function<void(void *)> _delete;
     void *_obj = nullptr;
 
 private:
-    
     semaphore _wait_start, _wait_stop;
     shared_ptr<::std::thread> _thd;
 
-    static void _ThdWorker(_ThreadResourceProvider*);
+    static void _ThdWorker(_ThreadResourceProvider *);
 };
 
 template <typename T>
 class ThreadResourceProvider : public _ThreadResourceProvider
 {
 public:
-
     ThreadResourceProvider(bool autostart = true)
     {
-        _init = []()->void* {
+        _init = []() -> void * {
             return new T();
         };
 
-        _delete = [](void* p) {
-            delete (T*)p;
+        _delete = [](void *p) {
+            delete (T *)p;
         };
 
         if (autostart)
             start();
     }
 
-    inline T& resource() {
-        return *(T*)_obj;
+    inline T &resource()
+    {
+        return *(T *)_obj;
     }
 
-    inline T const& resource() const {
-        return *(T*)_obj;
-    }
-    
-    inline T* operator -> () {
-        return (T*)_obj;
+    inline T const &resource() const
+    {
+        return *(T *)_obj;
     }
 
-    inline T const* operator -> () const {
-        return (T*)_obj;
+    inline T *operator->()
+    {
+        return (T *)_obj;
+    }
+
+    inline T const *operator->() const
+    {
+        return (T *)_obj;
     }
 };
 
