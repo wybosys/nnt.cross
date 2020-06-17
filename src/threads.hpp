@@ -264,6 +264,61 @@ public:
     virtual void cancel();
 };
 
+// 临界工作资源提供器
+class NNT_API _ThreadResourceProvider
+{
+public:
+
+    virtual ~_ThreadResourceProvider();
+
+    // 开始提供
+    void start();
+
+    // 停止
+    void stop();
+
+protected:
+
+    ::std::function<void*()> _init;
+    ::std::function<void(void*)> _delete;
+    void *_obj = nullptr;
+
+private:
+
+    semaphore _wait;
+    shared_ptr<::std::thread> _thd;
+
+    static void _ThdWorker(_ThreadResourceProvider*);
+};
+
+template <typename T>
+class ThreadResourceProvider : public _ThreadResourceProvider
+{
+public:
+
+    ThreadResourceProvider(bool autostart = true)
+    {
+        _init = []()->void* {
+            return new T();
+        };
+
+        _delete = [](void* p) {
+            delete (T*)p;
+        };
+
+        if (autostart)
+            start();
+    }
+
+    inline T& resource() {
+        return *(T*)_obj;
+    }
+
+    inline T const& resource() const {
+        return *(T*)_obj;
+    }
+};
+
 CROSS_END
 
 #endif
