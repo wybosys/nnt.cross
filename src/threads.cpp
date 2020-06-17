@@ -622,11 +622,6 @@ void _ThreadResourceProvider::start()
 {
     if (_thd)
         return;
-
-    if (!_obj) {
-        _obj = _init();
-    }
-
     _thd = make_shared<::std::thread>(_ThdWorker, this);
 }
 
@@ -638,18 +633,22 @@ void _ThreadResourceProvider::stop()
     // 自动退出线程
     _wait.notify();
     _thd->join();
-
-    // 清理资源
-    if (_obj && _delete) {
-        _delete(_obj);
-        _obj = nullptr;
-    }
 }
 
 void _ThreadResourceProvider::_ThdWorker(_ThreadResourceProvider* self)
 {
+    if (!self->_obj) {
+        self->_obj = self->_init();
+    }
+
     // 卡住线程等待结束
     self->_wait.wait();
+
+    // 清理资源
+    if (self->_obj) {
+        self->_delete(self->_obj);
+        self->_obj = nullptr;
+    }
 }
 
 CROSS_END
