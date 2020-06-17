@@ -317,6 +317,14 @@ public:
     inline T const& resource() const {
         return *(T*)_obj;
     }
+    
+    inline T* operator -> () {
+        return (T*)_obj;
+    }
+
+    inline T const* operator -> () const {
+        return (T*)_obj;
+    }
 };
 
 CROSS_END
