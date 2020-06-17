@@ -668,6 +668,7 @@ void _ThreadResourceProvider::stop()
     // 自动退出线程
     d_ptr->_wait_stop.notify();
     d_ptr->_thd->join();
+    d_ptr->_thd = nullptr;
 }
 
 void* _ThreadResourceProvider::_obj() const
