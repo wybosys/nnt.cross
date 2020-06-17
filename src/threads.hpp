@@ -284,8 +284,8 @@ protected:
     void *_obj = nullptr;
 
 private:
-
-    semaphore _wait;
+    
+    semaphore _wait_start, _wait_stop;
     shared_ptr<::std::thread> _thd;
 
     static void _ThdWorker(_ThreadResourceProvider*);
