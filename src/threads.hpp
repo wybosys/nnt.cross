@@ -3,7 +3,6 @@
 
 #include <functional>
 #include <mutex>
-#include <thread>
 
 CROSS_BEGIN
 
@@ -271,10 +270,16 @@ public:
     virtual void cancel();
 };
 
+NNT_CLASS_PREPARE(_ThreadResourceProvider);
+
 // 临界工作资源提供器
 class NNT_API _ThreadResourceProvider
 {
+    NNT_CLASS_DECL(_ThreadResourceProvider);
+
 public:
+
+    _ThreadResourceProvider();
     virtual ~_ThreadResourceProvider();
 
     // 开始提供
@@ -284,21 +289,18 @@ public:
     void stop();
 
 protected:
+
+    void* _obj() const;
+
     ::std::function<void *()> _init;
     ::std::function<void(void *)> _delete;
-    void *_obj = nullptr;
-
-private:
-    semaphore _wait_start, _wait_stop;
-    shared_ptr<::std::thread> _thd;
-
-    static void _ThdWorker(_ThreadResourceProvider *);
 };
 
 template <typename T>
 class ThreadResourceProvider : public _ThreadResourceProvider
 {
 public:
+
     ThreadResourceProvider(bool autostart = true)
     {
         _init = []() -> void * {
@@ -313,24 +315,24 @@ public:
             start();
     }
 
-    inline T &resource()
+    inline operator T& ()
     {
-        return *(T *)_obj;
+        return *(T *)_obj();
     }
 
-    inline T const &resource() const
+    inline operator T const& () const
     {
-        return *(T *)_obj;
+        return *(T *)_obj();
     }
 
     inline T *operator->()
     {
-        return (T *)_obj;
+        return (T *)_obj();
     }
 
     inline T const *operator->() const
     {
-        return (T *)_obj;
+        return (T *)_obj();
     }
 };
 

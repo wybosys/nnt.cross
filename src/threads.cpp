@@ -613,46 +613,66 @@ void QueuedTaskDispatcher::clear() {
     d_ptr->tasks.clear();
 }
 
+class _ThreadResourceProviderPrivate
+{
+public:
+
+    void *_obj = nullptr;
+    semaphore _wait_start, _wait_stop;
+    shared_ptr<::std::thread> _thd;
+
+    static void _ThdWorker(_ThreadResourceProvider *self)
+    {
+        if (!self->d_ptr->_obj) {
+            self->d_ptr->_obj = self->_init();
+        }
+
+        // 放开start
+        self->d_ptr->_wait_start.notify();
+
+        // 卡住线程等待结束
+        self->d_ptr->_wait_stop.wait();
+
+        // 清理资源
+        if (self->d_ptr->_obj) {
+            self->_delete(self->d_ptr->_obj);
+            self->d_ptr->_obj = nullptr;
+        }
+    }
+};
+
+_ThreadResourceProvider::_ThreadResourceProvider()
+{
+    NNT_CLASS_CONSTRUCT();
+}
+
 _ThreadResourceProvider::~_ThreadResourceProvider()
 {
     stop();
+    NNT_CLASS_DESTORY();
 }
 
 void _ThreadResourceProvider::start()
 {
-    if (_thd)
+    if (d_ptr->_thd)
         return;
-    _thd = make_shared<::std::thread>(_ThdWorker, this);
-    _wait_start.wait();
+    d_ptr->_thd = make_shared<::std::thread>(private_class_type::_ThdWorker, this);
+    d_ptr->_wait_start.wait();
 }
 
 void _ThreadResourceProvider::stop()
 {
-    if (!_thd)
+    if (!d_ptr->_thd)
         return;
 
     // 自动退出线程
-    _wait_stop.notify();
-    _thd->join();
+    d_ptr->_wait_stop.notify();
+    d_ptr->_thd->join();
 }
 
-void _ThreadResourceProvider::_ThdWorker(_ThreadResourceProvider* self)
+void* _ThreadResourceProvider::_obj() const
 {
-    if (!self->_obj) {
-        self->_obj = self->_init();
-    }
-
-    // 放开start
-    self->_wait_start.notify();
-
-    // 卡住线程等待结束
-    self->_wait_stop.wait();
-
-    // 清理资源
-    if (self->_obj) {
-        self->_delete(self->_obj);
-        self->_obj = nullptr;
-    }
+    return d_ptr->_obj;
 }
 
 CROSS_END
