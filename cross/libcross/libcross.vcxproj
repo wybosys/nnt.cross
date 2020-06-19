@@ -186,6 +186,7 @@
     <ClInclude Include="..\..\src\minizip\unzip.h" />
     <ClInclude Include="..\..\src\property.hpp" />
     <ClInclude Include="..\..\src\str.hpp" />
+    <ClInclude Include="..\..\src\stringbuilder.hpp" />
     <ClInclude Include="..\..\src\sys.hpp" />
     <ClInclude Include="..\..\src\threads.hpp" />
     <ClInclude Include="..\..\src\datetime.hpp" />
