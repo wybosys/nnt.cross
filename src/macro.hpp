@@ -180,6 +180,7 @@ public:                                     \
 #include <atomic>
 #include <memory>
 #include <functional>
+#include <mutex>
 
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
 #include <xstring>
