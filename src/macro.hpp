@@ -152,6 +152,20 @@ public:                                     \
 #define NNT_UNIXLIKE
 #endif
 
+#ifdef __arm__
+#define NNT_ARM
+#endif
+
+#ifdef __aarch64__
+#define NNT_ARM64
+#endif
+
+#if defined(__i386__)
+#define NNT_X86
+#elif defined(__x86_64__)
+#define NNT_X64
+#endif
+
 #ifndef NNT_API
 #define NNT_API NNT_PASS
 #endif
