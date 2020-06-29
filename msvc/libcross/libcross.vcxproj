@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../../src/;../../src/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;$(IncludePath)</IncludePath>
+    <IncludePath>../../cross/;../../cross/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;$(IncludePath)</IncludePath>
     <LibraryPath>D:/sdks/opt/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../../src/;../../src/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;$(IncludePath)</IncludePath>
+    <IncludePath>../../cross/;../../cross/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;$(IncludePath)</IncludePath>
     <LibraryPath>D:/sdks/opt/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,104 +155,104 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\code.hpp" />
-    <ClInclude Include="..\..\src\com++.hpp" />
-    <ClInclude Include="..\..\src\connector.hpp" />
-    <ClInclude Include="..\..\src\connector_curl.hpp" />
-    <ClInclude Include="..\..\src\connector_lws.hpp" />
-    <ClInclude Include="..\..\src\cross.hpp" />
-    <ClInclude Include="..\..\src\fs.hpp" />
-    <ClInclude Include="..\..\src\json.hpp" />
-    <ClInclude Include="..\..\src\jsoncpp\json\allocator.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\assertions.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\config.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\forwards.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\json.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\json_features.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\reader.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\value.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\version.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json\writer.h" />
-    <ClInclude Include="..\..\src\jsoncpp\json_tool.h" />
-    <ClInclude Include="..\..\src\logger.hpp" />
-    <ClInclude Include="..\..\src\macro.hpp" />
-    <ClInclude Include="..\..\src\digest.hpp" />
-    <ClInclude Include="..\..\src\md5\md5.h" />
-    <ClInclude Include="..\..\src\memory.hpp" />
-    <ClInclude Include="..\..\src\minizip\ioapi_mem.h" />
-    <ClInclude Include="..\..\src\minizip\crypt.h" />
-    <ClInclude Include="..\..\src\minizip\ioapi.h" />
-    <ClInclude Include="..\..\src\minizip\iowin32.h" />
-    <ClInclude Include="..\..\src\minizip\unzip.h" />
-    <ClInclude Include="..\..\src\property.hpp" />
-    <ClInclude Include="..\..\src\str.hpp" />
-    <ClInclude Include="..\..\src\stringbuilder.hpp" />
-    <ClInclude Include="..\..\src\sys.hpp" />
-    <ClInclude Include="..\..\src\threads.hpp" />
-    <ClInclude Include="..\..\src\datetime.hpp" />
-    <ClInclude Include="..\..\src\timer.hpp" />
-    <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h" />
-    <ClInclude Include="..\..\src\url.hpp" />
-    <ClInclude Include="..\..\src\xml.hpp" />
-    <ClInclude Include="..\..\src\zip.hpp" />
+    <ClInclude Include="..\..\cross\code.hpp" />
+    <ClInclude Include="..\..\cross\com++.hpp" />
+    <ClInclude Include="..\..\cross\connector.hpp" />
+    <ClInclude Include="..\..\cross\connector_curl.hpp" />
+    <ClInclude Include="..\..\cross\connector_lws.hpp" />
+    <ClInclude Include="..\..\cross\cross.hpp" />
+    <ClInclude Include="..\..\cross\fs.hpp" />
+    <ClInclude Include="..\..\cross\json.hpp" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\allocator.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\assertions.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\config.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\forwards.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\json.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\json_features.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\reader.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\value.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\version.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json\writer.h" />
+    <ClInclude Include="..\..\cross\jsoncpp\json_tool.h" />
+    <ClInclude Include="..\..\cross\logger.hpp" />
+    <ClInclude Include="..\..\cross\macro.hpp" />
+    <ClInclude Include="..\..\cross\digest.hpp" />
+    <ClInclude Include="..\..\cross\md5\md5.h" />
+    <ClInclude Include="..\..\cross\memory.hpp" />
+    <ClInclude Include="..\..\cross\minizip\ioapi_mem.h" />
+    <ClInclude Include="..\..\cross\minizip\crypt.h" />
+    <ClInclude Include="..\..\cross\minizip\ioapi.h" />
+    <ClInclude Include="..\..\cross\minizip\iowin32.h" />
+    <ClInclude Include="..\..\cross\minizip\unzip.h" />
+    <ClInclude Include="..\..\cross\property.hpp" />
+    <ClInclude Include="..\..\cross\str.hpp" />
+    <ClInclude Include="..\..\cross\stringbuilder.hpp" />
+    <ClInclude Include="..\..\cross\sys.hpp" />
+    <ClInclude Include="..\..\cross\threads.hpp" />
+    <ClInclude Include="..\..\cross\datetime.hpp" />
+    <ClInclude Include="..\..\cross\timer.hpp" />
+    <ClInclude Include="..\..\cross\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="..\..\cross\url.hpp" />
+    <ClInclude Include="..\..\cross\xml.hpp" />
+    <ClInclude Include="..\..\cross\zip.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\connector.cpp" />
-    <ClCompile Include="..\..\src\connector_curl.cpp" />
-    <ClCompile Include="..\..\src\connector_lws.cpp" />
-    <ClCompile Include="..\..\src\cross.cpp">
+    <ClCompile Include="..\..\cross\connector.cpp" />
+    <ClCompile Include="..\..\cross\connector_curl.cpp" />
+    <ClCompile Include="..\..\cross\connector_lws.cpp" />
+    <ClCompile Include="..\..\cross\cross.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\fs.cpp" />
-    <ClCompile Include="..\..\src\json.cpp" />
-    <ClCompile Include="..\..\src\jsoncpp\json_reader.cpp">
+    <ClCompile Include="..\..\cross\fs.cpp" />
+    <ClCompile Include="..\..\cross\json.cpp" />
+    <ClCompile Include="..\..\cross\jsoncpp\json_reader.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\jsoncpp\json_value.cpp">
+    <ClCompile Include="..\..\cross\jsoncpp\json_value.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\jsoncpp\json_writer.cpp">
+    <ClCompile Include="..\..\cross\jsoncpp\json_writer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\logger.cpp" />
-    <ClCompile Include="..\..\src\digest.cpp" />
-    <ClCompile Include="..\..\src\md5\md5.c">
+    <ClCompile Include="..\..\cross\logger.cpp" />
+    <ClCompile Include="..\..\cross\digest.cpp" />
+    <ClCompile Include="..\..\cross\md5\md5.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\minizip\ioapi_mem.c">
+    <ClCompile Include="..\..\cross\minizip\ioapi_mem.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\minizip\ioapi.c">
+    <ClCompile Include="..\..\cross\minizip\ioapi.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\minizip\iowin32.c">
+    <ClCompile Include="..\..\cross\minizip\iowin32.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\minizip\unzip.c">
+    <ClCompile Include="..\..\cross\minizip\unzip.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\property.cpp" />
-    <ClCompile Include="..\..\src\str.cpp" />
-    <ClCompile Include="..\..\src\sys.cpp" />
-    <ClCompile Include="..\..\src\threads.cpp" />
-    <ClCompile Include="..\..\src\datetime.cpp" />
-    <ClCompile Include="..\..\src\timer.cpp" />
-    <ClCompile Include="..\..\src\tinyxml2\tinyxml2.cpp" />
-    <ClCompile Include="..\..\src\url.cpp" />
-    <ClCompile Include="..\..\src\xml.cpp" />
-    <ClCompile Include="..\..\src\zip.cpp" />
+    <ClCompile Include="..\..\cross\property.cpp" />
+    <ClCompile Include="..\..\cross\str.cpp" />
+    <ClCompile Include="..\..\cross\sys.cpp" />
+    <ClCompile Include="..\..\cross\threads.cpp" />
+    <ClCompile Include="..\..\cross\datetime.cpp" />
+    <ClCompile Include="..\..\cross\timer.cpp" />
+    <ClCompile Include="..\..\cross\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="..\..\cross\url.cpp" />
+    <ClCompile Include="..\..\cross\xml.cpp" />
+    <ClCompile Include="..\..\cross\zip.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\jsoncpp\json_valueiterator.inl" />
+    <None Include="..\..\cross\jsoncpp\json_valueiterator.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
