@@ -65,6 +65,8 @@ public:
         : _buf((void*)buf), _size(lbuf)
     {}
 
+    virtual ~CasualByteBuffer() = default;
+
     inline char const* buf() const {
         return (char const*)_buf;
     }
@@ -105,7 +107,7 @@ public:
         _init(r.buf(), r.size());
     }
 
-    ~ByteBuffer()
+    virtual ~ByteBuffer()
     {
         free(_buf);
     }
@@ -175,7 +177,7 @@ public:
         _length += lbuf;
     }
 
-    void reserve(size_t tgt) 
+    void reserve(size_t tgt)
     {
         if (tgt <= _capacity)
             return;
@@ -256,7 +258,7 @@ public:
         pos += len;
         return r;
     }
-    
+
 protected:
 
     inline size_t _pos_s() const {
