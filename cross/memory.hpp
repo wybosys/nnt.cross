@@ -80,7 +80,8 @@ public:
     }
 
 protected:
-    void*_buf;
+
+    void* _buf;
     size_t _size;
 };
 
@@ -133,16 +134,27 @@ private:
 template <size_t Count = 8192>
 class ByteStream
 {
-    NNT_NOCOPY(ByteStream);
-
 public:
 
+    typedef ByteStream<Count> self_type;
     typedef char byte_type;
     enum { COUNT = Count };
 
     ByteStream()
     {
         _buf = malloc(COUNT);
+    }
+
+    template <size_t RCount>
+    ByteStream(ByteStream<RCount> const& r)
+    {
+        while (r._length > _capacity) {
+            _capacity += COUNT;
+        }
+
+        _buf = malloc(_capacity);
+        memcpy((char*)_buf, r._buf, r._length);
+        _length = r._length;
     }
 
     ByteStream(void const* buf, size_t lbuf)
@@ -161,7 +173,7 @@ public:
         free(_buf);
     }
 
-    void write(void const*buf, size_t lbuf)
+    void write(void const* buf, size_t lbuf)
     {
         bool _extend = false;
         while (_length + lbuf > _capacity) {
@@ -175,6 +187,14 @@ public:
 
         memcpy((char*)_buf + _length, buf, lbuf);
         _length += lbuf;
+    }
+
+    template <size_t RCount>
+    self_type& operator = (ByteStream<RCount> const& r)
+    {
+        _length = 0;
+        write(r._buf, r._length);
+        return *this;
     }
 
     void reserve(size_t tgt)
@@ -196,6 +216,8 @@ public:
 
     inline void clear() {
         _length = 0;
+        _capacity = Count;
+        _buf = realloc(_buf, _capacity);
     }
 
     inline char const* buf() const {
@@ -203,6 +225,7 @@ public:
     }
 
 private:
+
     void* _buf;
     size_t _capacity = COUNT;
     size_t _length = 0;
