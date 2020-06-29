@@ -5,6 +5,8 @@
 #include <functional>
 #include <algorithm>
 
+#define CROSS_HAS_MEMORY 1
+
 CROSS_BEGIN
 
 template<size_t LEN>
