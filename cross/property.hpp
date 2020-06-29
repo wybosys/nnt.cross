@@ -69,7 +69,8 @@ public:
     operator bool() const;
 
 private:
-    union {
+    union
+    {
         integer i;
         number n;
         bool b;
@@ -212,28 +213,29 @@ inline Property::data_type Property::array(size_t idx) const
     return idx < l.size() ? l[idx] : nullptr;
 }
 
-template <typename _CharT, typename _Traits>
+template<typename _CharT, typename _Traits>
 static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, Property const &v)
 {
-    switch (v.vt)
-    {
-    case Property::VT::STRING:
-        stm << v.toString();
-        break;
-    case Property::VT::INTEGER:
-        stm << v.toInteger();
-        break;
-    case Property::VT::NUMBER:
-        stm << v.toNumber();
-        break;
-    case Property::VT::BOOLEAN:
-        stm << v.toBool();
-        break;
+    switch (v.vt) {
+        case Property::VT::STRING:
+            stm << v.toString();
+            break;
+        case Property::VT::INTEGER:
+            stm << v.toInteger();
+            break;
+        case Property::VT::NUMBER:
+            stm << v.toNumber();
+            break;
+        case Property::VT::BOOLEAN:
+            stm << v.toBool();
+            break;
+        default:
+            break;
     }
     return stm;
 }
 
-template <typename _CharT, typename _Traits>
+template<typename _CharT, typename _Traits>
 static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr<Property> const &v)
 {
     if (!v)
@@ -241,13 +243,13 @@ static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_C
     return stm << *v;
 }
 
-template <typename V>
+template<typename V>
 inline shared_ptr<Property> make_property(V &v)
 {
     return make_shared<Property>(v);
 }
 
-template <typename V>
+template<typename V>
 inline shared_ptr<Property> _P(V const &v)
 {
     return make_shared<Property>(v);

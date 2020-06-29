@@ -3,35 +3,36 @@ project(cross)
 
 set(CMAKE_CXX_STANDARD 11)
 
-include_directories(src)
-include_directories(src/jsoncpp)
+include_directories(cross)
+include_directories(cross/jsoncpp)
 
-add_subdirectory(src/md5)
-add_subdirectory(src/minizip)
-add_subdirectory(src/jsoncpp)
+add_subdirectory(cross/md5)
+add_subdirectory(cross/minizip)
+add_subdirectory(cross/jsoncpp)
 
 set(CROSS_SRCS
-        src/cross.cpp
-        src/fs.cpp
-        src/str.cpp
-        src/connector.cpp
-        src/connector_curl.cpp
-        src/connector_lws.cpp
-        src/cross.cpp
-        src/datetime.cpp
-        src/digest.cpp
-        src/fs.cpp
-        src/json.cpp
-        src/logger.cpp
-        src/property.cpp
-        src/threads.cpp
-        src/url.cpp
-        src/xml.cpp
-        src/zip.cpp
-        )
+    cross/cross.cpp
+    cross/fs.cpp
+    cross/str.cpp
+    cross/connector.cpp
+    cross/connector_curl.cpp
+    cross/connector_lws.cpp
+    cross/cross.cpp
+    cross/datetime.cpp
+    cross/digest.cpp
+    cross/fs.cpp
+    cross/json.cpp
+    cross/logger.cpp
+    cross/property.cpp
+    cross/threads.cpp
+    cross/sys.cpp
+    cross/url.cpp
+    cross/xml.cpp
+    cross/zip.cpp
+    )
 add_library(cross STATIC ${CROSS_SRCS})
 
 set(TEST_SRCS
-        test/test.cpp)
+    test/test.cpp)
 add_executable(test ${TEST_SRCS})
 target_link_libraries(test cross UnitTest++ tinyxml2 jsoncpp pthread websockets minizip curl md5 z)
