@@ -75,7 +75,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\sdks\opt\include;$(SolutionDir)..\src;$(SolutionDir)..\src\jsoncpp;$(IncludePath)</IncludePath>
+    <IncludePath>D:\sdks\opt\include;$(SolutionDir)..\cross;$(IncludePath)</IncludePath>
     <LibraryPath>D:\sdks\opt\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>D:\sdks\opt\lib;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>

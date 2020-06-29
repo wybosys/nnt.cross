@@ -19,221 +19,221 @@
     <Filter Include="jsoncpp\json">
       <UniqueIdentifier>{3520ee35-9720-4965-9a8d-ed4924685794}</UniqueIdentifier>
     </Filter>
-    <Filter Include="tinyxml2">
-      <UniqueIdentifier>{7465949f-3111-47bf-9765-9dc3efad5712}</UniqueIdentifier>
-    </Filter>
     <Filter Include="md5">
       <UniqueIdentifier>{64d5b080-d140-461d-bb6d-6b059a855cc2}</UniqueIdentifier>
     </Filter>
     <Filter Include="minizip">
       <UniqueIdentifier>{80c5dd9e-8c01-4fcc-b308-6c3e98f522b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tinyxml2">
+      <UniqueIdentifier>{44f3af1d-366e-4613-8165-f38a21a15f08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\jsoncpp\json_tool.h">
-      <Filter>jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\allocator.h">
+    <ClInclude Include="..\..\cross\jsoncpp\json\allocator.h">
       <Filter>jsoncpp\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\assertions.h">
+    <ClInclude Include="..\..\cross\jsoncpp\json\assertions.h">
       <Filter>jsoncpp\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\config.h">
+    <ClInclude Include="..\..\cross\jsoncpp\json\config.h">
       <Filter>jsoncpp\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\forwards.h">
+    <ClInclude Include="..\..\cross\code.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\com++.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\connector.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\connector_curl.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\connector_lws.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\cross.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\minizip\crypt.h">
+      <Filter>minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\datetime.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\digest.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\jsoncpp\json\forwards.h">
       <Filter>jsoncpp\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\json.h">
+    <ClInclude Include="..\..\cross\fs.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\minizip\ioapi.h">
+      <Filter>minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\minizip\ioapi_mem.h">
+      <Filter>minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\minizip\iowin32.h">
+      <Filter>minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\jsoncpp\json\json.h">
       <Filter>jsoncpp\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\json_features.h">
+    <ClInclude Include="..\..\cross\json.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\jsoncpp\json\json_features.h">
       <Filter>jsoncpp\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\reader.h">
+    <ClInclude Include="..\..\cross\jsoncpp\json_tool.h">
       <Filter>jsoncpp\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\value.h">
-      <Filter>jsoncpp\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\version.h">
-      <Filter>jsoncpp\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\jsoncpp\json\writer.h">
-      <Filter>jsoncpp\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\tinyxml2\tinyxml2.h">
-      <Filter>tinyxml2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\code.hpp">
+    <ClInclude Include="..\..\cross\logger.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\com++.hpp">
+    <ClInclude Include="..\..\cross\macro.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\connector.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\connector_curl.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\connector_lws.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cross.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\datetime.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\fs.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\logger.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\macro.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\property.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\str.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\threads.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\url.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\digest.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\md5\md5.h">
+    <ClInclude Include="..\..\cross\md5\md5.h">
       <Filter>md5</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\zip.hpp">
+    <ClInclude Include="..\..\cross\memory.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\minizip\crypt.h">
+    <ClInclude Include="..\..\cross\property.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\jsoncpp\json\reader.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\str.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\stringbuilder.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\sys.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\threads.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\timer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\minizip\unzip.h">
       <Filter>minizip</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\minizip\ioapi.h">
-      <Filter>minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\minizip\iowin32.h">
-      <Filter>minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\minizip\unzip.h">
-      <Filter>minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\minizip\ioapi_mem.h">
-      <Filter>minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\xml.hpp">
+    <ClInclude Include="..\..\cross\url.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\json.hpp">
+    <ClInclude Include="..\..\cross\jsoncpp\json\value.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\jsoncpp\json\version.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\jsoncpp\json\writer.h">
+      <Filter>jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cross\xml.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\memory.hpp">
+    <ClInclude Include="..\..\cross\zip.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\sys.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\timer.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\stringbuilder.hpp">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\cross\tinyxml2\tinyxml2.h">
+      <Filter>tinyxml2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\fs.cpp">
+    <ClCompile Include="..\..\cross\connector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross.cpp">
+    <ClCompile Include="..\..\cross\connector_curl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\str.cpp">
+    <ClCompile Include="..\..\cross\connector_lws.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\logger.cpp">
+    <ClCompile Include="..\..\cross\cross.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\url.cpp">
+    <ClCompile Include="..\..\cross\datetime.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\jsoncpp\json_reader.cpp">
+    <ClCompile Include="..\..\cross\digest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\fs.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\minizip\ioapi.c">
+      <Filter>minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\minizip\ioapi_mem.c">
+      <Filter>minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\minizip\iowin32.c">
+      <Filter>minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\json.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\jsoncpp\json_reader.cpp">
       <Filter>jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\jsoncpp\json_value.cpp">
+    <ClCompile Include="..\..\cross\jsoncpp\json_writer.cpp">
       <Filter>jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\jsoncpp\json_writer.cpp">
+    <ClCompile Include="..\..\cross\jsoncpp\json_value.cpp">
       <Filter>jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\property.cpp">
+    <ClCompile Include="..\..\cross\logger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\tinyxml2\tinyxml2.cpp">
-      <Filter>tinyxml2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\threads.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\datetime.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\connector.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\connector_curl.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\connector_lws.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\zip.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\digest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\md5\md5.c">
+    <ClCompile Include="..\..\cross\md5\md5.c">
       <Filter>md5</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\minizip\ioapi.c">
-      <Filter>minizip</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\minizip\iowin32.c">
-      <Filter>minizip</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\minizip\unzip.c">
-      <Filter>minizip</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\minizip\ioapi_mem.c">
-      <Filter>minizip</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\xml.cpp">
+    <ClCompile Include="..\..\cross\property.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\json.cpp">
+    <ClCompile Include="..\..\cross\str.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\sys.cpp">
+    <ClCompile Include="..\..\cross\sys.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\timer.cpp">
+    <ClCompile Include="..\..\cross\threads.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\timer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\minizip\unzip.c">
+      <Filter>minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\url.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\xml.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\zip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\tinyxml2\tinyxml2.cpp">
+      <Filter>tinyxml2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\jsoncpp\json_valueiterator.inl">
-      <Filter>jsoncpp</Filter>
+    <None Include="..\..\cross\jsoncpp\json_valueiterator.inl">
+      <Filter>jsoncpp\json</Filter>
     </None>
   </ItemGroup>
 </Project>
