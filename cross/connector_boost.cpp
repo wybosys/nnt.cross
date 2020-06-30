@@ -6,6 +6,7 @@
 #include "str.hpp"
 #include "logger.hpp"
 #include "stringbuilder.hpp"
+#include "datetime.hpp"
 #include <thread>
 
 #include <boost/array.hpp>
@@ -75,11 +76,12 @@ public:
             return false;
         }
 
-        d_owner->on_connected();
-
         // 打开异步读取
-        if (!wait_bytes())
+        if (!wait_bytes()) {
+            // 打开读取失败，自动关闭
+            close();
             return false;
+        }
 
         // 启动线程
         thd_ioc = make_unique<::std::thread>([&]() {
@@ -87,6 +89,12 @@ public:
             ioc.run();
             Logger::Debug(LOG("退出工作线程"));
         });
+
+        // sleep 300ms保证ioc.run执行
+        Time::Sleep(0.3);
+
+        // 激发业务层连接成功
+        d_owner->on_connected();
 
         return true;
     }
@@ -102,8 +110,6 @@ public:
             }
         }
         catch (system::system_error &err) {
-            ws = nullptr;
-            wss = nullptr;
             Logger::Critical(LOG(err.what()));
             d_owner->on_error(error(Code::FAILED, err.what()));
             return false;
@@ -146,9 +152,40 @@ public:
     }
 
     void on_bytes(system::error_code ec, size_t len)
-    {
-        if (!len)
+    {        
+        // 判断是否可以处理数据
+        if (!len) 
+        {
+            NNT_AUTOGUARD(mtx_read);
+            stm_read.clear();
+
+            switch (ec.value()) {
+            case 1:
+            case 2:
+            case 995:
+                break; // 不需要处理
+            case 121: 
+            case 155:
+            case 336130329:
+            {
+                Logger::Info(LOG("网络断开 " << ec.message()));
+
+                // 如果业务层正在等待数据，则激活空数据
+                if (sema_read.waiting())
+                    sema_read.notify();
+
+                // 关闭当前连接
+                close();
+
+                // 发送事件给业务层，业务层负责处理重连逻辑
+                d_owner->on_disconnected();
+            } break;
+            default: {
+                Logger::Info(LOG("未捕获的错误码 code:" << ec.value() << " message: " << ec.message()));
+            } break;
+            }
             return;
+        }
 
         NNT_AUTOGUARD(mtx_read);
         auto d = buf_read.data();
@@ -159,9 +196,8 @@ public:
         Connector::memory_type mem(d, len);
         d_owner->on_bytes(mem);
 
+        // 解开业务层同步阻塞读
         sema_read.notify();
-
-        // 释放
 
         // 重新启动监听
         wait_bytes();
@@ -180,13 +216,16 @@ public:
         }
         catch (system::system_error &err)
         {
-            ws = nullptr;
-            wss = nullptr;
             Logger::Critical(LOG(err.what()));
             d_owner->on_error(error(Code::FAILED, err.what()));
             return false;
         }
-        return out == mem.size();
+
+        if (out == mem.size())
+            return true;
+
+        Logger::Warn(LOG("写入数据残留 总:" << mem.size() << " 实际:" << out));
+        return false;
     }
 
     // 写排队

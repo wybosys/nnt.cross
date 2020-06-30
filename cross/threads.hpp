@@ -62,6 +62,9 @@ public:
     // 等待
     void wait();
 
+    // 是否正在等待
+    bool waiting() const;
+
     // 尝试等待
     bool try_wait();
 };

@@ -95,7 +95,8 @@ void MainThread::invoke(func_type const &fn) {
     if (MainThreadPrivate::ismainthread) {
         // 如果已经在主线程，则直接运行
         fn();
-    } else {
+    }
+    else {
         NNT_AUTOGUARD(d_ptr->mtx_funcs);
         d_ptr->funcs.emplace_back(fn);
     }
@@ -151,8 +152,13 @@ bool semaphore::try_wait() {
     return false;
 }
 
+bool semaphore::waiting() const
+{
+    return d_ptr->waits != 0;
+}
+
 ITask::ITask(func_type fn)
-        : proc(move(fn)) {
+    : proc(move(fn)) {
     // pass
 }
 
@@ -198,7 +204,8 @@ public:
 
         if (newthd) {
             thd = make_shared<::std::thread>(ThdProc, this);
-        } else {
+        }
+        else {
             for (auto e : tasks) {
                 owner->_run(e);
             }
@@ -271,7 +278,8 @@ bool SingleTaskDispatcher::add(task_type &&tsk) {
         d_ptr->tasks.emplace(tsk);
         // cout << "添加一个任务" << endl;
         d_ptr->smp_tasks.notify();
-    } else {
+    }
+    else {
         _run(tsk);
     }
     return true;

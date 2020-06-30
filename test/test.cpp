@@ -18,6 +18,9 @@
 #include <zip.hpp>
 #include <sys.hpp>
 
+// #define WEBSOCKET_CONNECTOR LibWebSocketConnector
+#define WEBSOCKET_CONNECTOR BoostWebSocketConnector
+
 USE_NNT;
 USE_CROSS;
 
@@ -80,8 +83,7 @@ NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_ws, {
 });
 
 TEST (ws) {
-    //LibWebSocketConnector cnt;
-    BoostWebSocketConnector cnt;
+    WEBSOCKET_CONNECTOR cnt;
     cnt.url = "wss://echo.websocket.org:443";
     cnt.connect();
     cnt.write("hello");
@@ -93,17 +95,19 @@ TEST (ws) {
     receive = body->str();
     UNITTEST_CHECK_EQUAL(receive, "test");
     dis_ws.add([](ITask &) {
-        // LibWebSocketConnector cnt;
-        BoostWebSocketConnector cnt;
+        WEBSOCKET_CONNECTOR cnt;
         cnt.url = "wss://echo.websocket.org:443";
         cnt.connect();
         string input;
         while (input[0] != 'q') {
             cin >> input;
-            cnt.write(input);
+            if (!cnt.write(input)) {
+                break;
+            }
             auto body = cnt.wait();
             cout << "输入了 " << body->str() << endl;
         }
+        cout << "退出WebSocket Echo测试" << endl;
     });
 }
 
