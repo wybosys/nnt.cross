@@ -5,6 +5,12 @@ CROSS_BEGIN
 
 NNT_SINGLETON_IMPL(Logger);
 
+Logger::Logger()
+    : prefix("cross")
+{
+    // pass
+}
+
 void Logger::debug(string const& msg)
 {
     log(LogLevel::DEBUG, msg);

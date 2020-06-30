@@ -150,6 +150,9 @@
     <ClInclude Include="..\..\cross\tinyxml2\tinyxml2.h">
       <Filter>tinyxml2</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\cross\connector_boost.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\cross\connector.cpp">
@@ -229,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="..\..\cross\tinyxml2\tinyxml2.cpp">
       <Filter>tinyxml2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cross\connector_boost.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

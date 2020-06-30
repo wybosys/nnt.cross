@@ -156,19 +156,23 @@ class NNT_API WebSocketConnector : virtual public Connector {
 public:
 
     typedef ByteBuffer buffer_type;
+    typedef shared_ptr<buffer_type> buffer_typep;
 
     // 连接服务器
     virtual bool connect() = 0;
 
     // 发送数据
-    virtual bool write(memory_type const &) = 0;
+    virtual bool write(memory_type const &);
 
     virtual bool write(string const &str);
 
     // 等待数据
-    virtual buffer_type wait() = 0;
+    virtual buffer_typep wait() = 0;
 
 protected:
+
+    // 实际实现的write操作
+    virtual bool _write(memory_type const &) = 0;
 
     // 收到部分数据
     virtual void on_bytes(memory_type const &) const {}

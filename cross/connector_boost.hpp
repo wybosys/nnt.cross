@@ -1,25 +1,24 @@
-#ifndef __NNTCROSS_CONNECTOR_LWS_H_INCLUDED
-#define __NNTCROSS_CONNECTOR_LWS_H_INCLUDED
+#ifndef __CROSS_CONNECTOR_BOOST_H_INCLUDED
+#define __CROSS_CONNECTOR_BOOST_H_INCLUDED
 
 #include "connector.hpp"
 
 CROSS_BEGIN
 
-NNT_CLASS_PREPARE(LibWebSocketConnector);
+NNT_CLASS_PREPARE(BoostWebSocketConnector);
 
-class NNT_API LibWebSocketConnector 
+class NNT_API BoostWebSocketConnector
     : public WebSocketConnector 
 {
-    NNT_CLASS_DECL(LibWebSocketConnector);
+    NNT_CLASS_DECL(BoostWebSocketConnector);
 
 public:
 
-    LibWebSocketConnector();
-
-    virtual ~LibWebSocketConnector();
+    BoostWebSocketConnector();
+    virtual ~BoostWebSocketConnector();
 
     virtual bool connect() override;
-    
+
     virtual void close() override;
 
     virtual buffer_typep wait() override;

@@ -13,6 +13,7 @@
 #include <threads.hpp>
 #include <connector_curl.hpp>
 #include <connector_lws.hpp>
+#include <connector_boost.hpp>
 #include <digest.hpp>
 #include <zip.hpp>
 #include <sys.hpp>
@@ -79,22 +80,30 @@ NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_ws, {
 });
 
 TEST (ws) {
-    LibWebSocketConnector cnt;
+    //LibWebSocketConnector cnt;
+    BoostWebSocketConnector cnt;
     cnt.url = "wss://echo.websocket.org:443";
     cnt.connect();
     cnt.write("hello");
     auto body = cnt.wait();
-    auto receive = body.str();
+    auto receive = body->str();
     UNITTEST_CHECK_EQUAL(receive, "hello");
-
+    cnt.write("test");
+    body = cnt.wait();
+    receive = body->str();
+    UNITTEST_CHECK_EQUAL(receive, "test");
     dis_ws.add([](ITask &) {
-        LibWebSocketConnector cnt;
+        // LibWebSocketConnector cnt;
+        BoostWebSocketConnector cnt;
         cnt.url = "wss://echo.websocket.org:443";
         cnt.connect();
-        cnt.write("hello");
-        auto body = cnt.wait();
-        auto receive = body.str();
-        cout << "收到" + receive << endl;
+        string input;
+        while (input[0] != 'q') {
+            cin >> input;
+            cnt.write(input);
+            auto body = cnt.wait();
+            cout << "输入了 " << body->str() << endl;
+        }
     });
 }
 

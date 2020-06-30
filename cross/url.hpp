@@ -5,9 +5,9 @@
 
 CROSS_BEGIN
 
-class Url {
+class Url
+{
 public:
-
     Url();
 
     Url(string const &);
@@ -15,7 +15,7 @@ public:
     typedef ::std::map<string, Property> args_type;
 
     string protocol, host;
-    unsigned short port = 0; // 端口0代表没有设置
+    unsigned short port = 0; // 绔彛0浠ｈ〃娌℃湁璁剧疆
     ::std::vector<string> paths;
     args_type args;
 
@@ -25,14 +25,15 @@ public:
 
     string toString() const;
 
-    inline operator string() const {
+    inline operator string() const
+    {
         return toString();
     }
 
-    // 调用路径
+    // 璋冪敤璺緞
     string path() const;
 
-    // 调用url
+    // 璋冪敤url
     string url() const;
 };
 

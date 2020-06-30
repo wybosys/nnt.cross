@@ -39,6 +39,9 @@ class NNT_API Logger : public ILogger
     NNT_SINGLETON_DECL(Logger);
 
 public:
+
+    Logger();
+
     string prefix;
 
     virtual void debug(string const &);

@@ -7,7 +7,7 @@
 #include <sstream>
 #include <thread>
 #include <algorithm>
-#include <threads.hpp>
+#include "threads.hpp"
 
 #include <libwebsockets.h>
 #include <lws_config.h>
@@ -45,7 +45,7 @@ public:
                 {NULL, NULL,                       0, 0}
         };
 
-        lws_context_creation_info info = {0};
+        lws_context_creation_info info = { 0 };
         info.port = CONTEXT_PORT_NO_LISTEN;
         info.protocols = PROTOCOLS;
         info.options = LWS_SERVER_OPTION_DISABLE_IPV6;
@@ -68,7 +68,7 @@ public:
         Url url(owner->url);
         auto tpath = url.path();
 
-        lws_client_connect_info cinfo = {0};
+        lws_client_connect_info cinfo = { 0 };
         cinfo.context = lws;
         cinfo.port = url.port;
         cinfo.address = url.host.c_str();
@@ -81,7 +81,8 @@ public:
 #else
             cinfo.ssl_connection = 1;
 #endif
-        } else {
+        }
+        else {
             cinfo.ssl_connection = 0;
         }
         cinfo.userdata = this;
@@ -191,30 +192,30 @@ public:
         if (user == nullptr)
             return 0; // 连接成功之前的全局回调
 
-        auto self = (LibWebSocketConnectorPrivate *) user;
+        auto self = (LibWebSocketConnectorPrivate *)user;
         switch (reason) {
-            case LWS_CALLBACK_CLIENT_ESTABLISHED: {
-                lws_callback_on_writable(self->client);
-                self->on_connected();
-            }
-                break;
-            case LWS_CALLBACK_CLIENT_CONNECTION_ERROR: {
-                self->on_error(string((char const *) buf, len));
-            }
-                break;
-            case LWS_CALLBACK_PROTOCOL_DESTROY:
-            case LWS_CALLBACK_CLOSED: {
-                self->on_disconnected();
-            }
-                break;
-            case LWS_CALLBACK_CLIENT_RECEIVE: {
-                self->on_bytes((char const *) buf, len);
-            }
-                break;
-            case LWS_CALLBACK_CLIENT_WRITEABLE: {
-                self->on_writeable();
-            }
-                break;
+        case LWS_CALLBACK_CLIENT_ESTABLISHED: {
+            lws_callback_on_writable(self->client);
+            self->on_connected();
+        }
+                                              break;
+        case LWS_CALLBACK_CLIENT_CONNECTION_ERROR: {
+            self->on_error(string((char const *)buf, len));
+        }
+                                                   break;
+        case LWS_CALLBACK_PROTOCOL_DESTROY:
+        case LWS_CALLBACK_CLOSED: {
+            self->on_disconnected();
+        }
+                                  break;
+        case LWS_CALLBACK_CLIENT_RECEIVE: {
+            self->on_bytes((char const *)buf, len);
+        }
+                                          break;
+        case LWS_CALLBACK_CLIENT_WRITEABLE: {
+            self->on_writeable();
+        }
+                                            break;
         }
         return 0;
     }
@@ -239,15 +240,15 @@ void LibWebSocketConnector::close() {
     d_ptr->close();
 }
 
-bool LibWebSocketConnector::write(memory_type const &mem) {
+bool LibWebSocketConnector::_write(memory_type const &mem) {
     NNT_AUTOGUARD(d_ptr->mtx_write);
     return d_ptr->write(mem);
 }
 
-WebSocketConnector::buffer_type LibWebSocketConnector::wait() {
+WebSocketConnector::buffer_typep LibWebSocketConnector::wait() {
     d_ptr->sema_read.wait();
     NNT_AUTOGUARD(d_ptr->mtx_read);
-    return buffer_type(d_ptr->stm_read.buf(), d_ptr->stm_read.size());
+    return make_shared<buffer_type>(d_ptr->stm_read.buf(), d_ptr->stm_read.size());
 }
 
 CROSS_END

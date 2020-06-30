@@ -93,19 +93,21 @@ class ByteBuffer
 {
 public:
 
-    ByteBuffer() {}
+    ByteBuffer() {
+        // pass
+    }
 
     ByteBuffer(char const* buf, size_t lbuf)
     {
         _init(buf, lbuf);
     }
 
-    ByteBuffer(ByteBuffer const& r)
+    ByteBuffer(CasualByteBuffer const& r)
     {
         _init(r.buf(), r.size());
     }
 
-    ByteBuffer(CasualByteBuffer const& r)
+    ByteBuffer(ByteBuffer const& r)
     {
         _init(r.buf(), r.size());
     }
@@ -115,10 +117,15 @@ public:
         free(_buf);
     }
 
-    ByteBuffer& operator = (ByteBuffer const& r)
+    inline ByteBuffer& operator = (ByteBuffer const& r)
     {
-        _buf = realloc(_buf, r.size());
-        memcpy(_buf, r.buf(), r.size());
+        _init(r.buf(), r.size());
+        return *this;
+    }
+
+    inline ByteBuffer& operator = (CasualByteBuffer const& r)
+    {
+        _init(r.buf(), r.size());
         return *this;
     }
 
@@ -126,9 +133,15 @@ private:
 
     void _init(char const* buf, size_t lbuf)
     {
-        if (!lbuf)
+        if (!lbuf) {
+            if (_buf) {
+                free(_buf);
+                _buf = nullptr;
+            }
             return;
+        }
         _buf = malloc(lbuf);
+        _size = lbuf;
         memcpy(_buf, buf, lbuf);
     }
 };

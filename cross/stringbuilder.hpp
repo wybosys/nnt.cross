@@ -38,6 +38,10 @@ public:
         return _oss.str();
     }
 
+    inline ::std::string str() const {
+        return _oss.str();
+    }
+
 private:
     bool _newline = true;
     ::std::string _prefix, _suffix, _space;

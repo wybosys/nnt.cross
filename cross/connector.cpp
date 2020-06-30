@@ -75,6 +75,11 @@ bool HttpConnector::RespondCodeIsOk(respondcode_type code) {
     return false;
 }
 
+bool WebSocketConnector::write(memory_type const& mem)
+{
+    return _write(mem);
+}
+
 bool WebSocketConnector::write(string const &str) {
     memory_type mem(str.c_str(), str.length());
     return write(mem);

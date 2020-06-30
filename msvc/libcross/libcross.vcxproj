@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../../cross/;../../cross/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;$(IncludePath)</IncludePath>
+    <IncludePath>../../cross/;../../cross/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;C:\Program Files (x86)\OpenSSL-Win32\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:/sdks/opt/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../../cross/;../../cross/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;$(IncludePath)</IncludePath>
+    <IncludePath>../../cross/;../../cross/jsoncpp;D:/sdks/opt/include;D:/sdks/opt/include/libwebsockets;D:/sdks/opt/include/zlib;C:\Program Files (x86)\OpenSSL-Win32\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:/sdks/opt/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,6 +158,7 @@
     <ClInclude Include="..\..\cross\code.hpp" />
     <ClInclude Include="..\..\cross\com++.hpp" />
     <ClInclude Include="..\..\cross\connector.hpp" />
+    <ClInclude Include="..\..\cross\connector_boost.hpp" />
     <ClInclude Include="..\..\cross\connector_curl.hpp" />
     <ClInclude Include="..\..\cross\connector_lws.hpp" />
     <ClInclude Include="..\..\cross\cross.hpp" />
@@ -198,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\cross\connector.cpp" />
+    <ClCompile Include="..\..\cross\connector_boost.cpp" />
     <ClCompile Include="..\..\cross\connector_curl.cpp" />
     <ClCompile Include="..\..\cross\connector_lws.cpp" />
     <ClCompile Include="..\..\cross\cross.cpp">
