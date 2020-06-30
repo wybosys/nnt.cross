@@ -35,6 +35,10 @@ TEST (test) {
     ss >> val;
     UNITTEST_CHECK_EQUAL(val, "abc");
     UNITTEST_CHECK_EQUAL(ss.str().length(), 3);
+
+    val = tostr(100012345.0);
+    val = tostr(100012345.12345);
+    val = tostr(100012345);
 }
 
 TEST (fs) {
