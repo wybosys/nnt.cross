@@ -236,7 +236,8 @@ static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_C
 }
 
 template<typename _CharT, typename _Traits>
-static ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr<Property> const &v)
+static ::std::basic_ostream<_CharT, _Traits> &
+operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr<Property> const &v)
 {
     if (!v)
         return stm;
@@ -248,6 +249,10 @@ inline shared_ptr<Property> make_property(V &v)
 {
     return make_shared<Property>(v);
 }
+
+#ifdef _P
+#undef _P
+#endif
 
 template<typename V>
 inline shared_ptr<Property> _P(V const &v)
