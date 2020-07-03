@@ -24,14 +24,16 @@
 USE_NNT;
 USE_CROSS;
 
-TEST (sys) {
+TEST (sys)
+{
     string str = " a b c ";
     UNITTEST_CHECK_EQUAL(replace(str, " ", "/"), "/a/b/c/");
 
     cout << "当前线程号 " << get_thread_id() << endl;
 }
 
-TEST (test) {
+TEST (test)
+{
     ::std::stringstream ss;
     ss << "abc";
     UNITTEST_CHECK_EQUAL(ss.str().length(), 3);
@@ -45,7 +47,8 @@ TEST (test) {
     val = tostr(100012345);
 }
 
-TEST (fs) {
+TEST (fs)
+{
     string dir = "xxx/abc/cde/efg";
     mkdirs(dir);
     rmtree("xxx");
@@ -72,7 +75,8 @@ TEST (fs) {
     UNITTEST_CHECK_EQUAL(str, nstr);
 }
 
-TEST (url) {
+TEST (url)
+{
     string str = "http://www.baidu.com:80/abc/cde?abc=123&cde=123";
     Url u(str);
     UNITTEST_CHECK_EQUAL(u.toString(), str);
@@ -82,7 +86,8 @@ NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_ws, {
     self.start();
 });
 
-TEST (ws) {
+TEST (ws)
+{
     WEBSOCKET_CONNECTOR cnt;
     cnt.url = "wss://echo.websocket.org:443";
     cnt.connect();
@@ -94,28 +99,31 @@ TEST (ws) {
     body = cnt.wait();
     receive = body->str();
     UNITTEST_CHECK_EQUAL(receive, "test");
-    dis_ws.add([](ITask &) {
-        WEBSOCKET_CONNECTOR cnt;
-        cnt.url = "wss://echo.websocket.org:443";
-        cnt.connect();
-        string input;
-        while (input[0] != 'q') {
-            cin >> input;
-            if (!cnt.write(input)) {
-                break;
-            }
-            auto body = cnt.wait();
-            cout << "输入了 " << body->str() << endl;
-        }
-        cout << "退出WebSocket Echo测试" << endl;
-    });
+    dis_ws.add([](ITask &)
+               {
+                   WEBSOCKET_CONNECTOR cnt;
+                   cnt.url = "wss://echo.websocket.org:443";
+                   cnt.connect();
+                   string input;
+                   while (input[0] != 'q') {
+                       cin >> input;
+                       if (!cnt.write(input)) {
+                           break;
+                       }
+                       auto body = cnt.wait();
+                       cout << "输入了 " << body->str() << endl;
+                   }
+                   cout << "退出WebSocket Echo测试" << endl;
+               });
 }
 
-TEST (md5) {
+TEST (md5)
+{
     UNITTEST_CHECK_EQUAL(md5str("hello"), "5d41402abc4b2a76b9719d911017c592");
 }
 
-TEST (zip) {
+TEST (zip)
+{
     mkdir("test-file");
     mkdir("test-dir");
 
@@ -125,7 +133,8 @@ TEST (zip) {
     UNITTEST_CHECK_EQUAL(suc, true);
 }
 
-TEST (rest) {
+TEST (rest)
+{
     CurlHttpConnector cnt;
     cnt.url = "https://cn.bing.com/search";
     cnt.method = HttpConnector::Method::POST;
@@ -141,7 +150,8 @@ NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_download, {
     self.start();
 });
 
-TEST (download) {
+TEST (download)
+{
     dis_download.start();
 
     // 阻塞模式
@@ -151,25 +161,29 @@ TEST (download) {
     if (cnt.send()) {
         size_t sz = stat(cnt.target)->size;
         UNITTEST_CHECK_EQUAL(sz, 190567);
-    } else {
+    }
+    else {
         UNITTEST_CHECK_EQUAL(false, true);
     }
 
     // 非阻塞模式
-    dis_download.add([=](ITask &) {
-        CurlDownloadConnector cnt;
-        cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
-        cnt.target = "sample-0.zip";
-        if (cnt.send()) {
-            size_t sz = stat(cnt.target)->size;
-            UNITTEST_CHECK_EQUAL(sz, 190567);
-        } else {
-            UNITTEST_CHECK_EQUAL(false, true);
-        }
-    });
+    dis_download.add([=](ITask &)
+                     {
+                         CurlDownloadConnector cnt;
+                         cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
+                         cnt.target = "sample-0.zip";
+                         if (cnt.send()) {
+                             size_t sz = stat(cnt.target)->size;
+                             UNITTEST_CHECK_EQUAL(sz, 190567);
+                         }
+                         else {
+                             UNITTEST_CHECK_EQUAL(false, true);
+                         }
+                     });
 }
 
-TEST (prop) {
+TEST (prop)
+{
     string str = "{\"b\":false,\"nil\":null,\"s\":\"string\"}";
     auto v = json_decode(str);
     auto p = toproperty(*v);
@@ -201,7 +215,8 @@ TEST (prop) {
     UNITTEST_CHECK_EQUAL(str, astr);
 }
 
-TEST (task) {
+TEST (task)
+{
     // 测试单线程任务池
     // SingleTaskDispatcher dis;
 
@@ -216,52 +231,64 @@ TEST (task) {
     ::std::atomic<int> count(0);
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &) {
-            cout << ++count << endl;
-            Time::Sleep(1);
-        }));
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &)
+                                                 {
+                                                     cout << ++count << endl;
+                                                     Time::Sleep(1);
+                                                 }));
     }
     dis.start();
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &) {
-            cout << ++count << endl;
-            Time::Sleep(1);
-        }));
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &)
+                                                 {
+                                                     cout << ++count << endl;
+                                                     Time::Sleep(1);
+                                                 }));
     }
     dis.wait();
 }
 
 FixedTaskDispatcher dis;
+
 ::std::atomic<int> async_count(9000);
 
-TEST (async_task) {
+TEST (async_task)
+{
     // 测试异步线程
     dis.start();
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &) {
-            if (IsMainThread()) {
-                cout << "主线程: " << ++async_count << endl;
-            } else {
-                cout << "子线程: " << ++async_count << endl;
-            }
-        }));
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &)
+                                                 {
+                                                     if (IsMainThread()) {
+                                                         cout << "主线程: " << ++async_count << endl;
+                                                     }
+                                                     else {
+                                                         cout << "子线程: " << ++async_count << endl;
+                                                     }
+                                                 }));
     }
 
     for (int i = 0; i < 100; ++i) {
-        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &) {
-            MainThread::shared().invoke([&]() {
-                if (IsMainThread()) {
-                    cout << "主线程: " << ++async_count << endl;
-                } else {
-                    cout << "子线程: " << ++async_count << endl;
-                }
-            });
-        }));
+        dis.add(make_dynamic_shared<Task, ITask>([&](ITask &)
+                                                 {
+                                                     MainThread::shared().invoke([&]()
+                                                                                 {
+                                                                                     if (IsMainThread()) {
+                                                                                         cout << "主线程: "
+                                                                                              << ++async_count << endl;
+                                                                                     }
+                                                                                     else {
+                                                                                         cout << "子线程: "
+                                                                                              << ++async_count << endl;
+                                                                                     }
+                                                                                 });
+                                                 }));
     }
 }
 
-int main() {
+int main()
+{
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);
     runner.RunTestsIf(::UnitTest::Test::GetTestList(), nullptr, ::UnitTest::True(), 0);
