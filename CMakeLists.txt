@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(cross)
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 include_directories(cross)
 include_directories(cross/jsoncpp)

@@ -9,7 +9,7 @@ enum struct LogLevel
 {
     SPECIAL = 9,
     CUSTOM = 8,
-    DEBUG = 7,
+    DEVELOP = 7,
     INFO = 6,
     NOTICE = 5,
     WARNING = 4,
@@ -19,7 +19,7 @@ enum struct LogLevel
     EMERGENCY = 0
 };
 
-class ILogger : public ::NNT_NS::IObject
+class ILogger: public ::NNT_NS::IObject
 {
 public:
     virtual void debug(string const &) = 0;
@@ -34,9 +34,9 @@ public:
     virtual void log(LogLevel, string const &) = 0;
 };
 
-class NNT_API Logger : public ILogger
+class NNT_API Logger: public ILogger
 {
-    NNT_SINGLETON_DECL(Logger);
+NNT_SINGLETON_DECL(Logger);
 
 public:
 
