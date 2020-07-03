@@ -17,6 +17,7 @@ set(CROSS_SRCS
     cross/connector.cpp
     cross/connector_curl.cpp
     cross/connector_lws.cpp
+    cross/connector_boost.cpp
     cross/cross.cpp
     cross/datetime.cpp
     cross/digest.cpp
@@ -35,4 +36,4 @@ add_library(cross STATIC ${CROSS_SRCS})
 set(TEST_SRCS
     test/test.cpp)
 add_executable(test ${TEST_SRCS})
-target_link_libraries(test cross UnitTest++ tinyxml2 jsoncpp pthread websockets minizip curl md5 z)
+target_link_libraries(test cross UnitTest++ tinyxml2 jsoncpp pthread websockets minizip curl md5 z ssl crypto)
