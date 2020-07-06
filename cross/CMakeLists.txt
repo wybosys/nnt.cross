@@ -4,14 +4,18 @@ project(cross)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
+add_subdirectory(md5)
+add_subdirectory(minizip)
+add_subdirectory(jsoncpp)
+
 include_directories(.)
+include_directories(jsoncpp)
 
 set(CROSS_SRCS
     cross.cpp
     fs.cpp
     str.cpp
     connector.cpp
-    connector_curl.cpp
     cross.cpp
     datetime.cpp
     digest.cpp

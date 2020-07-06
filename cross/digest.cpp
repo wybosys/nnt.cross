@@ -4,25 +4,27 @@
 
 CROSS_BEGIN
 
-md5_result md5(string const& str)
+md5_result md5(string const &str)
 {
-    md5_result r = { 0 };
+    md5_result r = {0};
     md5_state_t ctx;
     md5_init(&ctx);
-    md5_append(&ctx, (unsigned char*)str.c_str(), str.length());
+    md5_append(&ctx, (unsigned char *)str.c_str(), str.length());
     md5_finish(&ctx, r.hex);
     return r;
 }
 
-string md5_hex2str(md5_result const& r) {
-    char result[33] = { 0 };
-    for (size_t i = 0; i < 16; i++) {
+string md5_hex2str(md5_result const &r)
+{
+    char result[33] = {0};
+    for (size_t i = 0; i < 16; i++)
+    {
 #ifdef NNT_WINDOWS
 #pragma warning(push)
-#pragma warning(disable:4996)
+#pragma warning(disable : 4996)
 #endif
 
-        // ²»¿ÉÄÜÔ½½ç£¬ËùÒÔ¹Ø±Õ±àÒëÆ÷µÄ¾¯¸æ
+        // ä¸å¯èƒ½è¶Šç•Œï¼Œæ‰€ä»¥å…³é—­ç¼–è¯‘å™¨çš„è­¦å‘Š
         sprintf(result + 2 * i, "%02x", r.hex[i]);
 
 #ifdef NNT_WINDOWS
@@ -32,7 +34,8 @@ string md5_hex2str(md5_result const& r) {
     return result;
 }
 
-string md5str(string const& str) {
+string md5str(string const &str)
+{
     return md5_hex2str(md5(str));
 }
 

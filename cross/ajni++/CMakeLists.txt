@@ -13,4 +13,4 @@ add_library(ajni++ STATIC
     java-prv.cpp
     )
 
-target_link_libraries(ajni++ log)
+target_link_libraries(ajni++ log cross)

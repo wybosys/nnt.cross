@@ -5,16 +5,16 @@
 #include "logger.hpp"
 
 #ifdef NNT_WINDOWS
-
 #include <Windows.h>
-
 #endif
 
 #ifdef NNT_UNIXLIKE
-
 #include <sys/types.h>
 #include <unistd.h>
+#endif
 
+#ifdef NNT_ANDROID
+#include <sys/prctl.h>
 #endif
 
 CROSS_BEGIN
@@ -47,8 +47,8 @@ string get_thread_name()
 
 void set_thread_name(string const& name)
 {
-    if (tls_thread_name == name)
-        return;
+	if (tls_thread_name == name)
+		return;
 
 	tls_thread_name = name;
 	auto tid = ::GetCurrentThreadId();
@@ -87,7 +87,11 @@ string get_thread_name()
 		auto tid = ::std::this_thread::get_id();
 		auto na = (pthread_t*)(&tid);
 		char buf[256];
+#ifdef NNT_ANDROID
+		if (0 == prctl(PR_GET_NAME, buf, 256))
+#else
 		if (0 == pthread_getname_np(*na, buf, 256))
+#endif
 		{
 			tls_thread_name = buf;
 		}
@@ -102,8 +106,8 @@ string get_thread_name()
 // 设置线程名称
 void set_thread_name(string const& name)
 {
-    if (tls_thread_name == name)
-        return;
+	if (tls_thread_name == name)
+		return;
 
 	if (name.length() > 16)
 	{

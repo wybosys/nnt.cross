@@ -37,26 +37,27 @@ protected:                                            \
     typedef cls self_class_type;                      \
     typedef NNT_PRIVATECLASS(cls) private_class_type; \
     friend class NNT_PRIVATECLASS(cls);               \
-    private_class_type *d_ptr = nullptr;              \
+    ::std::shared_ptr<private_class_type> d_ptr;      \
                                                       \
 public:                                               \
     inline private_class_type &d() const              \
     {                                                 \
-        return *(private_class_type *)d_ptr;          \
+        return *d_ptr;                                \
     }                                                 \
                                                       \
 private:                                              \
     NNT_NOCOPY(cls);
 
 #define NNT_CLASS_CONSTRUCT(...) \
-    d_ptr = new private_class_type(__VA_ARGS__);
+    d_ptr = ::std::make_shared<private_class_type>(__VA_ARGS__);
 #define NNT_CLASS_DESTORY() \
-    delete d_ptr;           \
     d_ptr = nullptr;
 
 #define NNT_SINGLETON_DECL(cls)             \
 private:                                    \
     static void _set_shared(cls *);         \
+    static ::std::mutex _mtx_shared;        \
+    void _shared_init();                    \
                                             \
 public:                                     \
     static cls &shared();                   \
@@ -67,16 +68,22 @@ public:                                     \
 
 #define NNT_SINGLETON_IMPL(cls, ...)                             \
     static cls *_##cls##_shared = nullptr;                       \
+    ::std::mutex cls::_mtx_shared;                               \
     cls &cls::shared()                                           \
     {                                                            \
+        if (_##cls##_shared)                                     \
+            return *_##cls##_shared;                             \
+        NNT_AUTOGUARD(_mtx_shared);                              \
         if (!_##cls##_shared)                                    \
         {                                                        \
             _##cls##_shared = new cls(__VA_ARGS__);              \
+            _##cls##_shared->_shared_init();                     \
         }                                                        \
         return *_##cls##_shared;                                 \
     }                                                            \
     void cls::free_shared()                                      \
     {                                                            \
+        NNT_AUTOGUARD(_mtx_shared);                              \
         if (_##cls##_shared)                                     \
         {                                                        \
             delete _##cls##_shared;                              \
@@ -86,9 +93,11 @@ public:                                     \
     bool cls::is_shared() { return nullptr != _##cls##_shared; } \
     void cls::_set_shared(cls *r)                                \
     {                                                            \
+        NNT_AUTOGUARD(_mtx_shared);                              \
         if (_##cls##_shared)                                     \
         {                                                        \
             delete _##cls##_shared;                              \
+            _##cls##_shared = nullptr;                           \
         }                                                        \
         _##cls##_shared = r;                                     \
     }
@@ -136,11 +145,16 @@ public:                                     \
 #define NNT_APP 1
 #endif
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #include <SDKDDKVer.h>
 #pragma warning(disable : 4251)
-#define WIN32_LEAN_AND_MEAN
 #define NNT_WINDOWS
+#define WIN32_LEAN_AND_MEAN
+#if defined(WIN32) || defined(_WIN32)
+#define NNT_X86
+#else
+#define NNT_X64
+#endif
 #ifdef NNT_LIBRARY
 #ifdef NNT_SHARED
 #define NNT_API __declspec(dllexport)
@@ -148,8 +162,6 @@ public:                                     \
 #elif !defined(NNT_USE_STATIC)
 #define NNT_API __declspec(dllimport)
 #endif
-#else
-#define NNT_UNIXLIKE
 #endif
 
 #ifdef __arm__
@@ -166,6 +178,19 @@ public:                                     \
 #define NNT_X64
 #endif
 
+#if defined(__ANDROID__)
+#define NNT_ANDROID
+#define NNT_MOBILE
+#endif
+
+#if !defined(NNT_WINDOWS)
+#define NNT_UNIXLIKE
+#endif
+
+#if !defined(NNT_MOBILE) // 移动设备
+#define NNT_WORKSTATION // 工作站
+#endif
+
 #ifndef NNT_API
 #define NNT_API NNT_PASS
 #endif
@@ -180,6 +205,7 @@ public:                                     \
 #include <atomic>
 #include <memory>
 #include <functional>
+#include <mutex>
 
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
 #include <xstring>
@@ -204,7 +230,9 @@ NNT_BEGIN
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
 typedef ::std::wstring system_string;
 #else
+
 typedef ::std::string system_string;
+
 #endif
 
 using ::std::cerr;
@@ -218,17 +246,17 @@ using ::std::string;
 
 typedef ::std::vector<string> strings;
 
-template <typename T>
-static T const &Nil()
+template<typename T>
+static T const& Nil()
 {
-    static const T __s;
-    return __s;
+	static const T __s;
+	return __s;
 };
 
 class Object
 {
 public:
-    virtual ~Object() = default;
+	virtual ~Object() = default;
 };
 
 typedef Object IObject;
@@ -236,200 +264,211 @@ typedef Object IObject;
 class RefObject : public IObject
 {
 public:
-    RefObject() : _referencedCount(1) {}
+	RefObject()
+		: _referencedCount(1)
+	{
+	}
 
-    virtual void grab() const
-    {
-        ++_referencedCount;
-    }
+	virtual void grab() const
+	{
+		++_referencedCount;
+	}
 
-    virtual bool drop() const
-    {
-        if (--_referencedCount == 0)
-        {
-            delete this;
-            return true;
-        }
-        return false;
-    }
+	virtual bool drop() const
+	{
+		if (--_referencedCount == 0)
+		{
+			delete this;
+			return true;
+		}
+		return false;
+	}
 
 private:
-    mutable ::std::atomic<size_t> _referencedCount;
+	mutable ::std::atomic<size_t> _referencedCount;
 };
 
-template <typename T>
+template<typename T>
 class shared_ref
 {
 public:
-    shared_ref()
-        : _ptr(new T())
-    {
-    }
+	shared_ref()
+		: _ptr(new T())
+	{
+	}
 
-    shared_ref(shared_ref<T> const &r)
-        : _ptr(const_cast<T *>(r.get()))
-    {
-        if (_ptr)
-            _ptr->grab();
-    }
+	shared_ref(shared_ref<T> const& r)
+		: _ptr(const_cast<T*>(r.get()))
+	{
+		if (_ptr)
+			_ptr->grab();
+	}
 
-    template <typename R>
-    shared_ref(shared_ref<R> const &r)
-        : _ptr(dynamic_cast<T *>(const_cast<R *>(r.get())))
-    {
-        if (_ptr)
-            _ptr->grab();
-    }
+	template<typename R>
+	shared_ref(shared_ref<R> const& r)
+		: _ptr(dynamic_cast<T*>(const_cast<R*>(r.get())))
+	{
+		if (_ptr)
+			_ptr->grab();
+	}
 
-    ~shared_ref()
-    {
-        if (_ptr)
-        {
-            _ptr->drop();
-            _ptr = nullptr;
-        }
-    }
+	~shared_ref()
+	{
+		if (_ptr)
+		{
+			_ptr->drop();
+			_ptr = nullptr;
+		}
+	}
 
-    shared_ref<T> &operator=(T const *r)
-    {
-        if (_ptr == r)
-            return *this;
-        if (_ptr)
-            _ptr->drop();
-        _ptr = const_cast<T *>(r);
-        if (_ptr)
-            _ptr->grab();
-        return *this;
-    }
+	shared_ref<T>& operator=(T const* r)
+	{
+		if (_ptr == r)
+			return *this;
+		if (_ptr)
+			_ptr->drop();
+		_ptr = const_cast<T*>(r);
+		if (_ptr)
+			_ptr->grab();
+		return *this;
+	}
 
-    template <typename R>
-    inline operator R *()
-    {
-        return dynamic_cast<R *>(_ptr);
-    }
+	template<typename R>
+	inline operator R*()
+	{
+		return dynamic_cast<R*>(_ptr);
+	}
 
-    template <typename R>
-    inline operator R const *() const
-    {
-        return dynamic_cast<R const *>(_ptr);
-    }
+	template<typename R>
+	inline operator R const*() const
+	{
+		return dynamic_cast<R const*>(_ptr);
+	}
 
-    inline T &operator*()
-    {
-        return *_ptr;
-    }
+	inline T& operator*()
+	{
+		return *_ptr;
+	}
 
-    inline T const &operator*() const
-    {
-        return *_ptr;
-    }
+	inline T const& operator*() const
+	{
+		return *_ptr;
+	}
 
-    inline T *operator->()
-    {
-        return _ptr;
-    }
+	inline T* operator->()
+	{
+		return _ptr;
+	}
 
-    inline T const *operator->() const
-    {
-        return _ptr;
-    }
+	inline T const* operator->() const
+	{
+		return _ptr;
+	}
 
-    inline bool operator<(shared_ref<T> const &r) const
-    {
-        return _ptr < r._ptr;
-    }
+	inline bool operator<(shared_ref<T> const& r) const
+	{
+		return _ptr < r._ptr;
+	}
 
-    inline T *get()
-    {
-        return _ptr;
-    }
+	inline T* get()
+	{
+		return _ptr;
+	}
 
-    inline T const *get() const
-    {
-        return _ptr;
-    }
+	inline T const* get() const
+	{
+		return _ptr;
+	}
 
 private:
-    T *_ptr;
+	T* _ptr;
 
-    shared_ref(nullptr_t) : _ptr(nullptr) {}
+	shared_ref(::std::nullptr_t)
+		: _ptr(nullptr)
+	{
+	}
 
-    static shared_ref<T> _assign(T *ptr)
-    {
-        auto r = shared_ref<T>(nullptr);
-        r._ptr = ptr;
-        return r;
-    }
+	static shared_ref<T> _assign(T* ptr)
+	{
+		auto r = shared_ref<T>(nullptr);
+		r._ptr = ptr;
+		return r;
+	}
 
-    template <typename TT, typename... Args>
-    friend shared_ref<TT> make_ref(Args &&...);
+	template<typename TT, typename... Args>
+	friend shared_ref<TT> make_ref(Args&& ...);
 };
 
-template <typename TShared>
+template<typename TShared>
 class shared_object
 {
 public:
-    typedef TShared shared_type;
-    typedef typename shared_type::element_type element_type;
+	typedef TShared shared_type;
+	typedef typename shared_type::element_type element_type;
 
-    shared_object() {}
-    shared_object(shared_type const &v) : _so(v) {}
+	shared_object()
+	{
+	}
+	shared_object(shared_type const& v)
+		: _so(v)
+	{
+	}
 
-    inline operator shared_type &()
-    {
-        return _so;
-    }
+	inline operator shared_type&()
+	{
+		return _so;
+	}
 
-    inline operator shared_type const &() const
-    {
-        return _so;
-    }
+	inline operator shared_type const&() const
+	{
+		return _so;
+	}
 
-    inline element_type *operator->()
-    {
-        return _so.operator->();
-    }
+	inline element_type* operator->()
+	{
+		return _so.operator->();
+	}
 
-    inline element_type const *operator->() const
-    {
-        return _so.operator->();
-    }
+	inline element_type const* operator->() const
+	{
+		return _so.operator->();
+	}
 
-    inline element_type &operator*()
-    {
-        return _so.operator*();
-    }
+	inline element_type& operator*()
+	{
+		return _so.operator*();
+	}
 
-    inline element_type const &operator*() const
-    {
-        return _so.operator*();
-    }
+	inline element_type const& operator*() const
+	{
+		return _so.operator*();
+	}
 
-    inline shared_type &get()
-    {
-        return _so;
-    }
+	inline shared_type& get()
+	{
+		return _so;
+	}
 
-    inline shared_type const &get() const
-    {
-        return _so;
-    }
+	inline shared_type const& get() const
+	{
+		return _so;
+	}
 
 private:
-    shared_type _so;
+	shared_type _so;
 };
 
-template <typename T, typename... Args>
-static shared_ref<T> make_ref(Args &&... args)
+template<typename T, typename... Args>
+static shared_ref<T> make_ref(Args&& ... args)
 {
-    return shared_ref<T>::_assign(new T(::std::forward<Args>(args)...));
+	return shared_ref<T>::_assign(new T(::std::forward<Args>(args)...));
 };
 
-template <typename T, typename TI, typename... Args>
-static shared_ptr<TI> make_dynamic_shared(Args &&... args)
+template<typename T, typename TI, typename... Args>
+static shared_ptr<TI> make_dynamic_shared(Args&& ... args)
 {
-    shared_ptr<TI> r((TI *)new T(::std::forward<Args>(args)...));
-    return r;
+	shared_ptr<TI> r((TI*)new T(::std::forward<Args>(args)...));
+	return r;
 }
 
 NNT_END

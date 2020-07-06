@@ -178,8 +178,17 @@ public:                                     \
 #define NNT_X64
 #endif
 
+#if defined(__ANDROID__)
+#define NNT_ANDROID
+#define NNT_MOBILE
+#endif
+
 #if !defined(NNT_WINDOWS)
 #define NNT_UNIXLIKE
+#endif
+
+#if !defined(NNT_MOBILE) // 移动设备
+#define NNT_WORKSTATION // 工作站
 #endif
 
 #ifndef NNT_API
