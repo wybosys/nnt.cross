@@ -85,7 +85,6 @@ TEST (url)
 
 TEST (thread)
 {
-	return;
 	Thread thd("测试");
 	semaphore wait;
 	thd.proc = [&](Thread&)
