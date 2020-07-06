@@ -85,7 +85,7 @@ TEST (url)
 
 TEST (thread)
 {
-    return;
+	return;
 	Thread thd("测试");
 	semaphore wait;
 	thd.proc = [&](Thread&)
@@ -111,19 +111,22 @@ TEST (time)
 	});
 	tmrs->start();
 
-    Timer::SetTimeout(1, []() {
-        Logger::Info("1s定时器");
-    });
+	Timer::SetTimeout(1, []()
+	{
+		Logger::Info("1s定时器");
+	});
 
-    auto tmr = make_shared<Timer::timer_t>();
-    *tmr = Timer::SetInterval(2, [=]() {
-        Logger::Info("循环定时器");
-        static size_t count = 5;
-        if (--count == 0) {
-            Logger::Info("取消循环定时器");
-            Timer::CancelInterval(*tmr);
-        }
-    });
+	auto tmr = make_shared<Timer::timer_t>();
+	*tmr = Timer::SetInterval(2, [=]()
+	{
+		Logger::Info("2s循环定时器");
+		static size_t count = 5;
+		if (--count == 0)
+		{
+			Logger::Info("取消2s循环定时器");
+			Timer::CancelInterval(*tmr);
+		}
+	});
 }
 
 NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_ws, {

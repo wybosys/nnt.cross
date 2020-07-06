@@ -5,6 +5,8 @@
 #include <map>
 #include <mutex>
 #include <atomic>
+#include <list>
+#include <cstring>
 
 #include "datetime.hpp"
 #include "logger.hpp"
@@ -15,6 +17,15 @@
 #include <Windows.h>
 #include <WinUser.h>
 #endif
+
+#ifdef NNT_UNIXLIKE
+  #include <unistd.h>
+  #include <sys/epoll.h>
+  #include <sys/timerfd.h>
+#endif
+
+// 同时运行的最大定时器数量
+#define MAX_TIMERS 256
 
 CROSS_BEGIN
 
@@ -239,10 +250,10 @@ void CoTimers::stop()
 
 Timer::timer_t Timer::SetTimeout(double time, tick_t&& cb)
 {
-    if (time <= 0) {
-        Logger::Warn("定时器的时间必须 > 0");
-        return 0;
-    }
+	if (time <= 0) {
+		Logger::Warn("定时器的时间必须 > 0");
+		return 0;
+	}
 
 	return CoTimers::shared().add(time, 1, ::std::forward<tick_t>(cb));
 }
@@ -254,10 +265,10 @@ void Timer::CancelTimeout(timer_t id)
 
 Timer::timer_t Timer::SetInterval(double time, tick_t&& cb)
 {
-    if (time <= 0) {
-        Logger::Warn("定时器的时间必须 > 0");
-        return 0;
-    }
+	if (time <= 0) {
+		Logger::Warn("定时器的时间必须 > 0");
+		return 0;
+	}
 
 	return CoTimers::shared().add(time, -1, ::std::forward<tick_t>(cb));
 }
@@ -276,9 +287,9 @@ void Timer::CancelInterval(timer_t id)
 class TimerItem
 {
 public:
-    Timer::tick_t tick;
-    UINT id;
-    HANDLE hdl;
+	Timer::tick_t tick;
+	UINT id;
+	HANDLE hdl;
 };
 
 // windows定时器id和业务回调的映射
@@ -288,135 +299,335 @@ static ::std::map<UINT, ::std::shared_ptr<TimerItem> > gs_timers;
 
 static void CALLBACK FnTimeout(PVOID parameter, BOOLEAN TimerOrWaitFired)
 {
-    set_thread_name("sys.timer");
+	set_thread_name("sys.timer");
 
-    UINT id = ((TimerItem*)parameter)->id;
-    ::std::shared_ptr<TimerItem> tmr;
+	UINT id = ((TimerItem*)parameter)->id;
+	::std::shared_ptr<TimerItem> tmr;
 
-    // 查找定时器对应的业务回调
-    {
-        NNT_AUTOGUARD(gsmtx_timers);
-        auto fnd = gs_timers.find(id);
-        if (fnd == gs_timers.end()) {
-            Logger::Critical("遇到一个不存在定时器");
-            return;
-        }
-        tmr = fnd->second;
-        gs_timers.erase(fnd);
-    }
+	// 查找定时器对应的业务回调
+	{
+		NNT_AUTOGUARD(gsmtx_timers);
+		auto fnd = gs_timers.find(id);
+		if (fnd == gs_timers.end()) {
+			Logger::Critical("遇到一个不存在定时器");
+			return;
+		}
+		tmr = fnd->second;
+		gs_timers.erase(fnd);
+	}
 
-    // 执行回调
-    tmr->tick();
+	// 执行回调
+	tmr->tick();
 }
 
 Timer::timer_t Timer::SetTimeout(double time, tick_t&& cb)
 {
-    if (time <= 0) {
-        Logger::Warn("定时器的时间必须 > 0");
-        return 0;
-    }
+	if (time <= 0) {
+		Logger::Warn("定时器的时间必须 > 0");
+		return 0;
+	}
 
-    NNT_AUTOGUARD(gsmtx_timers);
-    
-    auto tmr = make_shared<TimerItem>();
-    tmr->id = ++gsid_timers;
-    tmr->tick = cb;
-    gs_timers[tmr->id] = tmr;
+	NNT_AUTOGUARD(gsmtx_timers);
 
-    auto s = ::CreateTimerQueueTimer(&tmr->hdl, NULL, FnTimeout, tmr.get(), (DWORD)(time * 1e3), 0, WT_EXECUTEINTIMERTHREAD);
-    if (!s) {
-        Logger::Critical("启动定时器失败");
-        gs_timers.erase(tmr->id);
-        return 0;
-    }
+	auto tmr = make_shared<TimerItem>();
+	tmr->id = ++gsid_timers;
+	tmr->tick = cb;
+	gs_timers[tmr->id] = tmr;
 
-    return tmr->id;
+	auto s = ::CreateTimerQueueTimer(&tmr->hdl, NULL, FnTimeout, tmr.get(), (DWORD)(time * 1e3), 0, WT_EXECUTEINTIMERTHREAD);
+	if (!s) {
+		Logger::Critical("启动定时器失败");
+		gs_timers.erase(tmr->id);
+		return 0;
+	}
+
+	return tmr->id;
 }
 
-void Timer::CancelTimeout(timer_t tmr) 
+void Timer::CancelTimeout(timer_t tmr)
 {
-    auto id = (UINT)tmr;
-    HANDLE hdl;
+	auto id = (UINT)tmr;
+	HANDLE hdl;
 
-    // 清除回调映射
-    {
-        NNT_AUTOGUARD(gsmtx_timers);        
-        auto fnd = gs_timers.find(id);
-        if (fnd == gs_timers.end()) {
-            Logger::Debug("定时器已经执行完成或者不存在");
-            return;
-        }
-        hdl = fnd->second->hdl;
-        gs_timers.erase(fnd);
-    }
+	// 清除回调映射
+	{
+		NNT_AUTOGUARD(gsmtx_timers);
+		auto fnd = gs_timers.find(id);
+		if (fnd == gs_timers.end()) {
+			Logger::Debug("定时器已经执行完成或者不存在");
+			return;
+		}
+		hdl = fnd->second->hdl;
+		gs_timers.erase(fnd);
+	}
 
-    ::DeleteTimerQueueTimer(NULL, hdl, NULL);
+	::DeleteTimerQueueTimer(NULL, hdl, NULL);
 }
 
 static void CALLBACK FnInterval(PVOID parameter, BOOLEAN TimerOrWaitFired)
 {
-    set_thread_name("sys.timer");
+	set_thread_name("sys.timer");
 
-    UINT id = ((TimerItem*)parameter)->id;
-    ::std::shared_ptr<TimerItem> tmr;
+	UINT id = ((TimerItem*)parameter)->id;
+	::std::shared_ptr<TimerItem> tmr;
 
-    // 查找定时器对应的业务回调
-    {
-        NNT_AUTOGUARD(gsmtx_timers);
-        auto fnd = gs_timers.find(id);
-        if (fnd == gs_timers.end()) {
-            Logger::Critical("遇到一个不存在定时器");
-            return;
-        }
-        tmr = fnd->second;
-    }
+	// 查找定时器对应的业务回调
+	{
+		NNT_AUTOGUARD(gsmtx_timers);
+		auto fnd = gs_timers.find(id);
+		if (fnd == gs_timers.end()) {
+			Logger::Critical("遇到一个不存在定时器");
+			return;
+		}
+		tmr = fnd->second;
+	}
 
-    // 执行回调
-    tmr->tick();
+	// 执行回调
+	tmr->tick();
 }
 
 Timer::timer_t Timer::SetInterval(double time, tick_t&& cb)
 {
-    if (time <= 0) {
-        Logger::Warn("定时器的时间必须 > 0");
-        return 0;
-    }
+	if (time <= 0) {
+		Logger::Warn("定时器的时间必须 > 0");
+		return 0;
+	}
 
-    NNT_AUTOGUARD(gsmtx_timers);
+	NNT_AUTOGUARD(gsmtx_timers);
 
-    auto tmr = make_shared<TimerItem>();
-    tmr->id = ++gsid_timers;
-    tmr->tick = cb;
-    gs_timers[tmr->id] = tmr;
+	auto tmr = make_shared<TimerItem>();
+	tmr->id = ++gsid_timers;
+	tmr->tick = cb;
+	gs_timers[tmr->id] = tmr;
 
-    auto s = ::CreateTimerQueueTimer(&tmr->hdl, NULL, FnInterval, tmr.get(), (DWORD)(time * 1e3), (DWORD)(time * 1e3), WT_EXECUTEINTIMERTHREAD);
-    if (!s) {
-        Logger::Critical("启动定时器失败");
-        gs_timers.erase(tmr->id);
-        return 0;
-    }
+	auto s = ::CreateTimerQueueTimer(&tmr->hdl, NULL, FnInterval, tmr.get(), (DWORD)(time * 1e3), (DWORD)(time * 1e3), WT_EXECUTEINTIMERTHREAD);
+	if (!s) {
+		Logger::Critical("启动定时器失败");
+		gs_timers.erase(tmr->id);
+		return 0;
+	}
 
-    return tmr->id;
+	return tmr->id;
 }
 
 void Timer::CancelInterval(timer_t tmr)
 {
-    auto id = (UINT)tmr;
-    HANDLE hdl;
+	auto id = (UINT)tmr;
+	HANDLE hdl;
 
-    // 清除回调映射
-    {
-        NNT_AUTOGUARD(gsmtx_timers);
-        auto fnd = gs_timers.find(id);
-        if (fnd == gs_timers.end()) {
-            Logger::Debug("定时器已经执行完成或者不存在");
-            return;
-        }
-        hdl = fnd->second->hdl;
-        gs_timers.erase(fnd);
-    }
+	// 清除回调映射
+	{
+		NNT_AUTOGUARD(gsmtx_timers);
+		auto fnd = gs_timers.find(id);
+		if (fnd == gs_timers.end()) {
+			Logger::Debug("定时器已经执行完成或者不存在");
+			return;
+		}
+		hdl = fnd->second->hdl;
+		gs_timers.erase(fnd);
+	}
 
-    ::DeleteTimerQueueTimer(NULL, hdl, NULL);
+	::DeleteTimerQueueTimer(NULL, hdl, NULL);
+}
+
+#endif
+
+#ifdef NNT_UNIXLIKE
+
+class TimerThread
+	: public Thread
+{
+public:
+
+NNT_SINGLETON_DECL(TimerThread);
+
+	class TimerItem
+	{
+	public:
+		uint32_t id;
+		int hdl;
+		bool interval = false;
+		Timer::tick_t tick;
+	};
+
+	TimerThread()
+		: Thread("n2c.timer")
+	{
+		repeat = FOREVER;
+		fd_epoll = epoll_create(MAX_TIMERS);
+		tmpevents.resize(MAX_TIMERS);
+	}
+
+	virtual void main() override
+	{
+		auto fired = epoll_wait(fd_epoll, &tmpevents.at(0), MAX_TIMERS, 1);
+		if (fired <= 0)
+			return;
+
+		// 收集所有待激活timer
+		::std::vector<shared_ptr<TimerItem> > ticks;
+		{
+			NNT_AUTOGUARD(mtx);
+			for (auto i = 0; i < fired; ++i)
+			{
+				auto id = tmpevents[i].data.u32;
+				auto& tmr = timers[id];
+
+				// 读取状态
+				uint64_t val;
+				read(tmr->hdl, &val, sizeof(val));
+
+				// 激活
+				ticks.emplace_back(tmr);
+
+				// 如果是interval类型，则继续
+				if (tmr->interval)
+				{
+					++i;
+					continue;
+				}
+
+				// 移除已经结束的timer
+				epoll_ctl(fd_epoll, EPOLL_CTL_DEL, tmr->hdl, nullptr);
+
+				// 删除系统资源
+				close(tmr->hdl);
+
+				// 还回去id
+				i = timers.erase(i);
+			}
+		}
+
+		// 激活所有可以激活的
+		for (auto& e:ticks)
+		{
+			e->tick();
+		}
+	}
+
+	int timeout(uint msec, Timer::tick_t&& tick)
+	{
+		NNT_AUTOGUARD(mtx);
+		if (timers.size() == MAX_TIMERS)
+		{
+			Logger::Critical("当前持有的定时器超过系统最大定时器数量");
+			return 0;
+		}
+
+		auto tmr = make_shared<TimerItem>();
+
+		tmr->tick = tick;
+		tmr->id = ids_timers++;
+		timers[tmr->id] = tmr;
+
+		itimerspec its = { 0 };
+		its.it_value.tv_sec = msec / 1000;
+		its.it_value.tv_nsec = (msec % 1000) * 1e6;
+		tmr->hdl = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC | TFD_NONBLOCK);
+		timerfd_settime(tmr->hdl, 0, &its, nullptr);
+
+		epoll_event evt = { 0 };
+		evt.events = EPOLLIN;
+		evt.data.fd = tmr->hdl;
+		evt.data.u32 = tmr->id;
+		epoll_ctl(fd_epoll, EPOLL_CTL_ADD, tmr->hdl, &evt);
+
+		return tmr->id;
+	}
+
+	int interval(uint msec, Timer::tick_t&& tick)
+	{
+		NNT_AUTOGUARD(mtx);
+		if (timers.size() == MAX_TIMERS)
+		{
+			Logger::Critical("当前持有的定时器超过系统最大定时器数量");
+			return 0;
+		}
+
+		auto tmr = make_shared<TimerItem>();
+
+		tmr->interval = true;
+		tmr->tick = tick;
+		tmr->id = ids_timers++;
+		timers[tmr->id] = tmr;
+
+		itimerspec its = { 0 };
+		its.it_value.tv_sec = its.it_interval.tv_sec = msec / 1000;
+		its.it_value.tv_nsec = its.it_interval.tv_nsec = (msec % 1000) * 1e6;
+		tmr->hdl = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC | TFD_NONBLOCK);
+		timerfd_settime(tmr->hdl, 0, &its, nullptr);
+
+		epoll_event evt = { 0 };
+		evt.events = EPOLLIN;
+		evt.data.fd = tmr->hdl;
+		evt.data.u32 = tmr->id;
+		epoll_ctl(fd_epoll, EPOLL_CTL_ADD, tmr->hdl, &evt);
+
+		return tmr->id;
+	}
+
+	void cancel(int id)
+	{
+		NNT_AUTOGUARD(mtx);
+		auto fnd = timers.find(id);
+		if (fnd == timers.end())
+		{
+			Logger::Warn("没有找到定时器");
+			return;
+		}
+
+		// 清除事件
+		auto tmr = fnd->second;
+		epoll_ctl(fd_epoll, EPOLL_CTL_DEL, tmr->hdl, nullptr);
+
+		// 删除系统资源
+		close(tmr->hdl);
+
+		// 删除
+		timers.erase(fnd);
+	}
+
+	// epoll池
+	int fd_epoll;
+
+	// 操作锁
+	::std::mutex mtx;
+
+	// 定时器id池
+	::std::atomic<uint32_t> ids_timers;
+
+	// timers映射
+	::std::map<uint32_t, shared_ptr<TimerItem> > timers;
+
+	// event数组
+	::std::vector<epoll_event> tmpevents;
+};
+
+NNT_SINGLETON_IMPL(TimerThread);
+
+void TimerThread::_shared_init()
+{
+	start();
+}
+
+Timer::timer_t Timer::SetTimeout(double time, tick_t&& cb)
+{
+	return TimerThread::shared().timeout((uint)(time * 1e3), ::std::forward<tick_t>(cb));
+}
+
+void Timer::CancelTimeout(timer_t tmr)
+{
+	TimerThread::shared().cancel((uint)tmr);
+}
+
+Timer::timer_t Timer::SetInterval(double time, tick_t&& cb)
+{
+	return TimerThread::shared().interval((uint)(time * 1e3), ::std::forward<tick_t>(cb));
+}
+
+void Timer::CancelInterval(timer_t tmr)
+{
+	TimerThread::shared().cancel((uint)tmr);
 }
 
 #endif
