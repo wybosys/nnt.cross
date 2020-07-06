@@ -1,6 +1,6 @@
 #include "cross.hpp"
 #include "datetime.hpp"
-#include <time.h>
+#include <ctime>
 #include <thread>
 #include <chrono>
 
