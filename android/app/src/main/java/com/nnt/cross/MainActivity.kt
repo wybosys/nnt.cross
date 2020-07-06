@@ -12,32 +12,9 @@ class MainActivity() : AppCompatActivity() {
         // 加载so
         ReLinker.loadLibrary(this, "tester")
 
-        // 创建lua环境
-        Context.shared.create()
-
         // 执行测试
-        test0()
-        test1()
+        test_thread()
     }
 
-    fun test0() {
-        // 加载包中的lua脚本
-        val stm = resources.openRawResource(R.raw.test0)
-        Context.shared.load(stm.readBytes())
-
-        // 获得脚本中的函数
-        val obj = Context.shared.global("Test0")!!
-        var r = obj.call()
-        r = obj.call(123)
-        r = obj.call(null)
-    }
-
-    fun test1() {
-        val stm = resources.openRawResource(R.raw.test1)
-        Context.shared.load(stm.readBytes())
-
-        // 测试socket
-        val obj = Context.shared.global("Test1")!!
-        obj.call()
-    }
+    private external fun test_thread()
 }
