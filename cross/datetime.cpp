@@ -7,6 +7,7 @@
 #ifdef NNT_WINDOWS
 
 #include <Windows.h>
+#include <WinUser.h>
 
 #endif
 
@@ -50,6 +51,18 @@ seconds_t Time::Now()
 	return r;
 }
 
+static void usleep(long usec)
+{
+    HANDLE timer;
+    LARGE_INTEGER interval;
+    interval.QuadPart = -(10 * usec);
+
+    timer = CreateWaitableTimer(NULL, TRUE, NULL);
+    SetWaitableTimer(timer, &interval, 0, NULL, NULL, 0);
+    WaitForSingleObject(timer, INFINITE);
+    CloseHandle(timer);
+}
+
 #endif
 
 #ifdef NNT_UNIXLIKE
@@ -84,9 +97,9 @@ void Time::Sleep(seconds_t sec)
 
 void Time::SleepMs(millseconds_t msec)
 {
-	if (msec <= 0)
-		return;
-	::std::this_thread::sleep_for(::std::chrono::milliseconds(msec));
+    if (msec <= 0)
+        return;
+    ::std::this_thread::sleep_for(::std::chrono::milliseconds(msec));
 }
 
 CROSS_END
