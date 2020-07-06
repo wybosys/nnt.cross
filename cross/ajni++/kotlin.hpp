@@ -39,10 +39,11 @@ class JStaticMethod : public ::AJNI_NS::JStaticMethod
 public:
 
     JStaticMethod(JClass& clz)
-    : ::AJNI_NS::JStaticMethod(clz)
-    {}
+        : ::AJNI_NS::JStaticMethod(clz)
+    {
+    }
 
-    virtual return_type invoke(args_type const &) const;
+    virtual return_type invoke(args_type const&) const;
 };
 
 class JGlobalField
@@ -79,12 +80,43 @@ public:
     return_type operator()(arg_type const&) const;
     return_type operator()(arg_type const&, arg_type const&) const;
     return_type operator()(arg_type const&, arg_type const&, arg_type const&) const;
-    return_type operator()(arg_type const&, arg_type const&, arg_type const&, arg_type const&) const;
-    return_type operator()(arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&) const;
-    return_type operator()(arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&) const;
-    return_type operator()(arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&) const;
-    return_type operator()(arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&) const;
-    return_type operator()(arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&, arg_type const&) const;
+    return_type
+    operator()(arg_type const&, arg_type const&, arg_type const&, arg_type const&) const;
+    return_type operator()(arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&) const;
+    return_type operator()(arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&) const;
+    return_type operator()(arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&) const;
+    return_type operator()(arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&) const;
+    return_type operator()(arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&,
+        arg_type const&) const;
 
     virtual return_type invoke(args_type const&) const;
 

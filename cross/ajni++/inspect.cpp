@@ -25,13 +25,14 @@ struct JInspectPrivate
     shared_ptr<JReflectClass> rclass;
 };
 
-JInspect::JInspect(const ajni::JClass &clz)
+JInspect::JInspect(const ajni::JClass& clz)
     : _clz(clz)
 {
     NNT_CLASS_CONSTRUCT();
 }
 
-JInspect::~JInspect(){
+JInspect::~JInspect()
+{
     NNT_CLASS_DESTORY();
 }
 

@@ -13,8 +13,12 @@ class MainActivity() : AppCompatActivity() {
         ReLinker.loadLibrary(this, "tester")
 
         // 执行测试
+        test()
         test_thread()
+        test_time()
     }
 
+    private external fun test()
     private external fun test_thread()
+    private external fun test_time()
 }

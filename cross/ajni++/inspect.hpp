@@ -7,7 +7,7 @@ NNT_CLASS_PREPARE(JInspect);
 
 class JInspect
 {
-    NNT_CLASS_DECL(JInspect);
+NNT_CLASS_DECL(JInspect);
 
 public:
 

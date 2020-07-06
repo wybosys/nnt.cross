@@ -11,6 +11,7 @@ add_library(ajni++ STATIC
     variant.cpp
     kotlin.cpp
     java-prv.cpp
+    android-prv.cpp
     )
 
 target_link_libraries(ajni++ log cross)

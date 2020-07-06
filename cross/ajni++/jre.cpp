@@ -7,7 +7,7 @@ AJNI_BEGIN_NS(jre)
 
 JClassPath const Object::CLASSPATH = "java/lang/Object";
 
-Object::Object(JClassPath const &cp)
+Object::Object(JClassPath const& cp)
     : JClass(cp), toString(*this)
 {
     toString.name = "toString";
@@ -16,7 +16,7 @@ Object::Object(JClassPath const &cp)
 
 JClassPath const ClassLoader::CLASSPATH = "java/lang/ClassLoader";
 
-ClassLoader::ClassLoader(JClassPath const &cp)
+ClassLoader::ClassLoader(JClassPath const& cp)
     : JClass(cp), loadClass(*this)
 {
     loadClass.name = "loadClass";
@@ -27,14 +27,14 @@ ClassLoader::ClassLoader(JClassPath const &cp)
 
 JClassPath const Throwable::CLASSPATH = "java/lang/Throwable";
 
-Throwable::Throwable(JClassPath const &cp)
+Throwable::Throwable(JClassPath const& cp)
     : Object(cp)
 {
 }
 
 JClassPath const Boolean::CLASSPATH = "java/lang/Boolean";
 
-Boolean::Boolean(JClassPath const &cp)
+Boolean::Boolean(JClassPath const& cp)
     : JClass(cp),
       booleanValue(*this)
 {
@@ -44,7 +44,7 @@ Boolean::Boolean(JClassPath const &cp)
 
 JClassPath const Number::CLASSPATH = "java/lang/Number";
 
-Number::Number(JClassPath const &cp)
+Number::Number(JClassPath const& cp)
     : JClass(cp),
       longValue(*this)
 {
@@ -54,7 +54,7 @@ Number::Number(JClassPath const &cp)
 
 JClassPath const Float::CLASSPATH = "java/lang/Float";
 
-Float::Float(JClassPath const &cp)
+Float::Float(JClassPath const& cp)
     : Number(cp),
       floatValue(*this)
 {
@@ -64,7 +64,7 @@ Float::Float(JClassPath const &cp)
 
 JClassPath const Double::CLASSPATH = "java/lang/Double";
 
-Double::Double(JClassPath const &cp)
+Double::Double(JClassPath const& cp)
     : Number(cp),
       doubleValue(*this)
 {
@@ -74,7 +74,7 @@ Double::Double(JClassPath const &cp)
 
 JClassPath const Integer::CLASSPATH = "java/lang/Integer";
 
-Integer::Integer(JClassPath const &cp)
+Integer::Integer(JClassPath const& cp)
     : Number(cp),
       intValue(*this)
 {
@@ -84,7 +84,7 @@ Integer::Integer(JClassPath const &cp)
 
 JClassPath const String::CLASSPATH = "java/lang/String";
 
-String::String(JClassPath const &cp)
+String::String(JClassPath const& cp)
     : JClass(cp),
       getBytes(*this)
 {
@@ -99,7 +99,7 @@ const JTypeSignature CALLBACK = "Lcom/nnt/ajnixx/Callback;";
 
 JClassPath const Callback::CLASSPATH = "com/nnt/ajnixx/Callback";
 
-Callback::Callback(JClassPath const &cp)
+Callback::Callback(JClassPath const& cp)
     : JClass(cp),
       id(*this)
 {

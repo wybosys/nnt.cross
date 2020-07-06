@@ -5,11 +5,15 @@ AJNI_BEGIN_NS(android)
 
 namespace TypeSignature
 {
-    extern const JTypeSignature CONTEXT;
-    extern const JTypeSignature ATTRIBUTESET;
-    extern const JTypeSignature VIEW;
-    extern const JTypeSignature VIEWGROUP;
-    extern const JTypeSignature VIEWGROUP_LAYOUTPARAMS;
+extern const JTypeSignature CONTEXT;
+
+extern const JTypeSignature ATTRIBUTESET;
+
+extern const JTypeSignature VIEW;
+
+extern const JTypeSignature VIEWGROUP;
+
+extern const JTypeSignature VIEWGROUP_LAYOUTPARAMS;
 } // namespace TypeSignature
 
 class Context : public JClass
@@ -25,7 +29,7 @@ public:
 class Activity : public JClass
 {
 public:
-    Activity(const JClassPath & = "androidx/appcompat/app/AppCompatActivity");
+    Activity(const JClassPath& = "androidx/appcompat/app/AppCompatActivity");
 
     JMethod findViewById;
 };
@@ -33,7 +37,7 @@ public:
 class View : public JClass
 {
 public:
-    View(const JClassPath & = "android/view/View");
+    View(const JClassPath& = "android/view/View");
 
     JMethod setBackgroundColor;
 };
@@ -44,7 +48,7 @@ public:
     class LayoutParams : public JClass
     {
     public:
-        LayoutParams(const JClassPath & = "android/view/ViewGroup$LayoutParams");
+        LayoutParams(const JClassPath& = "android/view/ViewGroup$LayoutParams");
 
         enum
         {
@@ -54,7 +58,7 @@ public:
         };
     };
 
-    ViewGroup(const JClassPath & = "android/view/ViewGroup");
+    ViewGroup(const JClassPath& = "android/view/ViewGroup");
 
     JMethod addView;
 };
@@ -62,7 +66,7 @@ public:
 class ConstraintLayout : public ViewGroup
 {
 public:
-    ConstraintLayout(const JClassPath & = "androidx/constraintlayout/widget/ConstraintLayout");
+    ConstraintLayout(const JClassPath& = "androidx/constraintlayout/widget/ConstraintLayout");
 };
 
 AJNI_END_NS
