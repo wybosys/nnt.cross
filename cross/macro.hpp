@@ -37,26 +37,27 @@ protected:                                            \
     typedef cls self_class_type;                      \
     typedef NNT_PRIVATECLASS(cls) private_class_type; \
     friend class NNT_PRIVATECLASS(cls);               \
-    private_class_type *d_ptr = nullptr;              \
+    ::std::shared_ptr<private_class_type> d_ptr;      \
                                                       \
 public:                                               \
     inline private_class_type &d() const              \
     {                                                 \
-        return *(private_class_type *)d_ptr;          \
+        return *d_ptr;                                \
     }                                                 \
                                                       \
 private:                                              \
     NNT_NOCOPY(cls);
 
 #define NNT_CLASS_CONSTRUCT(...) \
-    d_ptr = new private_class_type(__VA_ARGS__);
+    d_ptr = ::std::make_shared<private_class_type>(__VA_ARGS__);
 #define NNT_CLASS_DESTORY() \
-    delete d_ptr;           \
     d_ptr = nullptr;
 
 #define NNT_SINGLETON_DECL(cls)             \
 private:                                    \
     static void _set_shared(cls *);         \
+    static ::std::mutex _mtx_shared;        \
+    void _shared_init();                    \
                                             \
 public:                                     \
     static cls &shared();                   \
@@ -67,16 +68,22 @@ public:                                     \
 
 #define NNT_SINGLETON_IMPL(cls, ...)                             \
     static cls *_##cls##_shared = nullptr;                       \
+    ::std::mutex cls::_mtx_shared;                               \
     cls &cls::shared()                                           \
     {                                                            \
+        if (_##cls##_shared)                                     \
+            return *_##cls##_shared;                             \
+        NNT_AUTOGUARD(_mtx_shared);                              \
         if (!_##cls##_shared)                                    \
         {                                                        \
             _##cls##_shared = new cls(__VA_ARGS__);              \
+            _##cls##_shared->_shared_init();                     \
         }                                                        \
         return *_##cls##_shared;                                 \
     }                                                            \
     void cls::free_shared()                                      \
     {                                                            \
+        NNT_AUTOGUARD(_mtx_shared);                              \
         if (_##cls##_shared)                                     \
         {                                                        \
             delete _##cls##_shared;                              \
@@ -86,9 +93,11 @@ public:                                     \
     bool cls::is_shared() { return nullptr != _##cls##_shared; } \
     void cls::_set_shared(cls *r)                                \
     {                                                            \
+        NNT_AUTOGUARD(_mtx_shared);                              \
         if (_##cls##_shared)                                     \
         {                                                        \
             delete _##cls##_shared;                              \
+            _##cls##_shared = nullptr;                           \
         }                                                        \
         _##cls##_shared = r;                                     \
     }
@@ -237,7 +246,7 @@ static T const& Nil()
 
 class Object
 {
- public:
+public:
 	virtual ~Object() = default;
 };
 
@@ -245,7 +254,7 @@ typedef Object IObject;
 
 class RefObject : public IObject
 {
- public:
+public:
 	RefObject()
 		: _referencedCount(1)
 	{
@@ -266,14 +275,14 @@ class RefObject : public IObject
 		return false;
 	}
 
- private:
+private:
 	mutable ::std::atomic<size_t> _referencedCount;
 };
 
 template<typename T>
 class shared_ref
 {
- public:
+public:
 	shared_ref()
 		: _ptr(new T())
 	{
@@ -362,7 +371,7 @@ class shared_ref
 		return _ptr;
 	}
 
- private:
+private:
 	T* _ptr;
 
 	shared_ref(::std::nullptr_t)
@@ -384,7 +393,7 @@ class shared_ref
 template<typename TShared>
 class shared_object
 {
- public:
+public:
 	typedef TShared shared_type;
 	typedef typename shared_type::element_type element_type;
 
@@ -436,7 +445,7 @@ class shared_object
 		return _so;
 	}
 
- private:
+private:
 	shared_type _so;
 };
 

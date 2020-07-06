@@ -99,12 +99,17 @@ string get_thread_name()
 // 设置线程名称
 void set_thread_name(string const& name)
 {
+	if (name.length() > 16)
+	{
+		Logger::Warn("设置线程名称长度超过限制(16) " + name);
+		return;
+	}
 	auto tid = ::std::this_thread::get_id();
 	auto na = (pthread_t*)(&tid);
 	tls_thread_name = name;
-	if (0 == pthread_setname_np(*na, tls_thread_name.c_str()))
-		return;
-	Logger::Warn("设置线程名称失败");
+	auto ret = pthread_setname_np(*na, tls_thread_name.c_str());
+	if (ret)
+		Logger::Warn("设置线程名称失败");
 }
 
 #endif

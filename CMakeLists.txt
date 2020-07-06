@@ -27,6 +27,7 @@ set(CROSS_SRCS
     cross/logger.cpp
     cross/property.cpp
     cross/threads.cpp
+    cross/timer.cpp
     cross/sys.cpp
     cross/url.cpp
     cross/xml.cpp

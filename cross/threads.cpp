@@ -21,9 +21,14 @@ CROSS_BEGIN
 
 NNT_SINGLETON_IMPL(MainThread);
 
+void MainThread::_shared_init()
+{
+	// pass
+}
+
 class MainThreadPrivate
 {
- public:
+public:
 
 	MainThreadPrivate()
 	{
@@ -131,7 +136,7 @@ bool IsMainThread()
 
 class semaphorePrivate
 {
- public:
+public:
 	::std::mutex mtx;
 	::std::condition_variable cond;
 	size_t count = 0, waits = 0;
@@ -193,7 +198,7 @@ bool semaphore::waiting() const
 
 class ThreadPrivate
 {
- public:
+public:
 	tid_t tid = -1;
 	bool waitquit = false;
 	string name;
@@ -213,20 +218,7 @@ Thread::~Thread()
 	// 等待安全退出
 	quit();
 
-	if (joinable())
-		join();
-
 	NNT_CLASS_DESTORY();
-}
-
-bool Thread::joinable() const
-{
-	return d_ptr->thd->joinable();
-}
-
-void Thread::join() const
-{
-	d_ptr->thd->join();
 }
 
 void Thread::wait() const
@@ -241,51 +233,46 @@ tid_t Thread::tid() const
 
 void Thread::start()
 {
-	NNT_AUTOGUARD(d_ptr->mtx_start);
+	auto d = this->d_ptr;
+	NNT_AUTOGUARD(d->mtx_start);
 
-	if (d_ptr->thd)
+	if (d->thd)
 	{
-		Logger::Warn("线程 " + d_ptr->name + " 已经启动");
+		Logger::Warn("线程 " + d->name + " 已经启动");
 		return;
 	}
 
-	d_ptr->waitquit = false;
+	d->waitquit = false;
 
-	d_ptr->thd = ::std::make_shared<::std::thread>([&]()
+	d->thd = ::std::make_shared<::std::thread>([=]()
 	{
-	  Logger::Debug("线程 " + d_ptr->name + " 启动");
-	  d_ptr->sema_start.notify();
+		auto const tname = d->name;
+		Logger::Debug("线程 " + tname + " 启动");
+		d->sema_start.notify();
 
-	  if (!d_ptr->name.empty())
-		  set_thread_name(d_ptr->name);
-	  d_ptr->tid = get_thread_id();
+		if (!tname.empty())
+			set_thread_name(tname);
+		d->tid = get_thread_id();
 
-	  size_t count = this->repeat;
-	  while (!d_ptr->waitquit)
-	  {
-		  NNT_AUTOGUARD(d_ptr->mtx_running);
+		size_t count = this->repeat;
+		while (d && !d->waitquit)
+		{
+			NNT_AUTOGUARD(d->mtx_running);
 
-		  // 执行线程任务
-		  main();
-		  if (proc)
-		  {
-			  proc(*this);
-		  }
+			// 执行线程任务
+			main();
+			if (proc)
+				proc(*this);
 
-		  if (count > 1)
-		  {
-			  // 0代表无限循环，》1代表有限次
-			  if (count-- == 1)
-				  break;
-		  }
-		  else
-		  {
-			  // 退出循环
-			  break;
-		  }
-	  }
+			if (count != INFINITE)
+			{
+				// -1代表无限循环，》1代表有限次
+				if (--count <= 0)
+					break;
+			}
+		}
 
-	  Logger::Debug("线程 " + d_ptr->name + " 退出");
+		Logger::Debug("线程 " + tname + " 退出");
 	});
 }
 
@@ -294,12 +281,23 @@ void Thread::quit()
 	NNT_AUTOGUARD(d_ptr->mtx_start);
 
 	if (!d_ptr->thd)
-	{
-		Logger::Warn("线程 " + d_ptr->name + " 已经退出");
 		return;
-	}
 
 	d_ptr->waitquit = true;
+
+	// 如果是同一个线程，则不能进行join，会导致deadlock
+	if (get_thread_id() != d_ptr->tid)
+	{
+		// 工作线程内join会导致死锁
+		d_ptr->thd->join();
+	}
+	else
+	{
+		// 解除联系，避免 thd=null 时释放系统县城资源导致崩溃
+		d_ptr->thd->detach();
+	}
+
+	d_ptr->thd = nullptr;
 }
 
 // ---------------------------------------- Tasks
@@ -337,7 +335,7 @@ void ITaskDispatcher::_run(task_type& tsk)
 
 class SingleTaskDispatcherPrivate
 {
- public:
+public:
 
 	SingleTaskDispatcher* owner;
 	bool newthd = true; // 是否需要开一个新线程承载
@@ -502,7 +500,7 @@ bool SingleTaskDispatcher::attach()
 
 class FixedTaskDispatcherPrivate
 {
- public:
+public:
 
 	FixedTaskDispatcher* owner;
 	::std::mutex mtx_tasks;
@@ -662,7 +660,7 @@ void FixedTaskDispatcher::clear()
 
 class QueuedTaskDispatcherPrivate
 {
- public:
+public:
 
 	QueuedTaskDispatcher* owner;
 	::std::mutex mtx_tasks;
@@ -846,7 +844,7 @@ void QueuedTaskDispatcher::clear()
 
 class _ThreadResourceProviderPrivate
 {
- public:
+public:
 
 	void* _obj = nullptr;
 	semaphore _wait_start, _wait_stop;
