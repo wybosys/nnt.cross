@@ -27,6 +27,12 @@
 // 同时运行的最大定时器数量
 #define MAX_TIMERS 256
 
+// 使用cotimers实现Time
+//#define TIME_IMPL_COTIMERS
+
+// 使用系统api实现Time
+#define TIME_IMPL_SYSTEM
+
 CROSS_BEGIN
 
 USE_STL
@@ -242,9 +248,6 @@ void CoTimers::stop()
 }
 
 // -------------------------------------------------- Time
-
-//#define TIME_IMPL_COTIMERS
-#define TIME_IMPL_SYSTEM
 
 #ifdef TIME_IMPL_COTIMERS
 
