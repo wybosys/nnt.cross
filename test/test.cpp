@@ -82,6 +82,19 @@ TEST (url)
     UNITTEST_CHECK_EQUAL(u.toString(), str);
 }
 
+TEST(thread)
+{
+    Thread thd("测试");
+    semaphore wait;
+    thd.proc = [&](Thread&) {
+        cout << "测试线程" << endl;
+        wait.notify();
+    };
+    thd.start();
+    wait.wait();
+    thd.join();
+}
+
 NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_ws, {
     self.start();
 });

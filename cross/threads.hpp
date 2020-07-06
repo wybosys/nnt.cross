@@ -69,6 +69,53 @@ public:
     bool try_wait();
 };
 
+NNT_CLASS_PREPARE(Thread);
+
+// 扩展线程类
+class NNT_API Thread
+{
+    NNT_CLASS_DECL(Thread);
+
+public:
+
+    enum {
+        INFINITE = 0, // 永远运行
+    };
+
+    // @name 线程名称
+    Thread(string const& name = "");
+    virtual ~Thread();
+
+    // 是否可以join
+    bool joinable() const;
+
+    // join等待结束
+    void join() const;
+
+    // wait等待开始
+    void wait() const;
+
+    typedef unsigned long long threadid_type;
+
+    // 获得线程id
+    threadid_type tid() const;
+
+    // 运行次数，默认为执行一次
+    size_t repeat = 1;
+
+    // 启动线程
+    void start();
+
+    // 安全退出运行
+    void quit();
+
+    typedef ::std::function<void(Thread&)> func_type;
+
+    // 执行函数
+    virtual void main() {}
+    func_type proc;
+};
+
 // 任务接口
 class NNT_API ITask : public ::NNT_NS::IObject
 {
