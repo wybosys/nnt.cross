@@ -136,11 +136,16 @@ public:                                     \
 #define NNT_APP 1
 #endif
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #include <SDKDDKVer.h>
 #pragma warning(disable : 4251)
-#define WIN32_LEAN_AND_MEAN
 #define NNT_WINDOWS
+#define WIN32_LEAN_AND_MEAN
+#if defined(WIN32) || defined(_WIN32)
+#define NNT_X86
+#else
+#define NNT_X64
+#endif
 #ifdef NNT_LIBRARY
 #ifdef NNT_SHARED
 #define NNT_API __declspec(dllexport)
@@ -148,8 +153,6 @@ public:                                     \
 #elif !defined(NNT_USE_STATIC)
 #define NNT_API __declspec(dllimport)
 #endif
-#else
-#define NNT_UNIXLIKE
 #endif
 
 #ifdef __arm__
@@ -164,6 +167,10 @@ public:                                     \
 #define NNT_X86
 #elif defined(__x86_64__)
 #define NNT_X64
+#endif
+
+#if !defined(NNT_WINDOWS)
+#define NNT_UNIXLIKE
 #endif
 
 #ifndef NNT_API
@@ -205,9 +212,7 @@ NNT_BEGIN
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
 typedef ::std::wstring system_string;
 #else
-
 typedef ::std::string system_string;
-
 #endif
 
 using ::std::cerr;
@@ -221,7 +226,7 @@ using ::std::string;
 
 typedef ::std::vector<string> strings;
 
-template<typename T>
+template <typename T>
 static T const &Nil()
 {
     static const T __s;
@@ -236,12 +241,10 @@ public:
 
 typedef Object IObject;
 
-class RefObject: public IObject
+class RefObject : public IObject
 {
 public:
-    RefObject()
-        : _referencedCount(1)
-    {}
+    RefObject() : _referencedCount(1) {}
 
     virtual void grab() const
     {
@@ -250,7 +253,8 @@ public:
 
     virtual bool drop() const
     {
-        if (--_referencedCount == 0) {
+        if (--_referencedCount == 0)
+        {
             delete this;
             return true;
         }
@@ -261,7 +265,7 @@ private:
     mutable ::std::atomic<size_t> _referencedCount;
 };
 
-template<typename T>
+template <typename T>
 class shared_ref
 {
 public:
@@ -277,7 +281,7 @@ public:
             _ptr->grab();
     }
 
-    template<typename R>
+    template <typename R>
     shared_ref(shared_ref<R> const &r)
         : _ptr(dynamic_cast<T *>(const_cast<R *>(r.get())))
     {
@@ -287,7 +291,8 @@ public:
 
     ~shared_ref()
     {
-        if (_ptr) {
+        if (_ptr)
+        {
             _ptr->drop();
             _ptr = nullptr;
         }
@@ -305,13 +310,13 @@ public:
         return *this;
     }
 
-    template<typename R>
+    template <typename R>
     inline operator R *()
     {
         return dynamic_cast<R *>(_ptr);
     }
 
-    template<typename R>
+    template <typename R>
     inline operator R const *() const
     {
         return dynamic_cast<R const *>(_ptr);
@@ -355,9 +360,7 @@ public:
 private:
     T *_ptr;
 
-    shared_ref(::std::nullptr_t)
-        : _ptr(nullptr)
-    {}
+    shared_ref(nullptr_t) : _ptr(nullptr) {}
 
     static shared_ref<T> _assign(T *ptr)
     {
@@ -366,22 +369,19 @@ private:
         return r;
     }
 
-    template<typename TT, typename... Args>
+    template <typename TT, typename... Args>
     friend shared_ref<TT> make_ref(Args &&...);
 };
 
-template<typename TShared>
+template <typename TShared>
 class shared_object
 {
 public:
     typedef TShared shared_type;
     typedef typename shared_type::element_type element_type;
 
-    shared_object()
-    {}
-    shared_object(shared_type const &v)
-        : _so(v)
-    {}
+    shared_object() {}
+    shared_object(shared_type const &v) : _so(v) {}
 
     inline operator shared_type &()
     {
@@ -427,16 +427,16 @@ private:
     shared_type _so;
 };
 
-template<typename T, typename... Args>
+template <typename T, typename... Args>
 static shared_ref<T> make_ref(Args &&... args)
 {
     return shared_ref<T>::_assign(new T(::std::forward<Args>(args)...));
 };
 
-template<typename T, typename TI, typename... Args>
+template <typename T, typename TI, typename... Args>
 static shared_ptr<TI> make_dynamic_shared(Args &&... args)
 {
-    shared_ptr<TI> r((TI *) new T(::std::forward<Args>(args)...));
+    shared_ptr<TI> r((TI *)new T(::std::forward<Args>(args)...));
     return r;
 }
 
