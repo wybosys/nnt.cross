@@ -4,13 +4,23 @@
 #include <thread>
 #include <map>
 #include <mutex>
+#include <atomic>
+
 #include "datetime.hpp"
 #include "logger.hpp"
 #include "threads.hpp"
+#include "sys.hpp"
+
+#ifdef NNT_WINDOWS
+#include <Windows.h>
+#include <WinUser.h>
+#endif
 
 CROSS_BEGIN
 
 USE_STL
+
+// ----------------------------------------------------- TimeCounter
 
 class TimeCounterPrivate
 {
@@ -46,6 +56,8 @@ double TimeCounter::seconds(bool reset)
 	return chrono::duration_cast<chrono::microseconds>(dur).count() * 0.000001;
 }
 
+// -------------------------------------------- CoTimers
+
 struct CoTimerItem
 {
 	// 定时器id
@@ -68,14 +80,14 @@ class CoTimersPrivate
 {
 public:
 
-	CoTimersPrivate(CoTimers *o)
+	explicit CoTimersPrivate(CoTimers* o)
 		: d_owner(o),
-        thd("n2c.cotimers")
+		  thd("n2c.cotimers")
 	{
-		thd.repeat = Thread::INFINITE;
+		thd.repeat = Thread::FOREVER;
 		thd.proc = [=](Thread&)
 		{
-            auto d = d_owner->d_ptr; // 避免被释放
+			auto d = d_owner->d_ptr; // 避免被释放
 			// Logger::Debug("定时器Tick");
 
 			// 等待
@@ -85,7 +97,7 @@ public:
 			millseconds_t b = Time::CurrentMs();
 
 			// tick所有分片
-            d->tick();
+			d->tick();
 
 			millseconds_t e = Time::CurrentMs();
 			cost = e - b;
@@ -96,11 +108,11 @@ public:
 		};
 	}
 
-    CoTimers *d_owner;
+	CoTimers* d_owner;
 
 	typedef map<CoTimers::timer_t, shared_ptr<CoTimerItem>> timers_type;
 
-    void tick()
+	void tick()
 	{
 		bool needclean = false;
 
@@ -108,7 +120,7 @@ public:
 		timers_type snaps;
 		{
 			NNT_AUTOGUARD(mtx);
-            snaps = timers;
+			snaps = timers;
 		}
 
 		// 遍历快照
@@ -218,8 +230,20 @@ void CoTimers::stop()
 	d_ptr->thd.quit();
 }
 
+// -------------------------------------------------- Time
+
+//#define TIME_IMPL_COTIMERS
+#define TIME_IMPL_SYSTEM
+
+#ifdef TIME_IMPL_COTIMERS
+
 Timer::timer_t Timer::SetTimeout(double time, tick_t&& cb)
 {
+    if (time <= 0) {
+        Logger::Warn("定时器的时间必须 > 0");
+        return 0;
+    }
+
 	return CoTimers::shared().add(time, 1, ::std::forward<tick_t>(cb));
 }
 
@@ -230,6 +254,11 @@ void Timer::CancelTimeout(timer_t id)
 
 Timer::timer_t Timer::SetInterval(double time, tick_t&& cb)
 {
+    if (time <= 0) {
+        Logger::Warn("定时器的时间必须 > 0");
+        return 0;
+    }
+
 	return CoTimers::shared().add(time, -1, ::std::forward<tick_t>(cb));
 }
 
@@ -237,5 +266,161 @@ void Timer::CancelInterval(timer_t id)
 {
 	CoTimers::shared().cancel(id);
 }
+
+#endif
+
+#ifdef TIME_IMPL_SYSTEM
+
+#ifdef NNT_WINDOWS
+
+class TimerItem
+{
+public:
+    Timer::tick_t tick;
+    UINT id;
+    HANDLE hdl;
+};
+
+// windows定时器id和业务回调的映射
+static ::std::mutex gsmtx_timers;
+static ::std::atomic<UINT> gsid_timers;
+static ::std::map<UINT, ::std::shared_ptr<TimerItem> > gs_timers;
+
+static void CALLBACK FnTimeout(PVOID parameter, BOOLEAN TimerOrWaitFired)
+{
+    set_thread_name("sys.timer");
+
+    UINT id = ((TimerItem*)parameter)->id;
+    ::std::shared_ptr<TimerItem> tmr;
+
+    // 查找定时器对应的业务回调
+    {
+        NNT_AUTOGUARD(gsmtx_timers);
+        auto fnd = gs_timers.find(id);
+        if (fnd == gs_timers.end()) {
+            Logger::Critical("遇到一个不存在定时器");
+            return;
+        }
+        tmr = fnd->second;
+        gs_timers.erase(fnd);
+    }
+
+    // 执行回调
+    tmr->tick();
+}
+
+Timer::timer_t Timer::SetTimeout(double time, tick_t&& cb)
+{
+    if (time <= 0) {
+        Logger::Warn("定时器的时间必须 > 0");
+        return 0;
+    }
+
+    NNT_AUTOGUARD(gsmtx_timers);
+    
+    auto tmr = make_shared<TimerItem>();
+    tmr->id = ++gsid_timers;
+    tmr->tick = cb;
+    gs_timers[tmr->id] = tmr;
+
+    auto s = ::CreateTimerQueueTimer(&tmr->hdl, NULL, FnTimeout, tmr.get(), (DWORD)(time * 1e3), 0, WT_EXECUTEINTIMERTHREAD);
+    if (!s) {
+        Logger::Critical("启动定时器失败");
+        gs_timers.erase(tmr->id);
+        return 0;
+    }
+
+    return tmr->id;
+}
+
+void Timer::CancelTimeout(timer_t tmr) 
+{
+    auto id = (UINT)tmr;
+    HANDLE hdl;
+
+    // 清除回调映射
+    {
+        NNT_AUTOGUARD(gsmtx_timers);        
+        auto fnd = gs_timers.find(id);
+        if (fnd == gs_timers.end()) {
+            Logger::Debug("定时器已经执行完成或者不存在");
+            return;
+        }
+        hdl = fnd->second->hdl;
+        gs_timers.erase(fnd);
+    }
+
+    ::DeleteTimerQueueTimer(NULL, hdl, NULL);
+}
+
+static void CALLBACK FnInterval(PVOID parameter, BOOLEAN TimerOrWaitFired)
+{
+    set_thread_name("sys.timer");
+
+    UINT id = ((TimerItem*)parameter)->id;
+    ::std::shared_ptr<TimerItem> tmr;
+
+    // 查找定时器对应的业务回调
+    {
+        NNT_AUTOGUARD(gsmtx_timers);
+        auto fnd = gs_timers.find(id);
+        if (fnd == gs_timers.end()) {
+            Logger::Critical("遇到一个不存在定时器");
+            return;
+        }
+        tmr = fnd->second;
+    }
+
+    // 执行回调
+    tmr->tick();
+}
+
+Timer::timer_t Timer::SetInterval(double time, tick_t&& cb)
+{
+    if (time <= 0) {
+        Logger::Warn("定时器的时间必须 > 0");
+        return 0;
+    }
+
+    NNT_AUTOGUARD(gsmtx_timers);
+
+    auto tmr = make_shared<TimerItem>();
+    tmr->id = ++gsid_timers;
+    tmr->tick = cb;
+    gs_timers[tmr->id] = tmr;
+
+    auto s = ::CreateTimerQueueTimer(&tmr->hdl, NULL, FnInterval, tmr.get(), (DWORD)(time * 1e3), (DWORD)(time * 1e3), WT_EXECUTEINTIMERTHREAD);
+    if (!s) {
+        Logger::Critical("启动定时器失败");
+        gs_timers.erase(tmr->id);
+        return 0;
+    }
+
+    return tmr->id;
+}
+
+void Timer::CancelInterval(timer_t tmr)
+{
+    auto id = (UINT)tmr;
+    HANDLE hdl;
+
+    // 清除回调映射
+    {
+        NNT_AUTOGUARD(gsmtx_timers);
+        auto fnd = gs_timers.find(id);
+        if (fnd == gs_timers.end()) {
+            Logger::Debug("定时器已经执行完成或者不存在");
+            return;
+        }
+        hdl = fnd->second->hdl;
+        gs_timers.erase(fnd);
+    }
+
+    ::DeleteTimerQueueTimer(NULL, hdl, NULL);
+}
+
+#endif
+
+#endif
 
 CROSS_END

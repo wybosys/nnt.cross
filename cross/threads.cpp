@@ -264,7 +264,7 @@ void Thread::start()
 			if (proc)
 				proc(*this);
 
-			if (count != INFINITE)
+			if (count != FOREVER)
 			{
 				// -1代表无限循环，》1代表有限次
 				if (--count <= 0)

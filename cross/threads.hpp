@@ -80,7 +80,7 @@ public:
 
 	enum
 	{
-		INFINITE = -1, // 永远运行
+        FOREVER = -1, // 永远运行
 	};
 
 	// @name 线程名称
