@@ -252,7 +252,7 @@ class ByteStreamReader
 public:
 
     ByteStreamReader()
-        : _stm(::NNT_NS::Nil<TStm>()), _flow(0), _fsize(0)
+        : _stm(::NNT_NS::AsNil<TStm>()), _flow(0), _fsize(0)
     {}
 
     ByteStreamReader(TStm const& stm, size_t low, size_t size)

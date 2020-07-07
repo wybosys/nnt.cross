@@ -22,7 +22,7 @@ HttpConnector &HttpConnector::setargs(args_type const &args) {
 
 HttpConnector::arg_type const &HttpConnector::getarg(string const &key) {
     auto fnd = _reqargs.find(key);
-    return fnd != _reqargs.end() ? fnd->second : ::NNT_NS::Nil<arg_type>();
+    return fnd != _reqargs.end() ? fnd->second : ::NNT_NS::AsNil<arg_type>();
 }
 
 bool HttpConnector::hasarg(string const &key) {
@@ -44,7 +44,7 @@ HttpConnector &HttpConnector::setheaders(args_type const &headers) {
 
 HttpConnector::arg_type const &HttpConnector::getheader(string const &key) {
     auto fnd = _reqheaders.find(key);
-    return fnd != _reqheaders.end() ? fnd->second : ::NNT_NS::Nil<arg_type>();
+    return fnd != _reqheaders.end() ? fnd->second : ::NNT_NS::AsNil<arg_type>();
 }
 
 bool HttpConnector::hasheader(string const &key) {
@@ -86,7 +86,7 @@ bool WebSocketConnector::write(string const &str) {
 }
 
 HttpConnector::body_stream_type DownloadConnector::body() const {
-    return body_stream_type(::NNT_NS::Nil<stream_type>());
+    return body_stream_type(::NNT_NS::AsNil<stream_type>());
 }
 
 CROSS_END
