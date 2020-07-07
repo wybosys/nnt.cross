@@ -18,7 +18,7 @@
 #include <WinUser.h>
 #endif
 
-#ifdef NNT_UNIXLIKE
+#if defined(NNT_UNIXLIKE) && !defined(NNT_DARWIN)
   #include <unistd.h>
   #include <sys/epoll.h>
   #include <sys/timerfd.h>
@@ -435,7 +435,7 @@ void Timer::CancelInterval(timer_t tmr)
 
 #endif
 
-#ifdef NNT_UNIXLIKE
+#if defined(NNT_UNIXLIKE) && !defined(NNT_DARWIN)
 
 class TimerThread
 	: public Thread

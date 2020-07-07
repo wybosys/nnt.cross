@@ -71,7 +71,7 @@ void set_thread_name(string const& name)
 
 #endif
 
-#ifdef NNT_UNIXLIKE
+#if defined(NNT_UNIXLIKE) && !defined(NNT_DARWIN)
 
 pid_t get_process_id()
 {

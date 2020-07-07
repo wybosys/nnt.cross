@@ -182,7 +182,20 @@ public:                                     \
 #define NNT_ANDROID
 #define NNT_MOBILE
 #endif
-
+        
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#ifdef __OBJC__
+#import <CoreFoundation/CoreFoundation.h>
+#import <Foundation/Foundation.h>
+#endif
+#define NNT_DARWIN
+#if TARGET_OS_MAC
+#else
+#define NNT_MOBILE
+#endif
+#endif
+        
 #if !defined(NNT_WINDOWS)
 #define NNT_UNIXLIKE
 #endif
@@ -247,7 +260,7 @@ using ::std::string;
 typedef ::std::vector<string> strings;
 
 template<typename T>
-static T const& Nil()
+static T const& AsNil()
 {
 	static const T __s;
 	return __s;

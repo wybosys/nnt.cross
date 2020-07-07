@@ -14,6 +14,20 @@
 		16A20E3A24B473AA00706A78 /* str.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3624B473AA00706A78 /* str.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E4924B476A300706A78 /* cross.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E4724B476A300706A78 /* cross.cpp */; };
 		16A20E4A24B476A300706A78 /* cross.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E4824B476A300706A78 /* cross.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16A20E5024B4784100706A78 /* swift-bridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E4F24B4784100706A78 /* swift-bridge.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16A20E5324B47AC700706A78 /* threads.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5124B47AC700706A78 /* threads.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16A20E5424B47AC700706A78 /* threads.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E5224B47AC700706A78 /* threads.cpp */; };
+		16A20E5924B47B1A00706A78 /* sys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E5524B47B1A00706A78 /* sys.cpp */; };
+		16A20E5A24B47B1A00706A78 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E5624B47B1A00706A78 /* timer.cpp */; };
+		16A20E5B24B47B1A00706A78 /* sys.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5724B47B1A00706A78 /* sys.hpp */; };
+		16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5824B47B1A00706A78 /* timer.hpp */; };
+		16A20E5E24B47BEB00706A78 /* sys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E5D24B47BEA00706A78 /* sys.mm */; };
+		16A20E6124B482B400706A78 /* stringbuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5F24B482B300706A78 /* stringbuilder.hpp */; };
+		16A20E6224B482B400706A78 /* timer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E6024B482B400706A78 /* timer.mm */; };
+		16A20E6524B4831600706A78 /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E6324B4831500706A78 /* datetime.cpp */; };
+		16A20E6624B4831600706A78 /* datetime.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E6424B4831600706A78 /* datetime.hpp */; };
+		16A20E6924B4833300706A78 /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E6724B4833300706A78 /* logger.cpp */; };
+		16A20E6A24B4833300706A78 /* logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E6824B4833300706A78 /* logger.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +40,20 @@
 		16A20E3624B473AA00706A78 /* str.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = str.hpp; path = ../../cross/str.hpp; sourceTree = "<group>"; };
 		16A20E4724B476A300706A78 /* cross.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cross.cpp; path = ../../cross/cross.cpp; sourceTree = "<group>"; };
 		16A20E4824B476A300706A78 /* cross.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = cross.hpp; path = ../../cross/cross.hpp; sourceTree = "<group>"; };
+		16A20E4F24B4784100706A78 /* swift-bridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "swift-bridge.hpp"; path = "../../cross/swift-bridge.hpp"; sourceTree = "<group>"; };
+		16A20E5124B47AC700706A78 /* threads.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = threads.hpp; path = ../../cross/threads.hpp; sourceTree = "<group>"; };
+		16A20E5224B47AC700706A78 /* threads.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = threads.cpp; path = ../../cross/threads.cpp; sourceTree = "<group>"; };
+		16A20E5524B47B1A00706A78 /* sys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sys.cpp; path = ../../cross/sys.cpp; sourceTree = "<group>"; };
+		16A20E5624B47B1A00706A78 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../../cross/timer.cpp; sourceTree = "<group>"; };
+		16A20E5724B47B1A00706A78 /* sys.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = sys.hpp; path = ../../cross/sys.hpp; sourceTree = "<group>"; };
+		16A20E5824B47B1A00706A78 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../../cross/timer.hpp; sourceTree = "<group>"; };
+		16A20E5D24B47BEA00706A78 /* sys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = sys.mm; path = ../../cross/sys.mm; sourceTree = "<group>"; };
+		16A20E5F24B482B300706A78 /* stringbuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = stringbuilder.hpp; path = ../../cross/stringbuilder.hpp; sourceTree = "<group>"; };
+		16A20E6024B482B400706A78 /* timer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = timer.mm; path = ../../cross/timer.mm; sourceTree = "<group>"; };
+		16A20E6324B4831500706A78 /* datetime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datetime.cpp; path = ../../cross/datetime.cpp; sourceTree = "<group>"; };
+		16A20E6424B4831600706A78 /* datetime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = datetime.hpp; path = ../../cross/datetime.hpp; sourceTree = "<group>"; };
+		16A20E6724B4833300706A78 /* logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logger.cpp; path = ../../cross/logger.cpp; sourceTree = "<group>"; };
+		16A20E6824B4833300706A78 /* logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = logger.hpp; path = ../../cross/logger.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +96,20 @@
 		16A20E3224B4737F00706A78 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				16A20E6724B4833300706A78 /* logger.cpp */,
+				16A20E6824B4833300706A78 /* logger.hpp */,
+				16A20E6324B4831500706A78 /* datetime.cpp */,
+				16A20E6424B4831600706A78 /* datetime.hpp */,
+				16A20E5F24B482B300706A78 /* stringbuilder.hpp */,
+				16A20E5D24B47BEA00706A78 /* sys.mm */,
+				16A20E5524B47B1A00706A78 /* sys.cpp */,
+				16A20E5724B47B1A00706A78 /* sys.hpp */,
+				16A20E6024B482B400706A78 /* timer.mm */,
+				16A20E5624B47B1A00706A78 /* timer.cpp */,
+				16A20E5824B47B1A00706A78 /* timer.hpp */,
+				16A20E5224B47AC700706A78 /* threads.cpp */,
+				16A20E5124B47AC700706A78 /* threads.hpp */,
+				16A20E4F24B4784100706A78 /* swift-bridge.hpp */,
 				16A20E4724B476A300706A78 /* cross.cpp */,
 				16A20E4824B476A300706A78 /* cross.hpp */,
 				16A20E3424B473AA00706A78 /* com++.hpp */,
@@ -87,9 +129,16 @@
 			files = (
 				16A20E3824B473AA00706A78 /* com++.hpp in Headers */,
 				16A20E3A24B473AA00706A78 /* str.hpp in Headers */,
+				16A20E5024B4784100706A78 /* swift-bridge.hpp in Headers */,
+				16A20E6124B482B400706A78 /* stringbuilder.hpp in Headers */,
+				16A20E6A24B4833300706A78 /* logger.hpp in Headers */,
 				16A20E3724B473AA00706A78 /* macro.hpp in Headers */,
+				16A20E6624B4831600706A78 /* datetime.hpp in Headers */,
+				16A20E5B24B47B1A00706A78 /* sys.hpp in Headers */,
 				16A20E4A24B476A300706A78 /* cross.hpp in Headers */,
+				16A20E5324B47AC700706A78 /* threads.hpp in Headers */,
 				161D68FE24B426AC007D7629 /* cross_macos.h in Headers */,
+				16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,8 +210,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16A20E5424B47AC700706A78 /* threads.cpp in Sources */,
+				16A20E5A24B47B1A00706A78 /* timer.cpp in Sources */,
+				16A20E6524B4831600706A78 /* datetime.cpp in Sources */,
+				16A20E6924B4833300706A78 /* logger.cpp in Sources */,
+				16A20E6224B482B400706A78 /* timer.mm in Sources */,
 				16A20E4924B476A300706A78 /* cross.cpp in Sources */,
+				16A20E5E24B47BEB00706A78 /* sys.mm in Sources */,
 				16A20E3924B473AA00706A78 /* str.cpp in Sources */,
+				16A20E5924B47B1A00706A78 /* sys.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
