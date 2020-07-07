@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		161D691124B426D8007D7629 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161D691024B426D8007D7629 /* main.swift */; };
+		16A20E2E24B4487700706A78 /* cross_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A20E2D24B4487700706A78 /* cross_macos.framework */; };
+		16A20E2F24B4487700706A78 /* cross_macos.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16A20E2D24B4487700706A78 /* cross_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -20,11 +22,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		16A20E3024B4487700706A78 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				16A20E2F24B4487700706A78 /* cross_macos.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		161D690D24B426D8007D7629 /* test-macos */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "test-macos"; sourceTree = BUILT_PRODUCTS_DIR; };
 		161D691024B426D8007D7629 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		16A20E2D24B4487700706A78 /* cross_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16A20E2E24B4487700706A78 /* cross_macos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +58,7 @@
 			children = (
 				161D690F24B426D8007D7629 /* test-macos */,
 				161D690E24B426D8007D7629 /* Products */,
+				16A20E2C24B4487700706A78 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +78,14 @@
 			path = "test-macos";
 			sourceTree = "<group>";
 		};
+		16A20E2C24B4487700706A78 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				16A20E2D24B4487700706A78 /* cross_macos.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -72,6 +96,7 @@
 				161D690924B426D8007D7629 /* Sources */,
 				161D690A24B426D8007D7629 /* Frameworks */,
 				161D690B24B426D8007D7629 /* CopyFiles */,
+				16A20E3024B4487700706A78 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
