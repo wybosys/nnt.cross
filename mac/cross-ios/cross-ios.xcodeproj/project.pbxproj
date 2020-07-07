@@ -11,7 +11,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		161D692124B42713007D7629 /* cross_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = cross_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		161D692124B42713007D7629 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		161D692424B42713007D7629 /* cross_ios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cross_ios.h; sourceTree = "<group>"; };
 		161D692524B42713007D7629 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -38,7 +38,7 @@
 		161D692224B42713007D7629 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				161D692124B42713007D7629 /* cross_ios.framework */,
+				161D692124B42713007D7629 /* cross.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,9 +66,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		161D692024B42713007D7629 /* cross-ios */ = {
+		161D692024B42713007D7629 /* cross */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 161D692924B42713007D7629 /* Build configuration list for PBXNativeTarget "cross-ios" */;
+			buildConfigurationList = 161D692924B42713007D7629 /* Build configuration list for PBXNativeTarget "cross" */;
 			buildPhases = (
 				161D691C24B42713007D7629 /* Headers */,
 				161D691D24B42713007D7629 /* Sources */,
@@ -79,9 +79,9 @@
 			);
 			dependencies = (
 			);
-			name = "cross-ios";
+			name = cross;
 			productName = "cross-ios";
-			productReference = 161D692124B42713007D7629 /* cross_ios.framework */;
+			productReference = 161D692124B42713007D7629 /* cross.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -111,7 +111,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				161D692024B42713007D7629 /* cross-ios */,
+				161D692024B42713007D7629 /* cross */,
 			);
 		};
 /* End PBXProject section */
@@ -272,7 +272,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nnt.cross-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -295,7 +295,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nnt.cross-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -315,7 +315,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		161D692924B42713007D7629 /* Build configuration list for PBXNativeTarget "cross-ios" */ = {
+		161D692924B42713007D7629 /* Build configuration list for PBXNativeTarget "cross" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				161D692A24B42713007D7629 /* Debug */,

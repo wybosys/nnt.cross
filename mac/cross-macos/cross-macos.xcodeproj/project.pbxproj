@@ -7,13 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		161D68FE24B426AC007D7629 /* cross_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = 161D68FC24B426AC007D7629 /* cross_macos.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		161D68FE24B426AC007D7629 /* cross_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = 161D68FC24B426AC007D7629 /* cross_macos.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		16A20E3724B473AA00706A78 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3324B473AA00706A78 /* macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16A20E3824B473AA00706A78 /* com++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3424B473AA00706A78 /* com++.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16A20E3924B473AA00706A78 /* str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E3524B473AA00706A78 /* str.cpp */; };
+		16A20E3A24B473AA00706A78 /* str.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3624B473AA00706A78 /* str.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16A20E4924B476A300706A78 /* cross.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E4724B476A300706A78 /* cross.cpp */; };
+		16A20E4A24B476A300706A78 /* cross.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E4824B476A300706A78 /* cross.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		161D68F924B426AC007D7629 /* cross_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = cross_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		161D68F924B426AC007D7629 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		161D68FC24B426AC007D7629 /* cross_macos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cross_macos.h; sourceTree = "<group>"; };
 		161D68FD24B426AC007D7629 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16A20E3324B473AA00706A78 /* macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macro.hpp; path = ../../cross/macro.hpp; sourceTree = "<group>"; };
+		16A20E3424B473AA00706A78 /* com++.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "com++.hpp"; path = "../../cross/com++.hpp"; sourceTree = "<group>"; };
+		16A20E3524B473AA00706A78 /* str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = str.cpp; path = ../../cross/str.cpp; sourceTree = "<group>"; };
+		16A20E3624B473AA00706A78 /* str.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = str.hpp; path = ../../cross/str.hpp; sourceTree = "<group>"; };
+		16A20E4724B476A300706A78 /* cross.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cross.cpp; path = ../../cross/cross.cpp; sourceTree = "<group>"; };
+		16A20E4824B476A300706A78 /* cross.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = cross.hpp; path = ../../cross/cross.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +42,7 @@
 		161D68EF24B426AB007D7629 = {
 			isa = PBXGroup;
 			children = (
+				16A20E3224B4737F00706A78 /* src */,
 				161D68FB24B426AC007D7629 /* cross-macos */,
 				161D68FA24B426AC007D7629 /* Products */,
 			);
@@ -38,7 +51,7 @@
 		161D68FA24B426AC007D7629 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				161D68F924B426AC007D7629 /* cross_macos.framework */,
+				161D68F924B426AC007D7629 /* cross.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -52,6 +65,19 @@
 			path = "cross-macos";
 			sourceTree = "<group>";
 		};
+		16A20E3224B4737F00706A78 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				16A20E4724B476A300706A78 /* cross.cpp */,
+				16A20E4824B476A300706A78 /* cross.hpp */,
+				16A20E3424B473AA00706A78 /* com++.hpp */,
+				16A20E3324B473AA00706A78 /* macro.hpp */,
+				16A20E3524B473AA00706A78 /* str.cpp */,
+				16A20E3624B473AA00706A78 /* str.hpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -59,6 +85,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16A20E3824B473AA00706A78 /* com++.hpp in Headers */,
+				16A20E3A24B473AA00706A78 /* str.hpp in Headers */,
+				16A20E3724B473AA00706A78 /* macro.hpp in Headers */,
+				16A20E4A24B476A300706A78 /* cross.hpp in Headers */,
 				161D68FE24B426AC007D7629 /* cross_macos.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -66,9 +96,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		161D68F824B426AC007D7629 /* cross-macos */ = {
+		161D68F824B426AC007D7629 /* cross */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 161D690124B426AC007D7629 /* Build configuration list for PBXNativeTarget "cross-macos" */;
+			buildConfigurationList = 161D690124B426AC007D7629 /* Build configuration list for PBXNativeTarget "cross" */;
 			buildPhases = (
 				161D68F424B426AC007D7629 /* Headers */,
 				161D68F524B426AC007D7629 /* Sources */,
@@ -79,9 +109,9 @@
 			);
 			dependencies = (
 			);
-			name = "cross-macos";
+			name = cross;
 			productName = "cross-macos";
-			productReference = 161D68F924B426AC007D7629 /* cross_macos.framework */;
+			productReference = 161D68F924B426AC007D7629 /* cross.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -111,7 +141,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				161D68F824B426AC007D7629 /* cross-macos */,
+				161D68F824B426AC007D7629 /* cross */,
 			);
 		};
 /* End PBXProject section */
@@ -131,6 +161,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16A20E4924B476A300706A78 /* cross.cpp in Sources */,
+				16A20E3924B473AA00706A78 /* str.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +304,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nnt.cross-macos";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -295,7 +327,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nnt.cross-macos";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -314,7 +346,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		161D690124B426AC007D7629 /* Build configuration list for PBXNativeTarget "cross-macos" */ = {
+		161D690124B426AC007D7629 /* Build configuration list for PBXNativeTarget "cross" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				161D690224B426AC007D7629 /* Debug */,

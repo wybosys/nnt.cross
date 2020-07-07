@@ -13,7 +13,7 @@
 		161D693F24B42741007D7629 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 161D693E24B42741007D7629 /* Assets.xcassets */; };
 		161D694224B42741007D7629 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 161D694124B42741007D7629 /* Preview Assets.xcassets */; };
 		161D694524B42741007D7629 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 161D694324B42741007D7629 /* LaunchScreen.storyboard */; };
-		16A20E2B24B4486100706A78 /* cross_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A20E2A24B4486100706A78 /* cross_ios.framework */; };
+		16A20E4C24B4771A00706A78 /* cross.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A20E4B24B4771A00706A78 /* cross.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +26,7 @@
 		161D694424B42741007D7629 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		161D694624B42741007D7629 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16A20E2A24B4486100706A78 /* cross_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		16A20E4B24B4771A00706A78 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16A20E2B24B4486100706A78 /* cross_ios.framework in Frameworks */,
+				16A20E4C24B4771A00706A78 /* cross.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +83,7 @@
 		16A20E2924B4486000706A78 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16A20E4B24B4771A00706A78 /* cross.framework */,
 				16A20E2A24B4486100706A78 /* cross_ios.framework */,
 			);
 			name = Frameworks;
@@ -305,7 +307,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nnt.cross.test-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -325,7 +327,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nnt.cross.test-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
