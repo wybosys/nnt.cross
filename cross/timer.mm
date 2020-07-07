@@ -45,6 +45,7 @@ public:
             for (auto &e:*_delays) {
                 [loop addTimer:e forMode:NSDefaultRunLoopMode];
             }
+            // 只存在于线程延迟启动，一次性处理
             _delays = nullptr;
         }
         
