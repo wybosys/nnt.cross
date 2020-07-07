@@ -43,7 +43,7 @@
 		16A20E3F24B4753B00706A78 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		16A20E4024B4753B00706A78 /* test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = test.mm; sourceTree = "<group>"; };
 		16A20E4324B4762500706A78 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		16A20E4D24B4774000706A78 /* test-macos-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "test-macos-Bridging-Header.h"; sourceTree = "<group>"; };
+		16A20E4E24B477CF00706A78 /* bridging-header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "bridging-header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +78,7 @@
 		161D690F24B426D8007D7629 /* test-macos */ = {
 			isa = PBXGroup;
 			children = (
-				16A20E4D24B4774000706A78 /* test-macos-Bridging-Header.h */,
+				16A20E4E24B477CF00706A78 /* bridging-header.h */,
 				16A20E3F24B4753B00706A78 /* test.h */,
 				16A20E4024B4753B00706A78 /* test.mm */,
 				161D691024B426D8007D7629 /* main.swift */,
@@ -287,7 +287,7 @@
 					"@loader_path/../Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "test-macos/test-macos-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "test-macos/bridging-header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -304,7 +304,7 @@
 					"@loader_path/../Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "test-macos/test-macos-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "test-macos/bridging-header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
