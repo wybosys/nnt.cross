@@ -13,7 +13,8 @@ class NSTimerThread
 public:
     
     NSTimerThread()
-    : Thread("n2c.timer")
+    : Thread("n2c.timer"),
+    _delays(make_shared<delay_timers>())
     {
         repeat = FOREVER;
     }
@@ -27,11 +28,10 @@ public:
     
     void run(NSTimer *tmr)
     {
-        NNT_AUTOGUARD(_mtx_loop);
         if (loop) {
             [loop addTimer:tmr forMode:NSDefaultRunLoopMode];
         } else {
-            _delay_timers.emplace_back(tmr);
+            _delays->emplace_back(tmr);
         }
     }
     
@@ -39,13 +39,13 @@ public:
     {
         if (!loop)
         {
-            NNT_AUTOGUARD(_mtx_loop);
+            NNT_AUTOGUARD(mtx);
             loop = [NSRunLoop currentRunLoop];
             
-            for (auto &e:_delay_timers) {
+            for (auto &e:*_delays) {
                 [loop addTimer:e forMode:NSDefaultRunLoopMode];
             }
-            _delay_timers.clear();
+            _delays = nullptr;
         }
         
         [loop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
@@ -53,8 +53,8 @@ public:
     
 private:
     
-    ::std::mutex _mtx_loop;
-    ::std::vector<NSTimer*> _delay_timers;
+    typedef ::std::vector<NSTimer*> delay_timers;
+    shared_ptr<delay_timers> _delays; // 定时器线程启动成功前加入的timer
     
 };
 
