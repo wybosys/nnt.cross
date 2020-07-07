@@ -19,15 +19,15 @@
 		16A20E5424B47AC700706A78 /* threads.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E5224B47AC700706A78 /* threads.cpp */; };
 		16A20E5924B47B1A00706A78 /* sys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E5524B47B1A00706A78 /* sys.cpp */; };
 		16A20E5A24B47B1A00706A78 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E5624B47B1A00706A78 /* timer.cpp */; };
-		16A20E5B24B47B1A00706A78 /* sys.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5724B47B1A00706A78 /* sys.hpp */; };
-		16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5824B47B1A00706A78 /* timer.hpp */; };
+		16A20E5B24B47B1A00706A78 /* sys.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5724B47B1A00706A78 /* sys.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5824B47B1A00706A78 /* timer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E5E24B47BEB00706A78 /* sys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E5D24B47BEA00706A78 /* sys.mm */; };
-		16A20E6124B482B400706A78 /* stringbuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5F24B482B300706A78 /* stringbuilder.hpp */; };
+		16A20E6124B482B400706A78 /* stringbuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E5F24B482B300706A78 /* stringbuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E6224B482B400706A78 /* timer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E6024B482B400706A78 /* timer.mm */; };
 		16A20E6524B4831600706A78 /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E6324B4831500706A78 /* datetime.cpp */; };
-		16A20E6624B4831600706A78 /* datetime.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E6424B4831600706A78 /* datetime.hpp */; };
+		16A20E6624B4831600706A78 /* datetime.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E6424B4831600706A78 /* datetime.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E6924B4833300706A78 /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E6724B4833300706A78 /* logger.cpp */; };
-		16A20E6A24B4833300706A78 /* logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E6824B4833300706A78 /* logger.hpp */; };
+		16A20E6A24B4833300706A78 /* logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E6824B4833300706A78 /* logger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -130,15 +130,15 @@
 				16A20E3824B473AA00706A78 /* com++.hpp in Headers */,
 				16A20E3A24B473AA00706A78 /* str.hpp in Headers */,
 				16A20E5024B4784100706A78 /* swift-bridge.hpp in Headers */,
+				16A20E3724B473AA00706A78 /* macro.hpp in Headers */,
 				16A20E6124B482B400706A78 /* stringbuilder.hpp in Headers */,
 				16A20E6A24B4833300706A78 /* logger.hpp in Headers */,
-				16A20E3724B473AA00706A78 /* macro.hpp in Headers */,
 				16A20E6624B4831600706A78 /* datetime.hpp in Headers */,
 				16A20E5B24B47B1A00706A78 /* sys.hpp in Headers */,
+				16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */,
 				16A20E4A24B476A300706A78 /* cross.hpp in Headers */,
 				16A20E5324B47AC700706A78 /* threads.hpp in Headers */,
 				161D68FE24B426AC007D7629 /* cross_macos.h in Headers */,
-				16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
