@@ -61,6 +61,8 @@ string Logger::format(LogLevel lv, string const& msg)
 	return (prefix.empty() ? "" : prefix + ": ") + msg;
 }
 
+#if !defined(NNT_DARWIN)
+
 void Logger::log(LogLevel lv, string const& msg)
 {
 	auto str = format(lv, msg);
@@ -90,5 +92,7 @@ void Logger::log(LogLevel lv, string const& msg)
 		break;
 	}
 }
+
+#endif
 
 CROSS_END
