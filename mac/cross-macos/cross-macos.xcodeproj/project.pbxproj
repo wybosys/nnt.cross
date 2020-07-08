@@ -60,7 +60,26 @@
 		16A20E6624B4831600706A78 /* datetime.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E6424B4831600706A78 /* datetime.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E6924B4833300706A78 /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E6724B4833300706A78 /* logger.cpp */; };
 		16A20E6A24B4833300706A78 /* logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E6824B4833300706A78 /* logger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16F19D9E24B5E543001011C8 /* connector_objc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16F19D9C24B5E542001011C8 /* connector_objc.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		16F19D9F24B5E543001011C8 /* connector_objc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16F19D9D24B5E542001011C8 /* connector_objc.mm */; };
+		16F19DA124B5EDF3001011C8 /* url.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16F19DA024B5EDF2001011C8 /* url.mm */; };
+		16F19DA524B5F319001011C8 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F19DA424B5F319001011C8 /* AFNetworking.framework */; };
+		16F19DA624B5F319001011C8 /* AFNetworking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16F19DA424B5F319001011C8 /* AFNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		16F19DA724B5F319001011C8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				16F19DA624B5F319001011C8 /* AFNetworking.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		161D68F924B426AC007D7629 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +138,10 @@
 		16A20E6424B4831600706A78 /* datetime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = datetime.hpp; path = ../../cross/datetime.hpp; sourceTree = "<group>"; };
 		16A20E6724B4833300706A78 /* logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logger.cpp; path = ../../cross/logger.cpp; sourceTree = "<group>"; };
 		16A20E6824B4833300706A78 /* logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = logger.hpp; path = ../../cross/logger.hpp; sourceTree = "<group>"; };
+		16F19D9C24B5E542001011C8 /* connector_objc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = connector_objc.hpp; path = ../../cross/connector_objc.hpp; sourceTree = "<group>"; };
+		16F19D9D24B5E542001011C8 /* connector_objc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = connector_objc.mm; path = ../../cross/connector_objc.mm; sourceTree = "<group>"; };
+		16F19DA024B5EDF2001011C8 /* url.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = url.mm; path = ../../cross/url.mm; sourceTree = "<group>"; };
+		16F19DA424B5F319001011C8 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				168C78F724B5D194006099C4 /* libcurl.tbd in Frameworks */,
+				16F19DA524B5F319001011C8 /* AFNetworking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +188,7 @@
 		168C78BD24B5704B006099C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16F19DA424B5F319001011C8 /* AFNetworking.framework */,
 				168C78F224B5D0F7006099C4 /* libcurl.tbd */,
 				168C78BE24B5704B006099C4 /* CryptoKit.framework */,
 			);
@@ -187,6 +212,8 @@
 		16A20E3224B4737F00706A78 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				16F19D9C24B5E542001011C8 /* connector_objc.hpp */,
+				16F19D9D24B5E542001011C8 /* connector_objc.mm */,
 				168C78F424B5D121006099C4 /* connector_curl.cpp */,
 				168C78F324B5D121006099C4 /* connector_curl.hpp */,
 				168C78DF24B5C8A1006099C4 /* zip.cpp */,
@@ -204,6 +231,7 @@
 				168C78A424B56E8B006099C4 /* memory.hpp */,
 				168C78A024B56E8B006099C4 /* property.cpp */,
 				168C78AA24B56E8C006099C4 /* property.hpp */,
+				16F19DA024B5EDF2001011C8 /* url.mm */,
 				168C78A324B56E8B006099C4 /* url.cpp */,
 				168C78AB24B56E8C006099C4 /* url.hpp */,
 				168C789B24B56DD8006099C4 /* connector.cpp */,
@@ -263,6 +291,7 @@
 				16A20E6A24B4833300706A78 /* logger.hpp in Headers */,
 				168C78E224B5C8A1006099C4 /* zip.hpp in Headers */,
 				168C78F524B5D121006099C4 /* connector_curl.hpp in Headers */,
+				16F19D9E24B5E543001011C8 /* connector_objc.hpp in Headers */,
 				16A20E6624B4831600706A78 /* datetime.hpp in Headers */,
 				16A20E5B24B47B1A00706A78 /* sys.hpp in Headers */,
 				16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */,
@@ -283,6 +312,7 @@
 				161D68F524B426AC007D7629 /* Sources */,
 				161D68F624B426AC007D7629 /* Frameworks */,
 				161D68F724B426AC007D7629 /* Resources */,
+				16F19DA724B5F319001011C8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -341,6 +371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16A20E5424B47AC700706A78 /* threads.cpp in Sources */,
+				16F19D9F24B5E543001011C8 /* connector_objc.mm in Sources */,
 				168C78DB24B5AF69006099C4 /* xml.cpp in Sources */,
 				168C789D24B56DD8006099C4 /* connector.cpp in Sources */,
 				164E588B24B56AD90028355F /* logger.mm in Sources */,
@@ -350,6 +381,7 @@
 				168C78C124B571C9006099C4 /* digest.mm in Sources */,
 				16A20E6224B482B400706A78 /* timer.mm in Sources */,
 				168C78E124B5C8A1006099C4 /* zip.cpp in Sources */,
+				16F19DA124B5EDF3001011C8 /* url.mm in Sources */,
 				168C78F624B5D121006099C4 /* connector_curl.cpp in Sources */,
 				168C78B424B56E8C006099C4 /* digest.cpp in Sources */,
 				168C789924B56D48006099C4 /* fs.cpp in Sources */,

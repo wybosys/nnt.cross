@@ -94,7 +94,7 @@ CurlHttpConnector::CurlHttpConnector()
 
 CurlHttpConnector::~CurlHttpConnector()
 {
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 string escape(CURL* h, HttpConnector::arg_type const& arg)
@@ -400,7 +400,7 @@ CurlDownloadConnector::CurlDownloadConnector()
 
 CurlDownloadConnector::~CurlDownloadConnector()
 {
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 void CurlDownloadConnector::close()

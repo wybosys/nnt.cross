@@ -10,7 +10,7 @@ CROSS_BEGIN
 typedef tinyxml2::XMLDocument XmlObject;
 #endif
 
-#ifdef NNT_DARWIN
+#if defined(NNT_DARWIN) && !defined(HAS_XMLOBJECT)
 #define HAS_XMLOBJECT
 class XmlObject {
 public:

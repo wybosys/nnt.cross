@@ -5,6 +5,8 @@
 
 CROSS_BEGIN
 
+#if TARGET_OS_OSX
+
 string xml_encode(XmlObject const &xo)
 {
     auto d = [(NSXMLDocument*)xo.obj XMLDataWithOptions:NSXMLNodePrettyPrint];
@@ -135,5 +137,7 @@ shared_ptr<Property> toproperty(XmlObject const &xo)
     toproperty(r, doc.rootElement);
     return r;
 }
+
+#endif
 
 CROSS_END

@@ -13,8 +13,24 @@
 		161D693F24B42741007D7629 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 161D693E24B42741007D7629 /* Assets.xcassets */; };
 		161D694224B42741007D7629 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 161D694124B42741007D7629 /* Preview Assets.xcassets */; };
 		161D694524B42741007D7629 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 161D694324B42741007D7629 /* LaunchScreen.storyboard */; };
-		168C78D424B5897D006099C4 /* cross.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168C78D324B5897D006099C4 /* cross.framework */; };
+		168C796A24B5E3BF006099C4 /* test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168C796824B5E3BF006099C4 /* test.mm */; };
+		16F19DAE24B5FE95001011C8 /* cross.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F19DAD24B5FE95001011C8 /* cross.framework */; };
+		16F19DAF24B5FE95001011C8 /* cross.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16F19DAD24B5FE95001011C8 /* cross.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		16F19DB024B5FE95001011C8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				16F19DAF24B5FE95001011C8 /* cross.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		161D693524B4273A007D7629 /* test-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "test-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -28,8 +44,11 @@
 		168C78C424B5759B006099C4 /* cross_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C78D124B58906006099C4 /* cocos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cocos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C78D324B5897D006099C4 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		168C796824B5E3BF006099C4 /* test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = test.mm; path = ../../test.mm; sourceTree = "<group>"; };
+		168C796924B5E3BF006099C4 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test.h; path = ../../test.h; sourceTree = "<group>"; };
 		16A20E2A24B4486100706A78 /* cross_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		16A20E4B24B4771A00706A78 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		16F19DAD24B5FE95001011C8 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				168C78D424B5897D006099C4 /* cross.framework in Frameworks */,
+				16F19DAE24B5FE95001011C8 /* cross.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +83,8 @@
 		161D693724B4273A007D7629 /* test-ios */ = {
 			isa = PBXGroup;
 			children = (
+				168C796924B5E3BF006099C4 /* test.h */,
+				168C796824B5E3BF006099C4 /* test.mm */,
 				161D693824B4273A007D7629 /* AppDelegate.swift */,
 				161D693A24B4273A007D7629 /* SceneDelegate.swift */,
 				161D693C24B4273B007D7629 /* ContentView.swift */,
@@ -86,6 +107,7 @@
 		16A20E2924B4486000706A78 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16F19DAD24B5FE95001011C8 /* cross.framework */,
 				168C78D324B5897D006099C4 /* cross.framework */,
 				168C78D124B58906006099C4 /* cocos.framework */,
 				168C78C424B5759B006099C4 /* cross_ios.framework */,
@@ -105,6 +127,7 @@
 				161D693124B4273A007D7629 /* Sources */,
 				161D693224B4273A007D7629 /* Frameworks */,
 				161D693324B4273A007D7629 /* Resources */,
+				16F19DB024B5FE95001011C8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -127,6 +150,7 @@
 				TargetAttributes = {
 					161D693424B4273A007D7629 = {
 						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
 					};
 				};
 			};
@@ -169,6 +193,7 @@
 				161D693924B4273A007D7629 /* AppDelegate.swift in Sources */,
 				161D693B24B4273B007D7629 /* SceneDelegate.swift in Sources */,
 				161D693D24B4273B007D7629 /* ContentView.swift in Sources */,
+				168C796A24B5E3BF006099C4 /* test.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,10 +329,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"test-ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 3RC2X964CN;
 				ENABLE_PREVIEWS = YES;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				INFOPLIST_FILE = "test-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -315,6 +344,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/../test.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -324,10 +355,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"test-ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 3RC2X964CN;
 				ENABLE_PREVIEWS = YES;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				INFOPLIST_FILE = "test-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -335,6 +370,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/../test.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

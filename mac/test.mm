@@ -13,7 +13,17 @@
 #import <cross/url.hpp>
 #import <cross/digest.hpp>
 #import <cross/zip.hpp>
+#import <cross/tinyxml2.h>
+
+#if TARGET_OS_MACOS
 #import <cross/connector_curl.hpp>
+#define HTTPCONNECTOR CurlHttpConnector
+#define DOWNLOADCONNECTOR CurlDownloadConnector
+#else
+#import <cross/connector_objc.hpp>
+#define HTTPCONNECTOR ObjcHttpConnector
+#define DOWNLOADCONNECTOR ObjcDownloadConnector
+#endif
 
 USE_NNT;
 USE_CROSS;
@@ -176,7 +186,7 @@ void test_zip()
 
 void test_rest()
 {
-    CurlHttpConnector cnt;
+    HTTPCONNECTOR cnt;
     cnt.url = "https://cn.bing.com/search";
     cnt.method = HttpConnector::Method::POST;
     cnt.setarg("q", "abc");
@@ -197,7 +207,7 @@ void test_download()
     dis_download.start();
     
     // 阻塞模式
-    CurlDownloadConnector cnt;
+    DOWNLOADCONNECTOR cnt;
     cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
     cnt.target = "sample-0.zip";
     if (cnt.send())
@@ -213,7 +223,7 @@ void test_download()
     // 非阻塞模式
     dis_download.add([=](ITask&)
                      {
-        CurlDownloadConnector cnt;
+        DOWNLOADCONNECTOR cnt;
         cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
         cnt.target = "sample-0.zip";
         if (cnt.send())

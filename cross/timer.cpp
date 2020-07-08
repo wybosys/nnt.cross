@@ -52,7 +52,7 @@ TimeCounter::TimeCounter()
 
 TimeCounter::~TimeCounter()
 {
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 void TimeCounter::start()
@@ -197,7 +197,7 @@ CoTimers::~CoTimers() noexcept
 	// 等待退出
 	stop();
 
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t&& cb)

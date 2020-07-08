@@ -43,4 +43,15 @@ extern NNT_API string build_querystring(Url::args_type const &, fn_url_encoder =
 
 CROSS_END
 
+#ifdef NNT_OBJC
+
+@interface NSString (cross)
+
+- (NSString *)escape;
+- (NSString *)unescape;
+
+@end
+
+#endif
+
 #endif

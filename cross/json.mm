@@ -125,7 +125,7 @@ shared_ptr<Property> toproperty(JsonObject const &jo) {
         }
     }
     else {
-        Logger::Critical(stringbuilder() << "处理Json遇到不支持的类型 " << jo.obj.className.UTF8String);
+        Logger::Critical(stringbuilder() << "处理Json遇到不支持的类型 " << object_getClassName(jo.obj));
     }
     
     return r;

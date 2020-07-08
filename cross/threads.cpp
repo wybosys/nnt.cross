@@ -74,7 +74,7 @@ MainThread::MainThread()
 
 MainThread::~MainThread()
 {
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 
 	// 清理
 	PreferredInvokeImpl = nullptr;
@@ -149,7 +149,7 @@ semaphore::semaphore()
 
 semaphore::~semaphore()
 {
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 void semaphore::notify()
@@ -218,7 +218,7 @@ Thread::~Thread()
 	// 等待安全退出
 	quit();
 
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 void Thread::wait() const
@@ -430,7 +430,7 @@ SingleTaskDispatcher::SingleTaskDispatcher()
 SingleTaskDispatcher::~SingleTaskDispatcher()
 {
 	d_ptr->stop();
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 bool SingleTaskDispatcher::add(task_type&& tsk)
@@ -600,7 +600,7 @@ FixedTaskDispatcher::FixedTaskDispatcher(size_t count)
 FixedTaskDispatcher::~FixedTaskDispatcher()
 {
 	d_ptr->stop();
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 bool FixedTaskDispatcher::add(task_type&& tsk)
@@ -774,7 +774,7 @@ QueuedTaskDispatcher::QueuedTaskDispatcher(size_t min, size_t max)
 QueuedTaskDispatcher::~QueuedTaskDispatcher()
 {
 	d_ptr->stop();
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 bool QueuedTaskDispatcher::add(task_type&& tsk)
@@ -880,7 +880,7 @@ _ThreadResourceProvider::_ThreadResourceProvider()
 _ThreadResourceProvider::~_ThreadResourceProvider()
 {
 	stop();
-	NNT_CLASS_DESTORY();
+	NNT_CLASS_DESTROY();
 }
 
 void _ThreadResourceProvider::start()

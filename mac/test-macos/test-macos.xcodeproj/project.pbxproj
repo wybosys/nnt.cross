@@ -10,7 +10,7 @@
 		161D691124B426D8007D7629 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161D691024B426D8007D7629 /* main.swift */; };
 		168C78D624B5898E006099C4 /* cross.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168C78D524B5898E006099C4 /* cross.framework */; };
 		168C78D724B5898E006099C4 /* cross.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 168C78D524B5898E006099C4 /* cross.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		16A20E4124B4753B00706A78 /* test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E4024B4753B00706A78 /* test.mm */; };
+		168C796724B5E363006099C4 /* test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168C796624B5E363006099C4 /* test.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,9 +42,9 @@
 		168C78C224B57594006099C4 /* cross_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C78CD24B588EC006099C4 /* cocos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cocos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C78D524B5898E006099C4 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		168C796524B5E363006099C4 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test.h; path = ../../test.h; sourceTree = "<group>"; };
+		168C796624B5E363006099C4 /* test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = test.mm; path = ../../test.mm; sourceTree = "<group>"; };
 		16A20E2D24B4487700706A78 /* cross_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		16A20E3F24B4753B00706A78 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
-		16A20E4024B4753B00706A78 /* test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = test.mm; sourceTree = "<group>"; };
 		16A20E4324B4762500706A78 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -80,8 +80,8 @@
 		161D690F24B426D8007D7629 /* test-macos */ = {
 			isa = PBXGroup;
 			children = (
-				16A20E3F24B4753B00706A78 /* test.h */,
-				16A20E4024B4753B00706A78 /* test.mm */,
+				168C796524B5E363006099C4 /* test.h */,
+				168C796624B5E363006099C4 /* test.mm */,
 				161D691024B426D8007D7629 /* main.swift */,
 			);
 			path = "test-macos";
@@ -160,7 +160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				161D691124B426D8007D7629 /* main.swift in Sources */,
-				16A20E4124B4753B00706A78 /* test.mm in Sources */,
+				168C796724B5E363006099C4 /* test.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,7 +294,7 @@
 					"@loader_path/../Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "test-macos/test.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/../test.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -314,7 +314,7 @@
 					"@loader_path/../Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "test-macos/test.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/../test.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

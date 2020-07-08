@@ -1,6 +1,6 @@
 #include "cross.hpp"
 
-#if !defined(NNT_DARWIN)
+#if !defined(NNT_DARWIN) || TARGET_OS_IOS
 #include <tinyxml2/tinyxml2.h>
 #endif
 
@@ -8,7 +8,7 @@
 
 CROSS_BEGIN
 
-#if !defined(NNT_DARWIN)
+#if !defined(NNT_DARWIN) || TARGET_OS_IOS
 
 using namespace tinyxml2;
 

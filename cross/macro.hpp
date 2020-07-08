@@ -50,7 +50,7 @@ private:                                              \
 
 #define NNT_CLASS_CONSTRUCT(...) \
     d_ptr = ::std::make_shared<private_class_type>(__VA_ARGS__);
-#define NNT_CLASS_DESTORY() \
+#define NNT_CLASS_DESTROY() \
     d_ptr = nullptr;
 
 #define NNT_SINGLETON_DECL(cls)             \
