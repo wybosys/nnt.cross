@@ -238,7 +238,10 @@ string dirname(string const &str) {
     if (ps.empty())
         return nstr;
     ps.pop_back();
-    return implode(ps, PATH_DELIMITER);
+    auto r = implode(ps, PATH_DELIMITER);
+    if (str[0] == '/') // 避免/根目录时因为explode传true导致头部丢失/
+        r = '/' + r;
+    return r;
 }
 
 bool mkdirs(string const &str) {
