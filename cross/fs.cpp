@@ -1,4 +1,4 @@
-﻿#include "cross.hpp"
+#include "cross.hpp"
 #include "fs.hpp"
 #include "str.hpp"
 #include <sstream>
@@ -218,8 +218,15 @@ shared_ptr<Stat> stat(string const &target) {
         return nullptr;
     auto r = make_shared<Stat>();
     r->size = st.st_size;
+    
+#if defined(NNT_DARWIN)
+    r->tm_created = st.st_ctimespec.tv_sec;
+    r->tm_modified = st.st_mtimespec.tv_sec;
+#else
     r->tm_created = st.st_ctim.tv_sec;
     r->tm_modified = st.st_mtim.tv_sec;
+#endif
+    
     return r;
 }
 
