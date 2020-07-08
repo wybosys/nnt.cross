@@ -13,6 +13,7 @@
 #import <cross/url.hpp>
 #import <cross/digest.hpp>
 #import <cross/zip.hpp>
+#import <cross/connector_curl.hpp>
 
 USE_NNT;
 USE_CROSS;
@@ -173,6 +174,60 @@ void test_zip()
     UNITTEST_CHECK_EQUAL(suc, true);
 }
 
+void test_rest()
+{
+    CurlHttpConnector cnt;
+    cnt.url = "https://cn.bing.com/search";
+    cnt.method = HttpConnector::Method::POST;
+    cnt.setarg("q", "abc");
+    UNITTEST_CHECK_EQUAL(cnt.send(), true);
+    cout << cnt.body().str() << endl;
+    for (auto& e : cnt.respheaders())
+    {
+        cout << e.first << ":" << e.second << endl;
+    }
+}
+
+NNT_HEAP_OBJECT_EXPRESS(FixedTaskDispatcher, dis_download, {
+    self.start();
+});
+
+void test_download()
+{
+    dis_download.start();
+    
+    // 阻塞模式
+    CurlDownloadConnector cnt;
+    cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
+    cnt.target = "sample-0.zip";
+    if (cnt.send())
+    {
+        size_t sz = stat(cnt.target)->size;
+        UNITTEST_CHECK_EQUAL(sz, 190567);
+    }
+    else
+    {
+        UNITTEST_CHECK_EQUAL(false, true);
+    }
+    
+    // 非阻塞模式
+    dis_download.add([=](ITask&)
+                     {
+        CurlDownloadConnector cnt;
+        cnt.url = "http://wybosys.com/github/datasets/icons/sample-0.zip";
+        cnt.target = "sample-0.zip";
+        if (cnt.send())
+        {
+            size_t sz = stat(cnt.target)->size;
+            UNITTEST_CHECK_EQUAL(sz, 190567);
+        }
+        else
+        {
+            UNITTEST_CHECK_EQUAL(false, true);
+        }
+    });
+}
+
 void test_task()
 {
     // 测试单线程任务池
@@ -264,6 +319,8 @@ void Test()
     test_time();
     test_md5();
     test_zip();
+    test_rest();
+    test_download();
     test_task();
     test_async_task();
     

@@ -102,7 +102,7 @@ string escape(CURL* h, HttpConnector::arg_type const& arg)
 	::std::ostringstream oss;
 	oss << arg;
 	auto str = oss.str();
-	char* res = curl_easy_escape(h, str.c_str(), str.length());
+	char* res = curl_easy_escape(h, str.c_str(), (int)str.length());
 	if (res)
 		str = res;
 	return str;
@@ -174,6 +174,7 @@ bool CurlHttpConnector::send() const
 
 		switch (method)
 		{
+        default:break;
 		case Method::POST:
 		{
 			_reqheaders[HEADER_CONTENT_TYPE] = make_property("multipart/form-data");
@@ -461,6 +462,7 @@ bool CurlDownloadConnector::send() const
 
 		switch (method)
 		{
+        default:break;
 		case Method::POST:
 		{
 			_reqheaders[HEADER_CONTENT_TYPE] = make_property("multipart/form-data");
