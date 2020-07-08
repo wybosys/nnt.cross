@@ -28,6 +28,15 @@
 		168C78DB24B5AF69006099C4 /* xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C78D924B5AF69006099C4 /* xml.cpp */; };
 		168C78DC24B5AF69006099C4 /* xml.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78DA24B5AF69006099C4 /* xml.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168C78DE24B5AF7A006099C4 /* xml.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168C78DD24B5AF7A006099C4 /* xml.mm */; };
+		168C78E124B5C8A1006099C4 /* zip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C78DF24B5C8A1006099C4 /* zip.cpp */; };
+		168C78E224B5C8A1006099C4 /* zip.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78E024B5C8A1006099C4 /* zip.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78EB24B5C919006099C4 /* ioapi_mem.c in Sources */ = {isa = PBXBuildFile; fileRef = 168C78E424B5C919006099C4 /* ioapi_mem.c */; };
+		168C78EC24B5C919006099C4 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 168C78E524B5C919006099C4 /* ioapi.h */; };
+		168C78ED24B5C919006099C4 /* ioapi_mem.h in Headers */ = {isa = PBXBuildFile; fileRef = 168C78E624B5C919006099C4 /* ioapi_mem.h */; };
+		168C78EE24B5C919006099C4 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = 168C78E724B5C919006099C4 /* unzip.h */; };
+		168C78EF24B5C919006099C4 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 168C78E824B5C919006099C4 /* unzip.c */; };
+		168C78F024B5C919006099C4 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 168C78E924B5C919006099C4 /* ioapi.c */; };
+		168C78F124B5C919006099C4 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 168C78EA24B5C919006099C4 /* crypt.h */; };
 		16A20E3724B473AA00706A78 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3324B473AA00706A78 /* macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E3824B473AA00706A78 /* com++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3424B473AA00706A78 /* com++.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E3924B473AA00706A78 /* str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E3524B473AA00706A78 /* str.cpp */; };
@@ -75,6 +84,15 @@
 		168C78D924B5AF69006099C4 /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = xml.cpp; path = ../../cross/xml.cpp; sourceTree = "<group>"; };
 		168C78DA24B5AF69006099C4 /* xml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = xml.hpp; path = ../../cross/xml.hpp; sourceTree = "<group>"; };
 		168C78DD24B5AF7A006099C4 /* xml.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = xml.mm; path = ../../cross/xml.mm; sourceTree = "<group>"; };
+		168C78DF24B5C8A1006099C4 /* zip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = zip.cpp; path = ../../cross/zip.cpp; sourceTree = "<group>"; };
+		168C78E024B5C8A1006099C4 /* zip.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = zip.hpp; path = ../../cross/zip.hpp; sourceTree = "<group>"; };
+		168C78E424B5C919006099C4 /* ioapi_mem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ioapi_mem.c; path = ../../cross/minizip/ioapi_mem.c; sourceTree = "<group>"; };
+		168C78E524B5C919006099C4 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioapi.h; path = ../../cross/minizip/ioapi.h; sourceTree = "<group>"; };
+		168C78E624B5C919006099C4 /* ioapi_mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioapi_mem.h; path = ../../cross/minizip/ioapi_mem.h; sourceTree = "<group>"; };
+		168C78E724B5C919006099C4 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unzip.h; path = ../../cross/minizip/unzip.h; sourceTree = "<group>"; };
+		168C78E824B5C919006099C4 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = unzip.c; path = ../../cross/minizip/unzip.c; sourceTree = "<group>"; };
+		168C78E924B5C919006099C4 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ioapi.c; path = ../../cross/minizip/ioapi.c; sourceTree = "<group>"; };
+		168C78EA24B5C919006099C4 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crypt.h; path = ../../cross/minizip/crypt.h; sourceTree = "<group>"; };
 		16A20E3324B473AA00706A78 /* macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macro.hpp; path = ../../cross/macro.hpp; sourceTree = "<group>"; };
 		16A20E3424B473AA00706A78 /* com++.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "com++.hpp"; path = "../../cross/com++.hpp"; sourceTree = "<group>"; };
 		16A20E3524B473AA00706A78 /* str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = str.cpp; path = ../../cross/str.cpp; sourceTree = "<group>"; };
@@ -111,6 +129,7 @@
 		161D68EF24B426AB007D7629 = {
 			isa = PBXGroup;
 			children = (
+				168C78E324B5C8FF006099C4 /* minizip */,
 				16A20E3224B4737F00706A78 /* src */,
 				161D68FB24B426AC007D7629 /* cross-macos */,
 				161D68FA24B426AC007D7629 /* Products */,
@@ -143,9 +162,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		168C78E324B5C8FF006099C4 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				168C78EA24B5C919006099C4 /* crypt.h */,
+				168C78E424B5C919006099C4 /* ioapi_mem.c */,
+				168C78E624B5C919006099C4 /* ioapi_mem.h */,
+				168C78E924B5C919006099C4 /* ioapi.c */,
+				168C78E524B5C919006099C4 /* ioapi.h */,
+				168C78E824B5C919006099C4 /* unzip.c */,
+				168C78E724B5C919006099C4 /* unzip.h */,
+			);
+			name = minizip;
+			sourceTree = "<group>";
+		};
 		16A20E3224B4737F00706A78 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				168C78DF24B5C8A1006099C4 /* zip.cpp */,
+				168C78E024B5C8A1006099C4 /* zip.hpp */,
 				168C78DD24B5AF7A006099C4 /* xml.mm */,
 				168C78D924B5AF69006099C4 /* xml.cpp */,
 				168C78DA24B5AF69006099C4 /* xml.hpp */,
@@ -198,6 +233,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16A20E3824B473AA00706A78 /* com++.hpp in Headers */,
+				168C78F124B5C919006099C4 /* crypt.h in Headers */,
 				16A20E3A24B473AA00706A78 /* str.hpp in Headers */,
 				16A20E5024B4784100706A78 /* swift-bridge.hpp in Headers */,
 				16A20E3724B473AA00706A78 /* macro.hpp in Headers */,
@@ -205,13 +241,17 @@
 				168C78B024B56E8C006099C4 /* code.hpp in Headers */,
 				168C789E24B56DD8006099C4 /* connector.hpp in Headers */,
 				168C78B924B56E8C006099C4 /* url.hpp in Headers */,
+				168C78ED24B5C919006099C4 /* ioapi_mem.h in Headers */,
 				168C78B624B56E8C006099C4 /* json.hpp in Headers */,
+				168C78EE24B5C919006099C4 /* unzip.h in Headers */,
 				168C78DC24B5AF69006099C4 /* xml.hpp in Headers */,
 				168C78B324B56E8C006099C4 /* digest.hpp in Headers */,
+				168C78EC24B5C919006099C4 /* ioapi.h in Headers */,
 				168C78B824B56E8C006099C4 /* property.hpp in Headers */,
 				168C78B224B56E8C006099C4 /* memory.hpp in Headers */,
 				16A20E6124B482B400706A78 /* stringbuilder.hpp in Headers */,
 				16A20E6A24B4833300706A78 /* logger.hpp in Headers */,
+				168C78E224B5C8A1006099C4 /* zip.hpp in Headers */,
 				16A20E6624B4831600706A78 /* datetime.hpp in Headers */,
 				16A20E5B24B47B1A00706A78 /* sys.hpp in Headers */,
 				16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */,
@@ -298,16 +338,20 @@
 				16A20E6924B4833300706A78 /* logger.cpp in Sources */,
 				168C78C124B571C9006099C4 /* digest.mm in Sources */,
 				16A20E6224B482B400706A78 /* timer.mm in Sources */,
+				168C78E124B5C8A1006099C4 /* zip.cpp in Sources */,
 				168C78B424B56E8C006099C4 /* digest.cpp in Sources */,
 				168C789924B56D48006099C4 /* fs.cpp in Sources */,
 				168C78B524B56E8C006099C4 /* json.cpp in Sources */,
 				16A20E4924B476A300706A78 /* cross.cpp in Sources */,
+				168C78EB24B5C919006099C4 /* ioapi_mem.c in Sources */,
 				168C78B124B56E8C006099C4 /* url.cpp in Sources */,
 				16A20E5E24B47BEB00706A78 /* sys.mm in Sources */,
 				168C78DE24B5AF7A006099C4 /* xml.mm in Sources */,
+				168C78F024B5C919006099C4 /* ioapi.c in Sources */,
 				16A20E3924B473AA00706A78 /* str.cpp in Sources */,
 				168C78C924B57B2F006099C4 /* json.mm in Sources */,
 				168C78AE24B56E8C006099C4 /* property.cpp in Sources */,
+				168C78EF24B5C919006099C4 /* unzip.c in Sources */,
 				16A20E5924B47B1A00706A78 /* sys.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

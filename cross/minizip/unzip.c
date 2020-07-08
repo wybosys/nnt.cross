@@ -1161,7 +1161,7 @@ extern int ZEXPORT unzGetCurrentFileInfo (unzFile file,
         pfile_info->internal_fa = file_info64.internal_fa;
         pfile_info->external_fa = file_info64.external_fa;
 
-        pfile_info->tmu_date = file_info64.tmu_date,
+        pfile_info->tmu_date = file_info64.tmu_date;
 
 
         pfile_info->compressed_size = (uLong)file_info64.compressed_size;
@@ -2131,7 +2131,7 @@ unzFile ZEXPORT unzOpenBuffer(const  void* buffer, uLong size) {
 #if defined(WIN32)
     sprintf_s(path, 16, "%x+%x", base, size);
 #else
-    sprintf(path, "%x+%x", base, size);
+    sprintf(path, "%x+%x", (int)base, (int)size);
 #endif
 
     fill_memory_filefunc64_32(&memory_file);
