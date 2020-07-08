@@ -10,10 +10,10 @@ CROSS_BEGIN
 
 #if !defined(NNT_DARWIN)
 
-using namespace TINYXML_NS;
+using namespace tinyxml2;
 
 string xml_encode(XmlObject const &xo) {
-    tinyxml2::XMLPrinter pr;
+    XMLPrinter pr;
     const_cast<XmlObject &>(xo).Print(&pr);
     return string(pr.CStr(), pr.CStrSize());
 }
@@ -167,6 +167,16 @@ shared_ptr<XmlObject> toxmlobj(shared_ptr<Property> const &obj) {
 
 shared_ptr<Property> toproperty(shared_ptr<XmlObject> const &obj) {
     return obj ? toproperty(*obj) : nullptr;
+}
+
+string property_toxml(Property const& prop)
+{
+    return xml_encode(*toxmlobj(prop));
+}
+
+shared_ptr<Property> xml_toproperty(string const& str)
+{
+    return toproperty(xml_decode(str));
 }
 
 CROSS_END

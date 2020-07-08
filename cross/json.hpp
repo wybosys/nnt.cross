@@ -6,10 +6,12 @@
 CROSS_BEGIN
 
 #ifdef JSON_JSON_H_INCLUDED
+#define HAS_JSONOBJECT
 typedef Json::Value JsonObject;
 #endif
 
 #ifdef NNT_DARWIN
+#define HAS_JSONOBJECT
 class JsonObject {
 public:
 #ifdef NNT_OBJC
@@ -25,6 +27,8 @@ public:
 struct JsonEncodeOption {
     bool pretty = false;
 };
+
+#ifdef HAS_JSONOBJECT
 
 // json对象转换为字符串
 extern NNT_API string json_encode(JsonObject const&, JsonEncodeOption const& opt = JsonEncodeOption());
@@ -43,6 +47,14 @@ extern NNT_API shared_ptr<Property> toproperty(JsonObject const&);
 
 // json对象转换为属性对象
 extern NNT_API shared_ptr<Property> toproperty(shared_ptr<JsonObject> const&);
+
+#endif
+
+// property对象编码为字符串
+extern NNT_API string property_tojson(Property const&);
+
+// json字符串解码为property对象
+extern NNT_API shared_ptr<Property> json_toproperty(string const&);
 
 CROSS_END
 

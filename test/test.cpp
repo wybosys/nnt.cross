@@ -1,6 +1,9 @@
 ﻿#include <UnitTest++/UnitTest++.h>
 #include <UnitTest++/TestReporterStdout.h>
 
+#include <jsoncpp/json/json.h>
+#include <tinyxml2/tinyxml2.h>
+
 #include <sstream>
 #include <cross.hpp>
 #include <fs.hpp>

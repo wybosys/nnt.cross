@@ -201,7 +201,7 @@ bool CurlHttpConnector::send() const
 		{
 			_reqheaders[HEADER_CONTENT_TYPE] = make_property("application/json; charset=utf-8;");
 			auto p = Combine(_reqargs);
-			auto val = json_encode(*tojsonobj(*p));
+            auto val = property_tojson(*p);
 			curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
 			curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
 		}
@@ -210,7 +210,7 @@ bool CurlHttpConnector::send() const
 		{
 			_reqheaders[HEADER_CONTENT_TYPE] = make_property("application/xml; charset=utf-8;");
 			auto p = Combine(_reqargs);
-			auto val = xml_encode(*toxmlobj(*p));
+			auto val = property_toxml(*p);
 			curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
 			curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
 		}
@@ -488,7 +488,7 @@ bool CurlDownloadConnector::send() const
 		{
 			_reqheaders[HEADER_CONTENT_TYPE] = make_property("application/json; charset=utf-8;");
 			auto p = Combine(_reqargs);
-			auto val = json_encode(*tojsonobj(*p));
+			auto val = property_tojson(*p);
 			curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
 			curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
 		}
@@ -497,7 +497,7 @@ bool CurlDownloadConnector::send() const
 		{
 			_reqheaders[HEADER_CONTENT_TYPE] = make_property("application/xml; charset=utf-8;");
 			auto p = Combine(_reqargs);
-			auto val = xml_encode(*toxmlobj(*p));
+			auto val = property_toxml(*p);
 			curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, val.length());
 			curl_easy_setopt(h, CURLOPT_COPYPOSTFIELDS, val.c_str());
 		}

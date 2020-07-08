@@ -117,4 +117,14 @@ shared_ptr<Property> toproperty(shared_ptr<JsonObject> const &obj) {
     return obj ? toproperty(*obj) : nullptr;
 }
 
+string property_tojson(Property const& prop)
+{
+    return json_encode(*tojsonobj(prop));
+}
+
+shared_ptr<Property> json_toproperty(string const& str)
+{
+    return toproperty(json_decode(str));
+}
+
 CROSS_END

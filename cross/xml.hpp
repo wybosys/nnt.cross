@@ -6,10 +6,12 @@
 CROSS_BEGIN
 
 #ifdef TINYXML2_INCLUDED
-typedef TINYXML_NS::XMLDocument XmlObject;
+#define HAS_XMLOBJECT
+typedef tinyxml2::XMLDocument XmlObject;
 #endif
 
 #ifdef NNT_DARWIN
+#define HAS_XMLOBJECT
 class XmlObject {
 public:
 #ifdef NNT_OBJC
@@ -22,17 +24,31 @@ public:
 };
 #endif
 
+#ifdef HAS_XMLOBJECT
+
+// 编码xml
 extern NNT_API string xml_encode(XmlObject const&);
 
+// 解码xml
 extern NNT_API shared_ptr<XmlObject> xml_decode(string const&);
 
+// property对象转换为xml对象
 extern NNT_API shared_ptr<XmlObject> toxmlobj(Property const&);
 
 extern NNT_API shared_ptr<XmlObject> toxmlobj(shared_ptr<Property> const&);
 
+// xml对象转换成标准property对象
 extern NNT_API shared_ptr<Property> toproperty(XmlObject const&);
 
 extern NNT_API shared_ptr<Property> toproperty(shared_ptr<XmlObject> const&);
+
+#endif
+
+// property对象编码为字符串
+extern NNT_API string property_toxml(Property const&);
+
+// xml字符串解码为property对象
+extern NNT_API shared_ptr<Property> xml_toproperty(string const&);
 
 CROSS_END
 
