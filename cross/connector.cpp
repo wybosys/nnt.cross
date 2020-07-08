@@ -6,7 +6,12 @@ CROSS_BEGIN
 
 unsigned int Connector::CTIMEOUT = 30;
 unsigned int Connector::TIMEOUT = 30;
+
+#if defined(NNT_DARWIN)
+string Connector::USERAGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15";
+#else
 string Connector::USERAGENT = "Mozilla/5.0 (Linux) AppleWebKit/600.1.4 (KHTML, like Gecko) NetType/WIFI";
+#endif
 
 HttpConnector &HttpConnector::setarg(string const &key, arg_type const &arg) {
     _reqargs[key] = arg;

@@ -33,6 +33,12 @@ public:
         _newline = true;
         return *this;
     }
+    
+    inline stringbuilder& ln() {
+        static eol t;
+        *this << t;
+        return *this;
+    }
 
     inline operator ::std::string () const { 
         return _oss.str();
@@ -41,8 +47,20 @@ public:
     inline ::std::string str() const {
         return _oss.str();
     }
+    
+    inline stringbuilder& space(::std::string const& s) {
+        _space = s;
+        return *this;
+    }
+    
+    inline stringbuilder& fix(::std::string const& pre, ::std::string const& suf) {
+        _prefix = pre;
+        _suffix = suf;
+        return *this;
+    }
 
 private:
+    
     bool _newline = true;
     ::std::string _prefix, _suffix, _space;
     ::std::ostringstream _oss;

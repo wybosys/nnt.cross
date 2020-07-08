@@ -1,9 +1,15 @@
 #include "cross.hpp"
-#include "json.hpp"
 #include <sstream>
+
+#if !defined(NNT_DARWIN)
 #include <json/json.h>
+#endif
+
+#include "json.hpp"
 
 CROSS_BEGIN
+
+#if !defined(NNT_DARWIN)
 
 string json_encode(JsonObject const &obj, JsonEncodeOption const &opt) {
     ::std::ostringstream oss;
@@ -100,6 +106,8 @@ shared_ptr<Property> toproperty(JsonObject const &jo) {
     }
     return r;
 }
+
+#endif
 
 shared_ptr<JsonObject> tojsonobj(shared_ptr<Property> const &obj) {
     return obj ? tojsonobj(*obj) : nullptr;

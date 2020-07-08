@@ -132,6 +132,19 @@ public:                                     \
         }                                          \
     };                                             \
     cls &var = _NNT_COMBINE(__heap_object_, __LINE__)()();
+        
+#ifdef __cplusplus
+#define NNT_CXX
+#endif
+        
+#ifdef __OBJC__
+#define NNT_OBJC
+#if __has_feature(objc_arc)
+#define NNT_OBJC_ARC
+#else
+#error "不支持NON-ARC模式"
+#endif
+#endif
 
 #ifdef NNT_STATIC
 #define NNT_LIBRARY 1

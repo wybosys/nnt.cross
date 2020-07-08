@@ -5,12 +5,48 @@
 #import <cross/str.hpp>
 #import <cross/threads.hpp>
 #import <cross/timer.hpp>
+#import <cross/json.hpp>
 
 USE_CROSS;
 
 void test_sys()
 {
     
+}
+
+void test_prop()
+{
+    string str = "{\"b\":false,\"nil\":null,\"s\":\"string\"}";
+    auto v = json_decode(str);
+    auto p = toproperty(*v);
+    v = tojsonobj(*p);
+    string astr = json_encode(*v);
+    //UNITTEST_CHECK_EQUAL(str, astr);
+    
+    /*
+    auto xo = toxmlobj(*p);
+    astr = xml_encode(*xo);
+    xo = xml_decode(astr);
+    p = toproperty(*xo);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
+    //UNITTEST_CHECK_EQUAL(str, astr);
+    
+    str = "[false,null,\"string\"]";
+    v = json_decode(str);
+    p = toproperty(*v);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
+    //UNITTEST_CHECK_EQUAL(str, astr);
+    
+    xo = toxmlobj(*p);
+    astr = xml_encode(*xo);
+    xo = xml_decode(astr);
+    p = toproperty(*xo);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
+    //UNITTEST_CHECK_EQUAL(str, astr);
+     */
 }
 
 void test_thread()
@@ -61,6 +97,7 @@ void test_timer()
 void Test()
 {
     test_sys();
+    test_prop();
     test_thread();
     test_timer();
     

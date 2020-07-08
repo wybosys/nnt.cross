@@ -1,8 +1,13 @@
 #include "cross.hpp"
 #include "digest.hpp"
+
+#if !defined(NNT_DARWIN)
 #include <md5/md5.h>
+#endif
 
 CROSS_BEGIN
+
+#if !defined(NNT_DARWIN)
 
 md5_result md5(string const &str)
 {
@@ -13,6 +18,8 @@ md5_result md5(string const &str)
     md5_finish(&ctx, r.hex);
     return r;
 }
+
+#endif
 
 string md5_hex2str(md5_result const &r)
 {

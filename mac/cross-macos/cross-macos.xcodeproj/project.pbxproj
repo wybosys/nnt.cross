@@ -10,7 +10,21 @@
 		161D68FE24B426AC007D7629 /* cross_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = 161D68FC24B426AC007D7629 /* cross_macos.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		164E588B24B56AD90028355F /* logger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 164E588A24B56AD90028355F /* logger.mm */; };
 		168C789924B56D48006099C4 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C789724B56D48006099C4 /* fs.cpp */; };
-		168C789A24B56D48006099C4 /* fs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C789824B56D48006099C4 /* fs.hpp */; };
+		168C789A24B56D48006099C4 /* fs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C789824B56D48006099C4 /* fs.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C789D24B56DD8006099C4 /* connector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C789B24B56DD8006099C4 /* connector.cpp */; };
+		168C789E24B56DD8006099C4 /* connector.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C789C24B56DD8006099C4 /* connector.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78AE24B56E8C006099C4 /* property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C78A024B56E8B006099C4 /* property.cpp */; };
+		168C78B024B56E8C006099C4 /* code.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78A224B56E8B006099C4 /* code.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78B124B56E8C006099C4 /* url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C78A324B56E8B006099C4 /* url.cpp */; };
+		168C78B224B56E8C006099C4 /* memory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78A424B56E8B006099C4 /* memory.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78B324B56E8C006099C4 /* digest.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78A524B56E8C006099C4 /* digest.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78B424B56E8C006099C4 /* digest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C78A624B56E8C006099C4 /* digest.cpp */; };
+		168C78B524B56E8C006099C4 /* json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C78A724B56E8C006099C4 /* json.cpp */; };
+		168C78B624B56E8C006099C4 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78A824B56E8C006099C4 /* json.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78B824B56E8C006099C4 /* property.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78AA24B56E8C006099C4 /* property.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78B924B56E8C006099C4 /* url.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78AB24B56E8C006099C4 /* url.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78C124B571C9006099C4 /* digest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168C78C024B571C9006099C4 /* digest.mm */; };
+		168C78C924B57B2F006099C4 /* json.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168C78C824B57B2F006099C4 /* json.mm */; };
 		16A20E3724B473AA00706A78 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3324B473AA00706A78 /* macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E3824B473AA00706A78 /* com++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3424B473AA00706A78 /* com++.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E3924B473AA00706A78 /* str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E3524B473AA00706A78 /* str.cpp */; };
@@ -40,6 +54,21 @@
 		164E588A24B56AD90028355F /* logger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = logger.mm; path = ../../cross/logger.mm; sourceTree = "<group>"; };
 		168C789724B56D48006099C4 /* fs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fs.cpp; path = ../../cross/fs.cpp; sourceTree = "<group>"; };
 		168C789824B56D48006099C4 /* fs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fs.hpp; path = ../../cross/fs.hpp; sourceTree = "<group>"; };
+		168C789B24B56DD8006099C4 /* connector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = connector.cpp; path = ../../cross/connector.cpp; sourceTree = "<group>"; };
+		168C789C24B56DD8006099C4 /* connector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = connector.hpp; path = ../../cross/connector.hpp; sourceTree = "<group>"; };
+		168C78A024B56E8B006099C4 /* property.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = property.cpp; path = ../../cross/property.cpp; sourceTree = "<group>"; };
+		168C78A224B56E8B006099C4 /* code.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = code.hpp; path = ../../cross/code.hpp; sourceTree = "<group>"; };
+		168C78A324B56E8B006099C4 /* url.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = url.cpp; path = ../../cross/url.cpp; sourceTree = "<group>"; };
+		168C78A424B56E8B006099C4 /* memory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = memory.hpp; path = ../../cross/memory.hpp; sourceTree = "<group>"; };
+		168C78A524B56E8C006099C4 /* digest.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = digest.hpp; path = ../../cross/digest.hpp; sourceTree = "<group>"; };
+		168C78A624B56E8C006099C4 /* digest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = digest.cpp; path = ../../cross/digest.cpp; sourceTree = "<group>"; };
+		168C78A724B56E8C006099C4 /* json.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json.cpp; path = ../../cross/json.cpp; sourceTree = "<group>"; };
+		168C78A824B56E8C006099C4 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = json.hpp; path = ../../cross/json.hpp; sourceTree = "<group>"; };
+		168C78AA24B56E8C006099C4 /* property.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = property.hpp; path = ../../cross/property.hpp; sourceTree = "<group>"; };
+		168C78AB24B56E8C006099C4 /* url.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = url.hpp; path = ../../cross/url.hpp; sourceTree = "<group>"; };
+		168C78BE24B5704B006099C4 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = System/Library/Frameworks/CryptoKit.framework; sourceTree = SDKROOT; };
+		168C78C024B571C9006099C4 /* digest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = digest.mm; path = ../../cross/digest.mm; sourceTree = "<group>"; };
+		168C78C824B57B2F006099C4 /* json.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = json.mm; path = ../../cross/json.mm; sourceTree = "<group>"; };
 		16A20E3324B473AA00706A78 /* macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macro.hpp; path = ../../cross/macro.hpp; sourceTree = "<group>"; };
 		16A20E3424B473AA00706A78 /* com++.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "com++.hpp"; path = "../../cross/com++.hpp"; sourceTree = "<group>"; };
 		16A20E3524B473AA00706A78 /* str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = str.cpp; path = ../../cross/str.cpp; sourceTree = "<group>"; };
@@ -79,6 +108,7 @@
 				16A20E3224B4737F00706A78 /* src */,
 				161D68FB24B426AC007D7629 /* cross-macos */,
 				161D68FA24B426AC007D7629 /* Products */,
+				168C78BD24B5704B006099C4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,9 +129,31 @@
 			path = "cross-macos";
 			sourceTree = "<group>";
 		};
+		168C78BD24B5704B006099C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				168C78BE24B5704B006099C4 /* CryptoKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		16A20E3224B4737F00706A78 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				168C78A224B56E8B006099C4 /* code.hpp */,
+				168C78C024B571C9006099C4 /* digest.mm */,
+				168C78A624B56E8C006099C4 /* digest.cpp */,
+				168C78A524B56E8C006099C4 /* digest.hpp */,
+				168C78C824B57B2F006099C4 /* json.mm */,
+				168C78A724B56E8C006099C4 /* json.cpp */,
+				168C78A824B56E8C006099C4 /* json.hpp */,
+				168C78A424B56E8B006099C4 /* memory.hpp */,
+				168C78A024B56E8B006099C4 /* property.cpp */,
+				168C78AA24B56E8C006099C4 /* property.hpp */,
+				168C78A324B56E8B006099C4 /* url.cpp */,
+				168C78AB24B56E8C006099C4 /* url.hpp */,
+				168C789B24B56DD8006099C4 /* connector.cpp */,
+				168C789C24B56DD8006099C4 /* connector.hpp */,
 				168C789724B56D48006099C4 /* fs.cpp */,
 				168C789824B56D48006099C4 /* fs.hpp */,
 				164E588A24B56AD90028355F /* logger.mm */,
@@ -136,11 +188,18 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				168C789A24B56D48006099C4 /* fs.hpp in Headers */,
 				16A20E3824B473AA00706A78 /* com++.hpp in Headers */,
 				16A20E3A24B473AA00706A78 /* str.hpp in Headers */,
 				16A20E5024B4784100706A78 /* swift-bridge.hpp in Headers */,
 				16A20E3724B473AA00706A78 /* macro.hpp in Headers */,
+				168C789A24B56D48006099C4 /* fs.hpp in Headers */,
+				168C78B024B56E8C006099C4 /* code.hpp in Headers */,
+				168C789E24B56DD8006099C4 /* connector.hpp in Headers */,
+				168C78B924B56E8C006099C4 /* url.hpp in Headers */,
+				168C78B624B56E8C006099C4 /* json.hpp in Headers */,
+				168C78B324B56E8C006099C4 /* digest.hpp in Headers */,
+				168C78B824B56E8C006099C4 /* property.hpp in Headers */,
+				168C78B224B56E8C006099C4 /* memory.hpp in Headers */,
 				16A20E6124B482B400706A78 /* stringbuilder.hpp in Headers */,
 				16A20E6A24B4833300706A78 /* logger.hpp in Headers */,
 				16A20E6624B4831600706A78 /* datetime.hpp in Headers */,
@@ -155,9 +214,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		161D68F824B426AC007D7629 /* cross */ = {
+		161D68F824B426AC007D7629 /* cross-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 161D690124B426AC007D7629 /* Build configuration list for PBXNativeTarget "cross" */;
+			buildConfigurationList = 161D690124B426AC007D7629 /* Build configuration list for PBXNativeTarget "cross-macos" */;
 			buildPhases = (
 				161D68F424B426AC007D7629 /* Headers */,
 				161D68F524B426AC007D7629 /* Sources */,
@@ -168,7 +227,7 @@
 			);
 			dependencies = (
 			);
-			name = cross;
+			name = "cross-macos";
 			productName = "cross-macos";
 			productReference = 161D68F924B426AC007D7629 /* cross.framework */;
 			productType = "com.apple.product-type.framework";
@@ -200,7 +259,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				161D68F824B426AC007D7629 /* cross */,
+				161D68F824B426AC007D7629 /* cross-macos */,
 			);
 		};
 /* End PBXProject section */
@@ -221,15 +280,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				16A20E5424B47AC700706A78 /* threads.cpp in Sources */,
+				168C789D24B56DD8006099C4 /* connector.cpp in Sources */,
 				164E588B24B56AD90028355F /* logger.mm in Sources */,
 				16A20E5A24B47B1A00706A78 /* timer.cpp in Sources */,
 				16A20E6524B4831600706A78 /* datetime.cpp in Sources */,
 				16A20E6924B4833300706A78 /* logger.cpp in Sources */,
+				168C78C124B571C9006099C4 /* digest.mm in Sources */,
 				16A20E6224B482B400706A78 /* timer.mm in Sources */,
+				168C78B424B56E8C006099C4 /* digest.cpp in Sources */,
 				168C789924B56D48006099C4 /* fs.cpp in Sources */,
+				168C78B524B56E8C006099C4 /* json.cpp in Sources */,
 				16A20E4924B476A300706A78 /* cross.cpp in Sources */,
+				168C78B124B56E8C006099C4 /* url.cpp in Sources */,
 				16A20E5E24B47BEB00706A78 /* sys.mm in Sources */,
 				16A20E3924B473AA00706A78 /* str.cpp in Sources */,
+				168C78C924B57B2F006099C4 /* json.mm in Sources */,
+				168C78AE24B56E8C006099C4 /* property.cpp in Sources */,
 				16A20E5924B47B1A00706A78 /* sys.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,6 +431,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../../cross";
 				INFOPLIST_FILE = "cross-macos/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -373,7 +443,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = cross;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -388,6 +458,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../../cross";
 				INFOPLIST_FILE = "cross-macos/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -396,7 +470,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.cross;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = cross;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -414,7 +488,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		161D690124B426AC007D7629 /* Build configuration list for PBXNativeTarget "cross" */ = {
+		161D690124B426AC007D7629 /* Build configuration list for PBXNativeTarget "cross-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				161D690224B426AC007D7629 /* Debug */,
