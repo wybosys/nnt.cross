@@ -12,7 +12,7 @@ typedef Json::Value JsonObject;
 #ifdef NNT_DARWIN
 class JsonObject {
 public:
-#ifdef __OBJC__
+#ifdef NNT_OBJC
     typedef NSObject * obj_type;
 #else
     typedef void * obj_type;

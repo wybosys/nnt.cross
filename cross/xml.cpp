@@ -1,8 +1,14 @@
 #include "cross.hpp"
-#include "xml.hpp"
+
+#if !defined(NNT_DARWIN)
 #include <tinyxml2/tinyxml2.h>
+#endif
+
+#include "xml.hpp"
 
 CROSS_BEGIN
+
+#if !defined(NNT_DARWIN)
 
 using namespace TINYXML_NS;
 
@@ -152,6 +158,8 @@ shared_ptr<Property> toproperty(XmlObject const &xo) {
     toproperty(r, *xo.RootElement());
     return r;
 }
+
+#endif
 
 shared_ptr<XmlObject> toxmlobj(shared_ptr<Property> const &obj) {
     return obj ? toxmlobj(*obj) : nullptr;

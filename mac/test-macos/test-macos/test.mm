@@ -6,6 +6,7 @@
 #import <cross/threads.hpp>
 #import <cross/timer.hpp>
 #import <cross/json.hpp>
+#import <cross/xml.hpp>
 
 USE_CROSS;
 
@@ -23,7 +24,6 @@ void test_prop()
     string astr = json_encode(*v);
     //UNITTEST_CHECK_EQUAL(str, astr);
     
-    /*
     auto xo = toxmlobj(*p);
     astr = xml_encode(*xo);
     xo = xml_decode(astr);
@@ -46,7 +46,6 @@ void test_prop()
     v = tojsonobj(*p);
     astr = json_encode(*v);
     //UNITTEST_CHECK_EQUAL(str, astr);
-     */
 }
 
 void test_thread()

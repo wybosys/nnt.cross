@@ -3,16 +3,24 @@
 
 #include "property.hpp"
 
-#define TINYXML_NS tinyxml2
-
-namespace TINYXML_NS
-{
-    class XMLDocument;
-}
-
 CROSS_BEGIN
 
+#ifdef TINYXML2_INCLUDED
 typedef TINYXML_NS::XMLDocument XmlObject;
+#endif
+
+#ifdef NNT_DARWIN
+class XmlObject {
+public:
+#ifdef NNT_OBJC
+    typedef NSObject* obj_type;
+#else
+    typedef void* obj_type;
+#endif
+    explicit XmlObject(obj_type o=nullptr) : obj(o) {}
+    obj_type obj;
+};
+#endif
 
 extern NNT_API string xml_encode(XmlObject const&);
 

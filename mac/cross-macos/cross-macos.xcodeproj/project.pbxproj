@@ -25,6 +25,9 @@
 		168C78B924B56E8C006099C4 /* url.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78AB24B56E8C006099C4 /* url.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168C78C124B571C9006099C4 /* digest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168C78C024B571C9006099C4 /* digest.mm */; };
 		168C78C924B57B2F006099C4 /* json.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168C78C824B57B2F006099C4 /* json.mm */; };
+		168C78DB24B5AF69006099C4 /* xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C78D924B5AF69006099C4 /* xml.cpp */; };
+		168C78DC24B5AF69006099C4 /* xml.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C78DA24B5AF69006099C4 /* xml.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168C78DE24B5AF7A006099C4 /* xml.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168C78DD24B5AF7A006099C4 /* xml.mm */; };
 		16A20E3724B473AA00706A78 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3324B473AA00706A78 /* macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E3824B473AA00706A78 /* com++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 16A20E3424B473AA00706A78 /* com++.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		16A20E3924B473AA00706A78 /* str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16A20E3524B473AA00706A78 /* str.cpp */; };
@@ -69,6 +72,9 @@
 		168C78BE24B5704B006099C4 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = System/Library/Frameworks/CryptoKit.framework; sourceTree = SDKROOT; };
 		168C78C024B571C9006099C4 /* digest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = digest.mm; path = ../../cross/digest.mm; sourceTree = "<group>"; };
 		168C78C824B57B2F006099C4 /* json.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = json.mm; path = ../../cross/json.mm; sourceTree = "<group>"; };
+		168C78D924B5AF69006099C4 /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = xml.cpp; path = ../../cross/xml.cpp; sourceTree = "<group>"; };
+		168C78DA24B5AF69006099C4 /* xml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = xml.hpp; path = ../../cross/xml.hpp; sourceTree = "<group>"; };
+		168C78DD24B5AF7A006099C4 /* xml.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = xml.mm; path = ../../cross/xml.mm; sourceTree = "<group>"; };
 		16A20E3324B473AA00706A78 /* macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macro.hpp; path = ../../cross/macro.hpp; sourceTree = "<group>"; };
 		16A20E3424B473AA00706A78 /* com++.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "com++.hpp"; path = "../../cross/com++.hpp"; sourceTree = "<group>"; };
 		16A20E3524B473AA00706A78 /* str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = str.cpp; path = ../../cross/str.cpp; sourceTree = "<group>"; };
@@ -140,6 +146,9 @@
 		16A20E3224B4737F00706A78 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				168C78DD24B5AF7A006099C4 /* xml.mm */,
+				168C78D924B5AF69006099C4 /* xml.cpp */,
+				168C78DA24B5AF69006099C4 /* xml.hpp */,
 				168C78A224B56E8B006099C4 /* code.hpp */,
 				168C78C024B571C9006099C4 /* digest.mm */,
 				168C78A624B56E8C006099C4 /* digest.cpp */,
@@ -197,6 +206,7 @@
 				168C789E24B56DD8006099C4 /* connector.hpp in Headers */,
 				168C78B924B56E8C006099C4 /* url.hpp in Headers */,
 				168C78B624B56E8C006099C4 /* json.hpp in Headers */,
+				168C78DC24B5AF69006099C4 /* xml.hpp in Headers */,
 				168C78B324B56E8C006099C4 /* digest.hpp in Headers */,
 				168C78B824B56E8C006099C4 /* property.hpp in Headers */,
 				168C78B224B56E8C006099C4 /* memory.hpp in Headers */,
@@ -280,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16A20E5424B47AC700706A78 /* threads.cpp in Sources */,
+				168C78DB24B5AF69006099C4 /* xml.cpp in Sources */,
 				168C789D24B56DD8006099C4 /* connector.cpp in Sources */,
 				164E588B24B56AD90028355F /* logger.mm in Sources */,
 				16A20E5A24B47B1A00706A78 /* timer.cpp in Sources */,
@@ -293,6 +304,7 @@
 				16A20E4924B476A300706A78 /* cross.cpp in Sources */,
 				168C78B124B56E8C006099C4 /* url.cpp in Sources */,
 				16A20E5E24B47BEB00706A78 /* sys.mm in Sources */,
+				168C78DE24B5AF7A006099C4 /* xml.mm in Sources */,
 				16A20E3924B473AA00706A78 /* str.cpp in Sources */,
 				168C78C924B57B2F006099C4 /* json.mm in Sources */,
 				168C78AE24B56E8C006099C4 /* property.cpp in Sources */,
