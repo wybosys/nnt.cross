@@ -10,6 +10,19 @@
 #import "code.hpp"
 #import "memory.hpp"
 
+USE_CROSS;
+
+@interface OBJC_ObjcHttpConnectorPrivate : NSObject <NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate, NSURLSessionStreamDelegate>
+{
+    size_t target_length; // 目标的大小
+}
+
+@property (assign) ObjcHttpConnectorPrivate *d_ptr;
+
+- (void)clear;
+
+@end
+
 CROSS_BEGIN
 
 class ObjcHttpConnectorPrivate
@@ -19,7 +32,13 @@ public:
     explicit ObjcHttpConnectorPrivate(ObjcHttpConnector* owner)
     : d_owner(owner)
     {
-
+        oc_ptr = [OBJC_ObjcHttpConnectorPrivate new];
+        oc_ptr.d_ptr = this;
+    }
+    
+    ~ObjcHttpConnectorPrivate()
+    {
+        oc_ptr = nil;
     }
     
     void clear()
@@ -28,28 +47,60 @@ public:
         errmsg.clear();
         buffer.clear();
         rspheaders.clear();
+        [oc_ptr clear];
     }
     
     void close()
     {
         clear();
         
-        /*
         if (task) {
             [task cancel];
             task = nil;
         }
-         */
+    }
+    
+    void on_error(error const& e)
+    {
+        d_owner->on_error(e);
+    }
+    
+    void on_bytes(HttpConnector::memory_type const& mem)
+    {
+        d_owner->on_bytes(mem);
+    }
+    
+    void on_completed()
+    {
+        d_owner->on_completed();
+    }
+    
+    void on_connected()
+    {
+        d_owner->on_connected();
+    }
+    
+    void on_disconnected()
+    {
+        d_owner->on_disconnected();
+    }
+    
+    void on_progress_download(HttpConnector::progress_type const& range)
+    {
+        d_owner->on_progress_download(range);
     }
     
     int errcode = -1;
     string errmsg;
     unsigned short respcode;
     HttpConnector::stream_type buffer;
+    ::std::mutex mtx_buffer;
     HttpConnector::args_type rspheaders;
     
     ObjcHttpConnector *d_owner;
     semaphore sema_task;
+    NSURLSessionDataTask *task = nil;
+    OBJC_ObjcHttpConnectorPrivate *oc_ptr;
 };
 
 ObjcHttpConnector::ObjcHttpConnector()
@@ -128,7 +179,7 @@ bool ObjcHttpConnector::send() const
     
     NSMutableURLRequest *req = nil;
     
-    if (Mask::IsSet(method, Method::POST) && 0)
+    if (Mask::IsSet(method, Method::POST))
     {
         switch (method)
         {
@@ -175,11 +226,15 @@ bool ObjcHttpConnector::send() const
     } else {
         req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     }
-        
-    [req setTimeoutInterval:timeout];
+    
+    auto config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    config.timeoutIntervalForRequest = ctimeout;
+    config.timeoutIntervalForResource = timeout;
+    config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+    req.timeoutInterval = timeout;
     
     // 设置请求头
-    if (!_reqheaders.empty() && 0)
+    if (!_reqheaders.empty())
     {
         for (auto& e : _reqheaders)
         {
@@ -191,34 +246,15 @@ bool ObjcHttpConnector::send() const
         }
     }
     
-    // 取消证书验证
-    
-    on_connected();
-    
-    NSError *err;
-    if (err) {
-        d_ptr->errcode = (int)err.code;
-        string msg = err.description.UTF8String;
-        d_ptr->errmsg = msg;
-        on_error(error(Code::FAILED, msg));
-        
-        Logger::Error(stringbuilder().space(" ") << "HttpConnector:" << err.code << err.debugDescription.UTF8String);
-        d_ptr->sema_task.notify();
-        //return;
-    }
-    
-    //d_ptr->respcode = respn.statusCode;
-    //    dict2args(respn.allHeaderFields, d_ptr->rspheaders);
-    
-    on_completed();
-    d_ptr->sema_task.notify();
-    
-    //[d_ptr->task resume];
-    
+    // 创建连接
+    NSURLSession *ses = [NSURLSession sessionWithConfiguration:config
+                                                      delegate:d_ptr->oc_ptr
+                                                 delegateQueue:nil];
+    d_ptr->task = [ses dataTaskWithRequest:req];
+            
+    [d_ptr->task resume];
     d_ptr->sema_task.wait();
-    //d_ptr->task = nil;
-    
-    on_disconnected();
+    d_ptr->task = nil;
 
     return RespondCodeIsOk(d_ptr->respcode);
 }
@@ -315,3 +351,201 @@ unsigned short ObjcDownloadConnector::respcode() const
 }
 
 CROSS_END
+
+// ------------------------------------ OC
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
+@implementation OBJC_ObjcHttpConnectorPrivate
+
+- (void)clear
+{
+    target_length = 0;
+}
+
+- (void)on_error:(NSError*)err
+{
+    _d_ptr->errcode = (int)err.code;
+    string msg = err.description.UTF8String;
+    _d_ptr->errmsg = msg;
+    _d_ptr->on_error(error(Code::FAILED, msg));
+    
+    Logger::Error(stringbuilder().space(" ") << "HttpConnector:" << err.code << err.debugDescription.UTF8String);
+    _d_ptr->sema_task.notify();
+}
+
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)err
+{
+    [self on_error:err];
+}
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+                                             completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler
+{
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+        // 忽略证书检查
+        auto cred = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, cred);
+        _d_ptr->on_connected();
+        return;
+    }
+    completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+    _d_ptr->on_disconnected();
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                     willPerformHTTPRedirection:(NSHTTPURLResponse *)response
+                                     newRequest:(NSURLRequest *)request
+                              completionHandler:(void (^)(NSURLRequest * _Nullable))completionHandler
+{
+#ifdef NNT_DEBUG
+    NSString *msg = [NSString stringWithFormat:@"重定向至 %@", request.URL];
+    Logger::Debug(msg.UTF8String);
+#endif
+    completionHandler(request);
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                            didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+                              completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler
+{
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+        // 忽略证书检查
+        auto cred = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, cred);
+        return;
+    }
+    completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                              needNewBodyStream:(void (^)(NSInputStream * _Nullable bodyStream))completionHandler
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                                didSendBodyData:(int64_t)bytesSent
+                                 totalBytesSent:(int64_t)totalBytesSent
+                       totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                           didCompleteWithError:(nullable NSError *)err
+{
+    if (err) {
+        [self on_error:err];
+    } else {
+        _d_ptr->on_completed();
+    }
+    _d_ptr->on_disconnected();
+    _d_ptr->sema_task.notify();
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
+                              didFinishDownloadingToURL:(NSURL *)location
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
+                                           didWriteData:(int64_t)bytesWritten
+                                      totalBytesWritten:(int64_t)totalBytesWritten
+                              totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
+                                      didResumeAtOffset:(int64_t)fileOffset
+                                     expectedTotalBytes:(int64_t)expectedTotalBytes
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+                                 didReceiveResponse:(NSURLResponse *)response
+                                  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
+{
+    auto respn = (NSHTTPURLResponse*)response;
+    _d_ptr->respcode = respn.statusCode;
+    dict2args(respn.allHeaderFields, _d_ptr->rspheaders);
+    
+    // 获取目标大小
+    auto fnd = _d_ptr->rspheaders.find("Content-Length");
+    if (fnd != _d_ptr->rspheaders.end()) {
+        target_length = fnd->second->toInteger();
+    }
+
+    completionHandler(NSURLSessionResponseAllow);
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+                              didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+                                didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+                                     didReceiveData:(NSData *)data
+{
+    size_t lbuf = data.length;
+    if (!lbuf)
+        return;
+    auto buf = (char const*)data.bytes;
+    
+    NNT_AUTOGUARD(_d_ptr->mtx_buffer);
+    _d_ptr->buffer.write(buf, lbuf);
+
+    HttpConnector::memory_type mem(buf, lbuf);
+    _d_ptr->on_bytes(mem);
+    
+    HttpConnector::progress_type down;
+    down.from = 0;
+    down.size = target_length;
+    down.value = _d_ptr->buffer.size();
+    _d_ptr->on_progress_download(down);
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+                                  willCacheResponse:(NSCachedURLResponse *)proposedResponse
+                                  completionHandler:(void (^)(NSCachedURLResponse * _Nullable cachedResponse))completionHandler
+{
+    
+    completionHandler(nil);
+}
+
+- (void)URLSession:(NSURLSession *)session readClosedForStreamTask:(NSURLSessionStreamTask *)streamTask
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session writeClosedForStreamTask:(NSURLSessionStreamTask *)streamTask
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session betterRouteDiscoveredForStreamTask:(NSURLSessionStreamTask *)streamTask
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session streamTask:(NSURLSessionStreamTask *)streamTask
+                                 didBecomeInputStream:(NSInputStream *)inputStream
+                                         outputStream:(NSOutputStream *)outputStream
+{
+    
+}
+
+@end
+
+#pragma clang diagnostic pop

@@ -31,9 +31,10 @@ public:
 		if (!lbuf)
 			return lbuf;
 
+        NNT_AUTOGUARD(self->mtx_buffer);
 		self->buffer.write(buf, lbuf);
 
-		CurlHttpConnector::memory_type mem(buf, lbuf);
+		HttpConnector::memory_type mem(buf, lbuf);
 		self->owner->on_bytes(mem);
 
 		return lbuf;
@@ -81,6 +82,7 @@ public:
 	string errmsg;
 
 	HttpConnector::stream_type buffer;
+    ::std::mutex mtx_buffer;
 
 	HttpConnector::args_type rspheaders;
 	unsigned short respcode;

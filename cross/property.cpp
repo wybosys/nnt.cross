@@ -1,5 +1,6 @@
 #include "cross.hpp"
 #include "property.hpp"
+#include "str.hpp"
 #include <sstream>
 #include <cmath>
 
@@ -209,6 +210,8 @@ Property::integer Property::toInteger() const
             return (integer) round(_var->toFloat());
         case Property::variant::VT::DOUBLE:
             return (integer) round(_var->toDouble());
+        case Property::variant::VT::STRING:
+            return (integer) toint(_var->toString());
         default:
             break;
     }
@@ -222,6 +225,8 @@ Property::number Property::toNumber() const
             return _var->toFloat();
         case Property::variant::VT::DOUBLE:
             return _var->toDouble();
+            case Property::variant::VT::STRING:
+                return todouble(_var->toString());
         default:
             break;
     }
@@ -239,6 +244,7 @@ string Property::toString() const
 {
     if (_var->vt == Property::variant::VT::STRING)
         return _var->toString();
+    
     ::std::ostringstream oss;
     oss << *this;
     return oss.str();

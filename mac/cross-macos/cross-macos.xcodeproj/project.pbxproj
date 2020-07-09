@@ -126,6 +126,7 @@
 		16F19D9D24B5E542001011C8 /* connector_objc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = connector_objc.mm; path = ../../cross/connector_objc.mm; sourceTree = "<group>"; };
 		16F19DA024B5EDF2001011C8 /* url.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = url.mm; path = ../../cross/url.mm; sourceTree = "<group>"; };
 		16F19DA424B5F319001011C8 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		16F19DB624B6F4C8001011C8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +172,7 @@
 		168C78BD24B5704B006099C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16F19DB624B6F4C8001011C8 /* Security.framework */,
 				16F19DA424B5F319001011C8 /* AFNetworking.framework */,
 				168C78F224B5D0F7006099C4 /* libcurl.tbd */,
 				168C78BE24B5704B006099C4 /* CryptoKit.framework */,
