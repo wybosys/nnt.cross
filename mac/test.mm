@@ -13,17 +13,22 @@
 #import <cross/url.hpp>
 #import <cross/digest.hpp>
 #import <cross/zip.hpp>
-#import <cross/connector_curl.hpp>
 #import <cross/connector_objc.hpp>
 
 #if TARGET_OS_MACOS
+
+#import <cross/connector_curl.hpp>
+
 #define HTTPCONNECTOR ObjcHttpConnector
 #define DOWNLOADCONNECTOR ObjcDownloadConnector
 //#define HTTPCONNECTOR CurlHttpConnector
 //#define DOWNLOADCONNECTOR CurlDownloadConnector
+
 #else
+
 #define HTTPCONNECTOR ObjcHttpConnector
 #define DOWNLOADCONNECTOR ObjcDownloadConnector
+
 #endif
 
 USE_NNT;
@@ -175,15 +180,17 @@ void test_md5()
 
 void test_zip()
 {
-    string cur = absolute(dirname(__FILE__) + "/..");
-    
     mkdir("test-file");
     mkdir("test-dir");
     
+#if TARGET_OS_MACOS
+    string cur = absolute(dirname(__FILE__) + "/..");
     bool suc = unzip(cur + "/test/test-file.zip", "test-file");
     UNITTEST_CHECK_EQUAL(suc, true);
     suc = unzip(cur + "/test/test-dir.zip", "test-dir");
     UNITTEST_CHECK_EQUAL(suc, true);
+#else
+#endif
 }
 
 void test_rest()
@@ -323,6 +330,8 @@ void test_async_task()
 
 void Test()
 {
+    cd(path_home());
+    
     test_sys();
     test_test();
     test_fs();

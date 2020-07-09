@@ -1,6 +1,7 @@
 #include "cross.hpp"
 #include "fs.hpp"
 #include "str.hpp"
+#include "logger.hpp"
 #include <sstream>
 
 #ifdef NNT_WINDOWS
@@ -31,7 +32,10 @@ string normalize(string const &str) {
 
 bool mkdir(string const &str)
 {
-    return CreateDirectoryA(str.c_str(), NULL);
+    bool r = CreateDirectoryA(str.c_str(), NULL);
+    if (!r)
+        Logger::Warn("创建目录 " + str + " 失败");
+    return r;
 }
 
 bool exists(string const &str)
@@ -74,12 +78,18 @@ bool isdirectory(string const &str)
 
 bool rmfile(string const &str)
 {
-    return DeleteFileA(str.c_str());
+    bool r = DeleteFileA(str.c_str());
+    if (!r)
+        Logger::Warn("删除文件 " + str + " 失败");
+    return r;
 }
 
 bool rmdir(string const &str)
 {
-    return RemoveDirectoryA(str.c_str());
+    bool r = RemoveDirectoryA(str.c_str());
+    if (!r)
+        Logger::Warn("删除目录 " + str + " 失败");
+    return r;
 }
 
 string absolute(string const &str)
@@ -112,7 +122,10 @@ string pwd()
 
 bool cd(string const& str)
 {
-    return SetCurrentDirectoryA(str.c_str()) == S_OK;
+    bool r = SetCurrentDirectoryA(str.c_str()) == S_OK;
+    if (!r)
+        Logger::Warn("修改当前工作目录为 " + str + " 失败");
+    return r;
 }
 
 shared_ptr<Stat> stat(string const &target) {
@@ -137,7 +150,10 @@ string normalize(string const &str) {
 }
 
 bool mkdir(string const &str) {
-    return ::mkdir(str.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0;
+    bool r = ::mkdir(str.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0;
+    if (!r)
+        Logger::Warn("创建文件夹 " + str + " 失败");
+    return r;
 }
 
 bool exists(string const &str) {
@@ -178,11 +194,17 @@ strings listdir(string const &str) {
 }
 
 bool rmfile(string const &str) {
-    return ::unlink(str.c_str()) == 0;
+    bool r = ::unlink(str.c_str()) == 0;
+    if (!r)
+        Logger::Warn("删除文件 " + str + " 失败");
+    return r;
 }
 
 bool rmdir(string const &str) {
-    return ::rmdir(str.c_str()) == 0;
+    bool r = ::rmdir(str.c_str()) == 0;
+    if (!r)
+        Logger::Warn("删除文件夹 " + str + " 失败");
+    return r;
 }
 
 string absolute(string const &str) {
@@ -209,7 +231,10 @@ string pwd() {
 }
 
 bool cd(string const &str) {
-    return ::chdir(str.c_str()) == 0;
+    bool r = ::chdir(str.c_str()) == 0;
+    if (!r)
+        Logger::Warn("修改工作目录为 " + str + " 失败");
+    return r;
 }
 
 shared_ptr<Stat> stat(string const &target) {
@@ -266,11 +291,9 @@ bool rmtree(string const &str) {
         auto cur = str + PATH_DELIMITER + e;
         if (isfile(cur)) {
             if (!rmfile(cur)) {
-                cerr << ("删除 " + cur + " 失败") << endl;
                 return false;
             }
         } else if (!rmtree(cur)) {
-            cerr << ("删除 " + cur + " 失败") << endl;
             return false;
         }
     }
@@ -334,5 +357,50 @@ bool file_put_contents(string const &file, string const &result) {
     fclose(fp);
     return true;
 }
+
+#if !defined(NNT_DARWIN)
+
+static string gs_path_home;
+
+string path_home()
+{
+    return gs_path_home;
+}
+
+void path_home(string const& v)
+{
+    gs_path_home = v;
+}
+
+static string gs_path_docs;
+
+string path_documents()
+{
+    return gs_path_docs;
+}
+
+void path_documents(string const& v)
+{
+    gs_path_docs = v;
+}
+
+static string gs_path_tmp;
+
+string path_tmp()
+{
+    return gs_path_tmp;
+}
+
+void path_tmp(string const& v)
+{
+    gs_path_tmp = v;
+}
+
+string path_app()
+{
+    return pwd();
+}
+
+#endif
 
 CROSS_END

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		161D692624B42713007D7629 /* cross_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 161D692424B42713007D7629 /* cross_ios.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		168B9B1524B71D4C00B0E221 /* objc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9B1324B71D4B00B0E221 /* objc.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9B1624B71D4C00B0E221 /* objc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B1424B71D4B00B0E221 /* objc.mm */; };
+		168B9B1824B71D5A00B0E221 /* fs.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B1724B71D5A00B0E221 /* fs.mm */; };
 		168C790124B5D47E006099C4 /* ioapi_mem.h in Headers */ = {isa = PBXBuildFile; fileRef = 168C78FA24B5D47D006099C4 /* ioapi_mem.h */; };
 		168C790224B5D47E006099C4 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = 168C78FB24B5D47D006099C4 /* unzip.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		168C790324B5D47E006099C4 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 168C78FC24B5D47D006099C4 /* ioapi.h */; };
@@ -68,6 +71,9 @@
 		161D692124B42713007D7629 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		161D692424B42713007D7629 /* cross_ios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cross_ios.h; sourceTree = "<group>"; };
 		161D692524B42713007D7629 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		168B9B1324B71D4B00B0E221 /* objc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = objc.hpp; path = ../../cross/objc.hpp; sourceTree = "<group>"; };
+		168B9B1424B71D4B00B0E221 /* objc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = objc.mm; path = ../../cross/objc.mm; sourceTree = "<group>"; };
+		168B9B1724B71D5A00B0E221 /* fs.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = fs.mm; path = ../../cross/fs.mm; sourceTree = "<group>"; };
 		168C78FA24B5D47D006099C4 /* ioapi_mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioapi_mem.h; path = ../../cross/minizip/ioapi_mem.h; sourceTree = "<group>"; };
 		168C78FB24B5D47D006099C4 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unzip.h; path = ../../cross/minizip/unzip.h; sourceTree = "<group>"; };
 		168C78FC24B5D47D006099C4 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioapi.h; path = ../../cross/minizip/ioapi.h; sourceTree = "<group>"; };
@@ -168,6 +174,8 @@
 		168C78F824B5D453006099C4 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				168B9B1324B71D4B00B0E221 /* objc.hpp */,
+				168B9B1424B71D4B00B0E221 /* objc.mm */,
 				16F19D9924B5E524001011C8 /* connector_objc.hpp */,
 				16F19D9824B5E524001011C8 /* connector_objc.mm */,
 				168C792D24B5D4D0006099C4 /* code.hpp */,
@@ -181,6 +189,7 @@
 				168C791E24B5D4CF006099C4 /* digest.cpp */,
 				168C791C24B5D4CF006099C4 /* digest.hpp */,
 				168C792F24B5D4D0006099C4 /* digest.mm */,
+				168B9B1724B71D5A00B0E221 /* fs.mm */,
 				168C791624B5D4CE006099C4 /* fs.cpp */,
 				168C791124B5D4CE006099C4 /* fs.hpp */,
 				168C792324B5D4CF006099C4 /* json.cpp */,
@@ -279,6 +288,7 @@
 				16F19D9B24B5E524001011C8 /* connector_objc.hpp in Headers */,
 				168C794124B5D4D1006099C4 /* threads.hpp in Headers */,
 				168C796424B5E324006099C4 /* tinyxml2.h in Headers */,
+				168B9B1524B71D4C00B0E221 /* objc.hpp in Headers */,
 				161D692624B42713007D7629 /* cross_ios.h in Headers */,
 				168C790124B5D47E006099C4 /* ioapi_mem.h in Headers */,
 				168C790324B5D47E006099C4 /* ioapi.h in Headers */,
@@ -355,6 +365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				168C795B24B5D4D1006099C4 /* digest.mm in Sources */,
+				168B9B1624B71D4C00B0E221 /* objc.mm in Sources */,
 				16F19D9A24B5E524001011C8 /* connector_objc.mm in Sources */,
 				168C795124B5D4D1006099C4 /* xml.mm in Sources */,
 				168C795E24B5D4D1006099C4 /* logger.cpp in Sources */,
@@ -377,6 +388,7 @@
 				168C793B24B5D4D1006099C4 /* datetime.cpp in Sources */,
 				168C795624B5D4D1006099C4 /* zip.cpp in Sources */,
 				168C794624B5D4D1006099C4 /* timer.mm in Sources */,
+				168B9B1824B71D5A00B0E221 /* fs.mm in Sources */,
 				168C794D24B5D4D1006099C4 /* sys.mm in Sources */,
 				168C793624B5D4D1006099C4 /* json.mm in Sources */,
 				168C793F24B5D4D1006099C4 /* threads.cpp in Sources */,
