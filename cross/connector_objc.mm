@@ -20,7 +20,7 @@ public:
     explicit ObjcHttpConnectorPrivate(ObjcHttpConnector* owner)
     : d_owner(owner)
     {
-        
+
     }
     
     void clear()
@@ -88,6 +88,7 @@ NSDictionary* args2dict(HttpConnector::args_type const& args)
     for (auto &e:args) {
         auto k = [NSString stringWithUTF8String:e.first.c_str()];
         ::std::ostringstream oss;
+        oss << e.second;
         auto vstr = oss.str();
         auto v = [NSString stringWithUTF8String:vstr.c_str()];
         [r setValue:v forKey:k];
@@ -109,7 +110,7 @@ bool ObjcHttpConnector::send() const
 {
     NSMutableString *url = [NSMutableString stringWithUTF8String:this->url.c_str()];
 
-    if (method == Method::GET)
+    if (method == Method::GET || 1)
     {
         if (!_reqargs.empty())
         {
@@ -127,10 +128,8 @@ bool ObjcHttpConnector::send() const
     
     NSMutableURLRequest *req = nil;
     
-    if (Mask::IsSet(method, Method::POST))
+    if (Mask::IsSet(method, Method::POST) && 0)
     {
-        [req setHTTPMethod:@"POST"];
-        
         switch (method)
         {
         default:break;
@@ -181,12 +180,14 @@ bool ObjcHttpConnector::send() const
         }
             break;
         }
+    } else {
+        req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     }
     
-    [req setTimeoutInterval:timeout];
+    //[req setTimeoutInterval:timeout];
     
     // 设置请求头
-    if (!_reqheaders.empty())
+    if (!_reqheaders.empty() && 0)
     {
         for (auto& e : _reqheaders)
         {
@@ -201,6 +202,7 @@ bool ObjcHttpConnector::send() const
     // 取消证书验证
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.securityPolicy.validatesDomainName = NO;
     
     on_connected();
     
@@ -230,6 +232,7 @@ bool ObjcHttpConnector::send() const
         on_completed();
         d_ptr->sema_task.notify();
     }];
+    [d_ptr->task resume];
     
     d_ptr->sema_task.wait();
     d_ptr->task = nil;

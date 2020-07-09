@@ -13,13 +13,15 @@
 #import <cross/url.hpp>
 #import <cross/digest.hpp>
 #import <cross/zip.hpp>
+#import <cross/connector_curl.hpp>
+#import <cross/connector_objc.hpp>
 
 #if TARGET_OS_MACOS
-#import <cross/connector_curl.hpp>
-#define HTTPCONNECTOR CurlHttpConnector
-#define DOWNLOADCONNECTOR CurlDownloadConnector
+#define HTTPCONNECTOR ObjcHttpConnector
+#define DOWNLOADCONNECTOR ObjcDownloadConnector
+//#define HTTPCONNECTOR CurlHttpConnector
+//#define DOWNLOADCONNECTOR CurlDownloadConnector
 #else
-#import <cross/connector_objc.hpp>
 #define HTTPCONNECTOR ObjcHttpConnector
 #define DOWNLOADCONNECTOR ObjcDownloadConnector
 #endif
@@ -172,7 +174,7 @@ void test_md5()
 
 void test_zip()
 {
-    string cur = absolute(dirname(__FILE__) + "/../../..");
+    string cur = absolute(dirname(__FILE__) + "/..");
     
     mkdir("test-file");
     mkdir("test-dir");
