@@ -11,6 +11,7 @@
 #import "memory.hpp"
 #import "objc.hpp"
 #import <fstream>
+#import "fs.hpp"
 
 USE_CROSS;
 
@@ -296,11 +297,6 @@ public:
     {
         oc_ptr = [OBJC_ObjcDownloadConnectorPrivate new];
         oc_ptr.d_ptr = this;
-        
-        buffer.proc_full = [&](FixedBuffer<BUFSIZ>& buf)
-        {
-            file->write(buf.buf(), buf.size());
-        };
     }
     
     ~ObjcDownloadConnectorPrivate()
@@ -308,27 +304,10 @@ public:
         oc_ptr = nil;
     }
     
-    void flush()
-    {
-        if (!file)
-            return;
-        
-        if (buffer.size())
-        {
-            file->write(buffer.buf(), buffer.size());
-            buffer.clear();
-        }
-        
-        file->flush();
-        file->close();
-        file = nullptr;
-    }
-
     void clear()
     {
         errcode = -1;
         errmsg.clear();
-        buffer.clear();
         rspheaders.clear();
         [oc_ptr clear];
     }
@@ -378,18 +357,16 @@ public:
         d_owner->on_progress_download(range);
     }
     
+    string const& target() const
+    {
+        return d_owner->target;
+    }
+    
     int errcode = -1;
     string errmsg;
     unsigned short respcode;
     HttpConnector::args_type rspheaders;
     
-    // 下载缓存
-    ::std::mutex mtx_buffer;
-    FixedBuffer<BUFSIZ> buffer;
-
-    // 下载的文件指针
-    shared_ptr<::std::ofstream> file;
-
     ObjcDownloadConnector *d_owner;
     semaphore sema_task;
     NSURLSessionDownloadTask *task = nil;
@@ -414,11 +391,7 @@ void ObjcDownloadConnector::close()
 bool ObjcDownloadConnector::send() const
 {
     d_ptr->close();
-    
-    // 打开文件，进行读写
-    d_ptr->file = make_shared<::std::ofstream>();
-    d_ptr->file->open(target, ::std::ios::out | ::std::ios::binary);
-    
+        
     NSMutableString *url = [NSMutableString stringWithUTF8String:this->url.c_str()];
 
     if (method == Method::GET)
@@ -794,6 +767,7 @@ CROSS_END
     NSString *msg = [NSString stringWithFormat:@"重定向至 %@", request.URL];
     Logger::Debug(msg.UTF8String);
 #endif
+    
     completionHandler(request);
 }
 
@@ -831,9 +805,6 @@ CROSS_END
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
                            didCompleteWithError:(nullable NSError *)err
 {
-    // 不管成功或者失败，都刷新下文件，避免文件句柄一直被打开
-    _d_ptr->flush();
-    
     if (err) {
         [self on_error:err];
     } else {
@@ -851,11 +822,10 @@ CROSS_END
     _d_ptr->respcode = respn.statusCode;
     fromOc(respn.allHeaderFields, _d_ptr->rspheaders);
     
-    _d_ptr->flush();
-    
-    // 删除下载的临时文件
-    NSError *err;
-    [NSFileManager.defaultManager removeItemAtURL:location error:&err];
+    // 移动
+    if (exists(_d_ptr->target()))
+        rmfile(_d_ptr->target());
+    mv(fromOc(location.relativePath), _d_ptr->target());
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask

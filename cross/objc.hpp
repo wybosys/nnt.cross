@@ -11,6 +11,8 @@ CROSS_BEGIN
 
 extern NSString *toOc(string const&);
 
+extern string fromOc(NSString *);
+
 extern NSDictionary *toOc(::std::map<string, shared_ptr<Property> > const&);
 
 extern void fromOc(NSDictionary*, ::std::map<string, shared_ptr<Property> > &);

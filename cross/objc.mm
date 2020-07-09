@@ -9,6 +9,11 @@ NSString *toOc(string const& str)
     return [NSString stringWithUTF8String:str.c_str()];
 }
 
+string fromOc(NSString *str)
+{
+    return str.UTF8String;
+}
+
 NSDictionary *toOc(::std::map<string, shared_ptr<Property> > const& args)
 {
     NSMutableDictionary *r = [NSMutableDictionary dictionaryWithCapacity:args.size()];

@@ -23,6 +23,8 @@ extern NNT_API ::std::vector<string> listdir(string const &);
 
 extern NNT_API bool rmfile(string const &);
 
+extern NNT_API bool mv(string const&, string const&);
+
 extern NNT_API bool rmtree(string const &);
 
 extern NNT_API bool rmdir(string const &);

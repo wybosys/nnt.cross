@@ -11,6 +11,7 @@
 		164E588B24B56AD90028355F /* logger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 164E588A24B56AD90028355F /* logger.mm */; };
 		168B9B0F24B709E800B0E221 /* objc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B0D24B709E800B0E221 /* objc.mm */; };
 		168B9B1024B709E800B0E221 /* objc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9B0E24B709E800B0E221 /* objc.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9B1224B71B1900B0E221 /* fs.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B1124B71B1900B0E221 /* fs.mm */; };
 		168C789924B56D48006099C4 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C789724B56D48006099C4 /* fs.cpp */; };
 		168C789A24B56D48006099C4 /* fs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C789824B56D48006099C4 /* fs.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168C789D24B56DD8006099C4 /* connector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C789B24B56DD8006099C4 /* connector.cpp */; };
@@ -74,6 +75,7 @@
 		164E588A24B56AD90028355F /* logger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = logger.mm; path = ../../cross/logger.mm; sourceTree = "<group>"; };
 		168B9B0D24B709E800B0E221 /* objc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = objc.mm; path = ../../cross/objc.mm; sourceTree = "<group>"; };
 		168B9B0E24B709E800B0E221 /* objc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = objc.hpp; path = ../../cross/objc.hpp; sourceTree = "<group>"; };
+		168B9B1124B71B1900B0E221 /* fs.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = fs.mm; path = ../../cross/fs.mm; sourceTree = "<group>"; };
 		168C789724B56D48006099C4 /* fs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fs.cpp; path = ../../cross/fs.cpp; sourceTree = "<group>"; };
 		168C789824B56D48006099C4 /* fs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fs.hpp; path = ../../cross/fs.hpp; sourceTree = "<group>"; };
 		168C789B24B56DD8006099C4 /* connector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = connector.cpp; path = ../../cross/connector.cpp; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				168C78AB24B56E8C006099C4 /* url.hpp */,
 				168C789B24B56DD8006099C4 /* connector.cpp */,
 				168C789C24B56DD8006099C4 /* connector.hpp */,
+				168B9B1124B71B1900B0E221 /* fs.mm */,
 				168C789724B56D48006099C4 /* fs.cpp */,
 				168C789824B56D48006099C4 /* fs.hpp */,
 				164E588A24B56AD90028355F /* logger.mm */,
@@ -385,6 +388,7 @@
 				168C78DE24B5AF7A006099C4 /* xml.mm in Sources */,
 				168C78F024B5C919006099C4 /* ioapi.c in Sources */,
 				16A20E3924B473AA00706A78 /* str.cpp in Sources */,
+				168B9B1224B71B1900B0E221 /* fs.mm in Sources */,
 				168C78C924B57B2F006099C4 /* json.mm in Sources */,
 				168C78AE24B56E8C006099C4 /* property.cpp in Sources */,
 				168C78EF24B5C919006099C4 /* unzip.c in Sources */,
