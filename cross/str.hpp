@@ -37,6 +37,11 @@ extern NNT_API string tostr(double, bool trim = true);
 
 extern NNT_API string tostr(unsigned long long);
 
+// 大小写转换
+extern NNT_API string toupper(string const&);
+
+extern NNT_API string tolower(string const&);
+
 // 字符替换
 extern NNT_API string replace(string const &, string const &pat, string const &tgt);
 

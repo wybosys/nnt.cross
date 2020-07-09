@@ -14,11 +14,13 @@ class MainActivity() : AppCompatActivity() {
 
         // 执行测试
         test()
+        test_sys()
         test_thread()
         test_time()
     }
 
     private external fun test()
+    private external fun test_sys()
     private external fun test_thread()
     private external fun test_time()
 }

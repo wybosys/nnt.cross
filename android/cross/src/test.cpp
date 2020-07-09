@@ -3,6 +3,11 @@
 #include <cross/logger.hpp>
 #include <cross/threads.hpp>
 #include <cross/timer.hpp>
+#include <cross/stringbuilder.hpp>
+#include <cross/sys.hpp>
+#include <cross/str.hpp>
+
+#define UNITTEST_CHECK_EQUAL(a, b) assert(a == b)
 
 AJNI_IMP_LOADED({})
 AJNI_IMP_UNLOADED({})
@@ -14,6 +19,20 @@ USE_CROSS;
 AJNI_API(void) CROSS_FUNC(MainActivity, test)(JNIEnv* env, jobject thiz)
 {
     Logger::shared().prefix = "CROSS-AJNI";
+}
+
+AJNI_API(void) CROSS_FUNC(MainActivity, test_1sys)(JNIEnv* env, jobject thiz)
+{
+    string str = " a b c ";
+    UNITTEST_CHECK_EQUAL(replace(str, " ", "/"), "/a/b/c/");
+
+    stringbuilder sb;
+    sb.space(" ");
+    Logger::Info(
+        sb.add("当前线程号:").add(get_thread_id()).ln()
+            .add("uuid:").add(uuid()).ln()
+            .str()
+    );
 }
 
 AJNI_API(void) CROSS_FUNC(MainActivity, test_1thread)(JNIEnv* env, jobject thiz)

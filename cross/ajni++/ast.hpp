@@ -407,6 +407,40 @@ private:
     mutable shared_ptr<JObject::_JGlobalObject> _gobj;
 };
 
+// 类静态实例
+template<typename TClass>
+class JClassEntry
+{
+public:
+
+    typedef TClass class_type;
+    typedef shared_ptr<JClass> class_typep;
+
+    explicit JClassEntry(class_typep const& clz = nullptr)
+        : _clazz(clz)
+    {
+        if (!_clazz)
+        {
+            _clazz = Env.context().register_class<class_type>();
+        }
+    }
+
+    inline class_type* operator->()
+    {
+        return dynamic_cast<class_type*>(_clazz.get());
+    }
+
+    inline class_type const* operator->() const
+    {
+        return dynamic_cast<class_type*>(_clazz.get());
+    }
+
+private:
+
+    class_typep _clazz;
+};
+
+// jstring转换为cstring
 extern string tostr(jstring);
 
 template<typename TClass>

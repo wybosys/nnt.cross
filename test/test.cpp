@@ -39,6 +39,8 @@ TEST (sys)
 	cout <<
 		 sb.add("当前线程号:").add(get_thread_id()).ln()
 			 .add("uuid:").add(uuid()).ln();
+
+    UNITTEST_CHECK_EQUAL("ABC", toupper("abc"));
 }
 
 TEST (test)

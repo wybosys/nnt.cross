@@ -2,6 +2,8 @@
 #include "str.hpp"
 #include <sstream>
 #include <regex>
+#include <cctype>
+#include <algorithm>
 
 CROSS_BEGIN
 
@@ -121,5 +123,20 @@ string tostr(unsigned long long v) {
 string replace(string const &str, string const &pat, string const &tgt) {
     return ::std::regex_replace(str, ::std::regex(pat), tgt);
 }
+
+string toupper(string const& str)
+{
+    string s = str;
+    ::std::transform(s.begin(), s.end(), s.begin(), ::toupper);
+    return s;
+}
+
+string tolower(string const& str)
+{
+    string s = str;
+    ::std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+    return s;
+}
+
 
 CROSS_END

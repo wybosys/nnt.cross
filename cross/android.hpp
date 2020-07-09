@@ -1,0 +1,13 @@
+#ifndef __CROSS_ANDROID_H_INCLUDED
+#define __CROSS_ANDROID_H_INCLUDED
+
+CROSS_BEGIN
+
+#ifdef NNT_ANDROID
+
+
+#endif
+
+CROSS_END
+
+#endif

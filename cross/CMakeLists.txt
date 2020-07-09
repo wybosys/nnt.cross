@@ -29,6 +29,7 @@ set(CROSS_SRCS
     url.cpp
     xml.cpp
     zip.cpp
+    android.cpp
     )
 
 add_library(cross STATIC ${CROSS_SRCS})
