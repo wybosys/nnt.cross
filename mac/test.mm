@@ -13,7 +13,6 @@
 #import <cross/url.hpp>
 #import <cross/digest.hpp>
 #import <cross/zip.hpp>
-#import <cross/tinyxml2.h>
 
 #if TARGET_OS_MACOS
 #import <cross/connector_curl.hpp>

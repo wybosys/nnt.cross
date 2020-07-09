@@ -3,14 +3,18 @@
 
 #include "property.hpp"
 
+#if TARGET_OS_IOS
+// ios没有提供系统级的xml双向解析器
+#include "tinyxml2.h"
+#endif
+
 CROSS_BEGIN
 
 #ifdef TINYXML2_INCLUDED
 #define HAS_XMLOBJECT
 typedef tinyxml2::XMLDocument XmlObject;
-#endif
-
-#if defined(NNT_DARWIN) && !defined(HAS_XMLOBJECT)
+#else
+#if defined(NNT_DARWIN)
 #define HAS_XMLOBJECT
 class XmlObject {
 public:
@@ -22,6 +26,7 @@ public:
     explicit XmlObject(obj_type o=nullptr) : obj(o) {}
     obj_type obj;
 };
+#endif
 #endif
 
 #ifdef HAS_XMLOBJECT
