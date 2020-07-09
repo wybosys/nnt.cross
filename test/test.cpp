@@ -21,6 +21,7 @@
 #include <zip.hpp>
 #include <sys.hpp>
 #include <timer.hpp>
+#include <stringbuilder.hpp>
 
 // #define WEBSOCKET_CONNECTOR LibWebSocketConnector
 #define WEBSOCKET_CONNECTOR BoostWebSocketConnector
@@ -33,7 +34,11 @@ TEST (sys)
 	string str = " a b c ";
 	UNITTEST_CHECK_EQUAL(replace(str, " ", "/"), "/a/b/c/");
 
-	cout << "当前线程号 " << get_thread_id() << endl;
+	stringbuilder sb;
+	sb.space(" ");
+	cout <<
+		 sb.add("当前线程号:").add(get_thread_id()).ln()
+			 .add("uuid:").add(uuid()).ln();
 }
 
 TEST (test)
@@ -77,6 +82,10 @@ TEST (fs)
 	file_put_contents("xx", str);
 	file_get_contents("xx", nstr);
 	UNITTEST_CHECK_EQUAL(str, nstr);
+
+    mv("xx", "yy");
+    UNITTEST_CHECK(exists("yy"));
+    rmfile("yy");
 }
 
 TEST (url)
@@ -356,6 +365,8 @@ TEST (async_task)
 int main()
 {
 	using namespace ::UnitTest;
+
+	cd(path_home());
 
 	TestReporterStdout rpt;
 	TestRunner runner(rpt);

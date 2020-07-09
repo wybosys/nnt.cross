@@ -261,7 +261,7 @@ BoostWebSocketConnector::BoostWebSocketConnector()
 BoostWebSocketConnector::~BoostWebSocketConnector()
 {
     close();
-    NNT_CLASS_DESTORY();
+    NNT_CLASS_DESTROY();
 }
 
 bool BoostWebSocketConnector::connect()

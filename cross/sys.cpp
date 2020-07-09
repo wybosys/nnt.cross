@@ -6,6 +6,7 @@
 
 #ifdef NNT_WINDOWS
 #include <Windows.h>
+#include <objbase.h>
 #endif
 
 #ifdef NNT_UNIXLIKE
@@ -68,6 +69,28 @@ void set_thread_name(string const& name)
 	{
 		// pass
 	}
+}
+
+string uuid()
+{
+    GUID t;
+    ::CoCreateGuid(&t);
+
+    char result[33] = { 0 };
+#ifdef __GNUC__
+    snprintf(
+#else // MSVC
+    _snprintf_s(
+#endif
+        result,
+        33,
+        "%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x",
+        t.Data1, t.Data2, t.Data3,
+        t.Data4[0], t.Data4[1],
+        t.Data4[2], t.Data4[3],
+        t.Data4[4], t.Data4[5],
+        t.Data4[6], t.Data4[7]);
+    return result;
 }
 
 #endif

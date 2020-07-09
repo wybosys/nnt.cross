@@ -228,7 +228,7 @@ LibWebSocketConnector::LibWebSocketConnector() {
 
 LibWebSocketConnector::~LibWebSocketConnector() {
     d_ptr->close();
-    NNT_CLASS_DESTORY();
+    NNT_CLASS_DESTROY();
 }
 
 bool LibWebSocketConnector::connect() {

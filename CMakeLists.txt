@@ -38,4 +38,4 @@ add_library(cross STATIC ${CROSS_SRCS})
 set(TEST_SRCS
     test/test.cpp)
 add_executable(test ${TEST_SRCS})
-target_link_libraries(test cross UnitTest++ tinyxml2 jsoncpp pthread websockets minizip curl md5 z ssl crypto)
+target_link_libraries(test cross UnitTest++ tinyxml2 jsoncpp pthread websockets minizip curl md5 z ssl crypto uuid)

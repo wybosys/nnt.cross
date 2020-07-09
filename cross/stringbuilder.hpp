@@ -19,22 +19,30 @@ public:
     {}
 
     template <typename T>
-    inline stringbuilder& operator << (T const& v) {
+    stringbuilder& add(T const& v) {
         if (_newline) {
             _oss << _prefix;
             _newline = false;
+        }
+        else {
+            _oss << _space;
         }
         _oss << v;
         return *this;
     }
 
-    inline stringbuilder& operator << (eol const& v) {
+    template <typename T>
+    inline stringbuilder& operator << (T const& v) {
+        return add(v);
+    }
+
+    stringbuilder& operator << (eol const& v) {
         _oss << _suffix << v.endl;
         _newline = true;
         return *this;
     }
     
-    inline stringbuilder& ln() {
+    stringbuilder& ln() {
         static eol t;
         *this << t;
         return *this;
