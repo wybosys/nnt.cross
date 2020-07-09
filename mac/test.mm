@@ -189,7 +189,8 @@ void test_rest()
 {
     HTTPCONNECTOR cnt;
     cnt.url = "https://cn.bing.com/search";
-    cnt.method = HttpConnector::Method::POST;
+    cnt.method = HttpConnector::Method::GET;
+    // cnt.method = HttpConnector::Method::POST;
     cnt.setarg("q", "abc");
     UNITTEST_CHECK_EQUAL(cnt.send(), true);
     cout << cnt.body().str() << endl;

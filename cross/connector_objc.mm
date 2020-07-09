@@ -9,7 +9,6 @@
 #import "threads.hpp"
 #import "code.hpp"
 #import "memory.hpp"
-#import <AFNetworking/AFNetworking.h>
 
 CROSS_BEGIN
 
@@ -35,10 +34,12 @@ public:
     {
         clear();
         
+        /*
         if (task) {
             [task cancel];
             task = nil;
         }
+         */
     }
     
     int errcode = -1;
@@ -48,7 +49,6 @@ public:
     HttpConnector::args_type rspheaders;
     
     ObjcHttpConnector *d_owner;
-    NSURLSessionTask *task = nil;
     semaphore sema_task;
 };
 
@@ -110,7 +110,7 @@ bool ObjcHttpConnector::send() const
 {
     NSMutableString *url = [NSMutableString stringWithUTF8String:this->url.c_str()];
 
-    if (method == Method::GET || 1)
+    if (method == Method::GET)
     {
         if (!_reqargs.empty())
         {
@@ -138,10 +138,6 @@ bool ObjcHttpConnector::send() const
             _reqheaders[HEADER_CONTENT_TYPE] = make_property("multipart/form-data");
             auto args = args2dict(_reqargs);
             NSError *err;
-            req = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST"
-                                                                URLString:url
-                                                               parameters:args
-                                                                    error:&err];
             if (err) {
                 Logger::Warn(stringbuilder().space(" ") << "HttpConnector:" << err.code << err.debugDescription.UTF8String);
                 return false;
@@ -160,10 +156,6 @@ bool ObjcHttpConnector::send() const
             _reqheaders[HEADER_CONTENT_TYPE] = make_property("application/json; charset=utf-8;");
             auto args = args2dict(_reqargs);
             NSError *err;
-            req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST"
-                                                                URLString:url
-                                                               parameters:args
-                                                                    error:&err];
             if (err) {
                 Logger::Warn(stringbuilder().space(" ") << "HttpConnector:" << err.code << err.debugDescription.UTF8String);
                 return false;
@@ -183,8 +175,8 @@ bool ObjcHttpConnector::send() const
     } else {
         req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     }
-    
-    //[req setTimeoutInterval:timeout];
+        
+    [req setTimeoutInterval:timeout];
     
     // 设置请求头
     if (!_reqheaders.empty() && 0)
@@ -200,42 +192,31 @@ bool ObjcHttpConnector::send() const
     }
     
     // 取消证书验证
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.securityPolicy.allowInvalidCertificates = YES;
-    manager.securityPolicy.validatesDomainName = NO;
     
     on_connected();
     
-    d_ptr->task = [manager dataTaskWithRequest:req
-                                uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
-        // pass
-    }
-                              downloadProgress:^(NSProgress * _Nonnull downloadProgress) {
-        // pass
-    }
-                             completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable err) {
-        if (err) {
-            d_ptr->errcode = (int)err.code;
-            string msg = err.description.UTF8String;
-            d_ptr->errmsg = msg;
-            on_error(error(Code::FAILED, msg));
-            
-            Logger::Error(stringbuilder().space(" ") << "HttpConnector:" << err.code << err.debugDescription.UTF8String);
-            d_ptr->sema_task.notify();
-            return;
-        }
+    NSError *err;
+    if (err) {
+        d_ptr->errcode = (int)err.code;
+        string msg = err.description.UTF8String;
+        d_ptr->errmsg = msg;
+        on_error(error(Code::FAILED, msg));
         
-        auto respn = (NSHTTPURLResponse*)response;
-        d_ptr->respcode = respn.statusCode;
-        dict2args(respn.allHeaderFields, d_ptr->rspheaders);
-        
-        on_completed();
+        Logger::Error(stringbuilder().space(" ") << "HttpConnector:" << err.code << err.debugDescription.UTF8String);
         d_ptr->sema_task.notify();
-    }];
-    [d_ptr->task resume];
+        //return;
+    }
+    
+    //d_ptr->respcode = respn.statusCode;
+    //    dict2args(respn.allHeaderFields, d_ptr->rspheaders);
+    
+    on_completed();
+    d_ptr->sema_task.notify();
+    
+    //[d_ptr->task resume];
     
     d_ptr->sema_task.wait();
-    d_ptr->task = nil;
+    //d_ptr->task = nil;
     
     on_disconnected();
 
