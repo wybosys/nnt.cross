@@ -245,9 +245,9 @@ operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr<Property> cons
 }
 
 template<typename V>
-inline shared_ptr<Property> make_property(V &v)
+inline shared_ptr<Property> make_property(V &&v)
 {
-    return make_shared<Property>(v);
+    return make_shared<Property>(::std::forward<V>(v));
 }
 
 #ifdef _P

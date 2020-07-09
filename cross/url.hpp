@@ -2,6 +2,7 @@
 #define __NNTCROSS_URL_H_INCLUDED
 
 #include "property.hpp"
+#include "memory.hpp"
 
 CROSS_BEGIN
 
@@ -39,7 +40,35 @@ public:
 
 typedef string(fn_url_encoder)(Property const &);
 
+// 构造请求url
 extern NNT_API string build_querystring(Url::args_type const &, fn_url_encoder = nullptr);
+
+// formdata构造对象
+class NNT_API FormData
+{
+public:
+    
+    FormData();
+    
+    // 标记
+    string boundary;
+    
+    typedef shared_ptr<Property> arg_type;
+    typedef ::std::map<string, arg_type> args_type;
+    
+    // 参数集
+    args_type args;
+    
+    // 生成内容头
+    string contenttype() const;
+    void contenttype(string &) const;
+    
+    typedef ByteStream<> buffer_type;
+    
+    // 生成数据段
+    shared_ptr<buffer_type> body() const;
+    void body(buffer_type &) const;
+};
 
 CROSS_END
 

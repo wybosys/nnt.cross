@@ -2,6 +2,7 @@
 #include "url.hpp"
 #include <sstream>
 #include "str.hpp"
+#include "sys.hpp"
 
 CROSS_BEGIN
 
@@ -95,6 +96,46 @@ string build_querystring(Url::args_type const &args, fn_url_encoder url_encoder)
     }
 
     return "?" + implode(strs, "&");
+}
+
+FormData::FormData()
+{
+    boundary = "----" + uuid();
+}
+
+void FormData::contenttype(string &ct) const
+{
+    ct = "multipart/form-data; boundary=" + boundary;
+}
+
+void FormData::body(buffer_type &buf) const
+{
+    for (auto const& e: args) {
+        buf.write(boundary.c_str(), boundary.length());
+    
+        string header = "Content-Disposition: form-data; name=\"" + e.first + "\"\n";
+        buf.write(header.c_str(), header.length());
+        
+        string val = e.second->toString();
+        buf.write(val.c_str(), val.length());
+        
+        string eov = "\n\n";
+        buf.write(eov.c_str(), eov.length());
+    }
+}
+
+string FormData::contenttype() const
+{
+    string r;
+    contenttype(r);
+    return r;
+}
+
+auto FormData::body() const -> shared_ptr<buffer_type>
+{
+    auto r = make_shared<buffer_type>();
+    body(*r);
+    return r;
 }
 
 CROSS_END

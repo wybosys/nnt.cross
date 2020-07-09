@@ -320,12 +320,18 @@ public:
 
 	void flush()
 	{
+        if (!file)
+            return;
+        
 		if (buffer.size())
 		{
 			file->write(buffer.buf(), buffer.size());
 			buffer.clear();
 		}
+        
 		file->flush();
+        file->close();
+        file = nullptr;
 	}
 
 	static size_t ImpReceiveData(char const* buf, size_t size, size_t count, private_type
@@ -531,11 +537,14 @@ bool CurlDownloadConnector::send() const
 	curl_easy_setopt(h, CURLOPT_HEADERDATA, d_ptr.get());
 
 	auto st = curl_easy_perform(h);
+    
+    // 不管成功或者失败，都刷新下文件，避免文件句柄一直被打开
+    d_ptr->flush();
+    
 	if (st == CURLE_OK)
 	{
 		curl_easy_getinfo(h, CURLINFO_RESPONSE_CODE, &d_ptr->respcode);
 		// 刷缓存中的数据
-		d_ptr->flush();
 		on_completed();
 	}
 	else

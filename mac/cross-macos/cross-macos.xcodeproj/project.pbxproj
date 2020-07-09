@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		161D68FE24B426AC007D7629 /* cross_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = 161D68FC24B426AC007D7629 /* cross_macos.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		164E588B24B56AD90028355F /* logger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 164E588A24B56AD90028355F /* logger.mm */; };
+		168B9B0F24B709E800B0E221 /* objc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B0D24B709E800B0E221 /* objc.mm */; };
+		168B9B1024B709E800B0E221 /* objc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9B0E24B709E800B0E221 /* objc.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168C789924B56D48006099C4 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C789724B56D48006099C4 /* fs.cpp */; };
 		168C789A24B56D48006099C4 /* fs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168C789824B56D48006099C4 /* fs.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168C789D24B56DD8006099C4 /* connector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168C789B24B56DD8006099C4 /* connector.cpp */; };
@@ -70,6 +72,8 @@
 		161D68FC24B426AC007D7629 /* cross_macos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cross_macos.h; sourceTree = "<group>"; };
 		161D68FD24B426AC007D7629 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		164E588A24B56AD90028355F /* logger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = logger.mm; path = ../../cross/logger.mm; sourceTree = "<group>"; };
+		168B9B0D24B709E800B0E221 /* objc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = objc.mm; path = ../../cross/objc.mm; sourceTree = "<group>"; };
+		168B9B0E24B709E800B0E221 /* objc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = objc.hpp; path = ../../cross/objc.hpp; sourceTree = "<group>"; };
 		168C789724B56D48006099C4 /* fs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fs.cpp; path = ../../cross/fs.cpp; sourceTree = "<group>"; };
 		168C789824B56D48006099C4 /* fs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fs.hpp; path = ../../cross/fs.hpp; sourceTree = "<group>"; };
 		168C789B24B56DD8006099C4 /* connector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = connector.cpp; path = ../../cross/connector.cpp; sourceTree = "<group>"; };
@@ -197,6 +201,8 @@
 		16A20E3224B4737F00706A78 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				168B9B0E24B709E800B0E221 /* objc.hpp */,
+				168B9B0D24B709E800B0E221 /* objc.mm */,
 				16F19D9C24B5E542001011C8 /* connector_objc.hpp */,
 				16F19D9D24B5E542001011C8 /* connector_objc.mm */,
 				168C78F424B5D121006099C4 /* connector_curl.cpp */,
@@ -278,6 +284,7 @@
 				168C78F524B5D121006099C4 /* connector_curl.hpp in Headers */,
 				16F19D9E24B5E543001011C8 /* connector_objc.hpp in Headers */,
 				16A20E6624B4831600706A78 /* datetime.hpp in Headers */,
+				168B9B1024B709E800B0E221 /* objc.hpp in Headers */,
 				16A20E5B24B47B1A00706A78 /* sys.hpp in Headers */,
 				16A20E5C24B47B1A00706A78 /* timer.hpp in Headers */,
 				16A20E4A24B476A300706A78 /* cross.hpp in Headers */,
@@ -355,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16A20E5424B47AC700706A78 /* threads.cpp in Sources */,
+				168B9B0F24B709E800B0E221 /* objc.mm in Sources */,
 				16F19D9F24B5E543001011C8 /* connector_objc.mm in Sources */,
 				168C78DB24B5AF69006099C4 /* xml.cpp in Sources */,
 				168C789D24B56DD8006099C4 /* connector.cpp in Sources */,

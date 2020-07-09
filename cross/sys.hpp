@@ -17,6 +17,9 @@ extern string get_thread_name();
 // 设置线程名称
 extern void set_thread_name(string const&);
 
+// 生成UUID字符串，不带-的形式
+extern NNT_API string uuid();
+
 CROSS_END
 
 #endif

@@ -11,6 +11,7 @@
 #ifdef NNT_UNIXLIKE
 #include <sys/types.h>
 #include <unistd.h>
+#include <uuid/uuid.h>
 #endif
 
 #ifdef NNT_ANDROID
@@ -121,6 +122,34 @@ void set_thread_name(string const& name)
 	auto ret = pthread_setname_np(*na, tls_thread_name.c_str());
 	if (ret)
 		Logger::Warn("设置线程名称失败");
+}
+
+#endif
+
+#ifdef NNT_UNIXLIKE
+
+string uuid()
+{
+    uuid_t t;
+    uuid_generate(t);
+    
+    char result[33] = {0};
+    for (size_t i = 0; i < 16; i++)
+    {
+#ifdef NNT_WINDOWS
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+        
+        // 不可能越界，所以关闭编译器的警告
+        sprintf(result + 2 * i, "%02x", t[i]);
+        
+#ifdef NNT_WINDOWS
+#pragma warning(pop)
+#endif
+    }
+
+    return result;
 }
 
 #endif
