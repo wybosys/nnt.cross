@@ -7,6 +7,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 add_subdirectory(md5)
 add_subdirectory(minizip)
 add_subdirectory(jsoncpp)
+add_subdirectory(tinyxml2)
 
 include_directories(.)
 include_directories(jsoncpp)

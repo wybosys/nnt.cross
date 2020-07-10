@@ -7,6 +7,12 @@
 #include <cross/sys.hpp>
 #include <cross/str.hpp>
 
+#include <tinyxml2/tinyxml2.h>
+#include <json/json.h>
+
+#include <cross/xml.hpp>
+#include <cross/json.hpp>
+
 #define UNITTEST_CHECK_EQUAL(a, b) assert(a == b)
 
 AJNI_IMP_LOADED({})
@@ -78,4 +84,37 @@ AJNI_API(void) CROSS_FUNC(MainActivity, test_1time)(JNIEnv* env, jobject thiz)
             Timer::CancelInterval(*tmr);
         }
     });
+}
+
+AJNI_API(void) CROSS_FUNC(MainActivity, test_1prop)(JNIEnv* env, jobject thiz)
+{
+    string str = "{\"b\":false,\"nil\":null,\"s\":\"string\"}";
+    auto v = json_decode(str);
+    auto p = toproperty(*v);
+    v = tojsonobj(*p);
+    string astr = json_encode(*v);
+    UNITTEST_CHECK_EQUAL(str, astr);
+
+    auto xo = toxmlobj(*p);
+    astr = xml_encode(*xo);
+    xo = xml_decode(astr);
+    p = toproperty(*xo);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
+    UNITTEST_CHECK_EQUAL(str, astr);
+
+    str = "[false,null,\"string\"]";
+    v = json_decode(str);
+    p = toproperty(*v);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
+    UNITTEST_CHECK_EQUAL(str, astr);
+
+    xo = toxmlobj(*p);
+    astr = xml_encode(*xo);
+    xo = xml_decode(astr);
+    p = toproperty(*xo);
+    v = tojsonobj(*p);
+    astr = json_encode(*v);
+    UNITTEST_CHECK_EQUAL(str, astr);
 }

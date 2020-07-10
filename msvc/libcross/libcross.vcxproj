@@ -248,7 +248,12 @@
     <ClCompile Include="..\..\cross\threads.cpp" />
     <ClCompile Include="..\..\cross\datetime.cpp" />
     <ClCompile Include="..\..\cross\timer.cpp" />
-    <ClCompile Include="..\..\cross\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="..\..\cross\tinyxml2\tinyxml2.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\cross\url.cpp" />
     <ClCompile Include="..\..\cross\xml.cpp" />
     <ClCompile Include="..\..\cross\zip.cpp" />

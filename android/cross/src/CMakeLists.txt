@@ -17,5 +17,7 @@ add_subdirectory(${LIB_DIR} cross)
 # 构造测试so
 include_directories(${LIB_HOME})
 include_directories(${LIB_DIR})
+include_directories(${LIB_DIR}/jsoncpp)
+
 add_library(tester SHARED test.cpp ${LIB_DIR}/android_link.cpp)
-target_link_libraries(tester cross ajni++)
+target_link_libraries(tester cross ajni++ jsoncpp tinyxml2)
