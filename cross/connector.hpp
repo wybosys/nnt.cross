@@ -40,7 +40,7 @@ protected:
     virtual void on_connected() const {}
 
     // 遇到错误
-    virtual void on_error(error const &) const {} 
+    virtual void on_error(error const &) const;
 
     // 断开连接
     virtual void on_disconnected() const {} 

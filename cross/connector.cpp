@@ -1,5 +1,6 @@
 #include "cross.hpp"
 #include "connector.hpp"
+#include "logger.hpp"
 #include <sstream>
 
 CROSS_BEGIN
@@ -12,6 +13,11 @@ string Connector::USERAGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) A
 #else
 string Connector::USERAGENT = "Mozilla/5.0 (Linux) AppleWebKit/600.1.4 (KHTML, like Gecko) NetType/WIFI";
 #endif
+
+void Connector::on_error(error const &err) const
+{
+    Logger::Error(err.what());
+}
 
 HttpConnector &HttpConnector::setarg(string const &key, arg_type const &arg) {
     _reqargs[key] = arg;
