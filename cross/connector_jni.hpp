@@ -7,9 +7,10 @@ CROSS_BEGIN
 
 NNT_CLASS_PREPARE(JniHttpConnector);
 
-class NNT_API JniHttpConnector : public HttpConnector
+class NNT_API JniHttpConnector
+    : public HttpConnector
 {
-    NNT_CLASS_DECL(JniHttpConnector);
+NNT_CLASS_DECL(JniHttpConnector);
 
 public:
 
@@ -30,17 +31,20 @@ NNT_CLASS_PREPARE(JniWebSocketConnector);
 
 class NNT_API JniWebSocketConnector : public WebSocketConnector
 {
-    NNT_CLASS_DECL(JniWebSocketConnector);
+NNT_CLASS_DECL(JniWebSocketConnector);
 
 public:
 
     JniWebSocketConnector(string const& JavaClassPath);
     virtual ~JniWebSocketConnector();
 
-    virtual void close();
-    virtual bool connect();
-    virtual bool write(memory_type const&);
-    virtual buffer_type wait();
+    virtual void close() override;
+    virtual bool connect() override;
+    virtual buffer_typep wait() override;
+
+protected:
+
+    virtual bool _write(memory_type const&) override;
 };
 
 CROSS_END

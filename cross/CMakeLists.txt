@@ -16,6 +16,7 @@ set(CROSS_SRCS
     fs.cpp
     str.cpp
     connector.cpp
+    connector_jni.cpp
     cross.cpp
     datetime.cpp
     digest.cpp

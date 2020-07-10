@@ -18,7 +18,7 @@ JniHttpConnector::JniHttpConnector(string const& JavaClassPath)
 
 JniHttpConnector::~JniHttpConnector()
 {
-    NNT_CLASS_DESTORY();
+    NNT_CLASS_DESTROY();
 }
 
 void JniHttpConnector::close()
@@ -38,17 +38,17 @@ int JniHttpConnector::errcode() const
 
 string const& JniHttpConnector::errmsg() const
 {
-    return ::NNT_NS::Nil<string>();
+    return ::NNT_NS::AsNil<string>();
 }
 
 HttpConnector::body_stream_type JniHttpConnector::body() const
 {
-    return ::NNT_NS::Nil<stream_type>();
+    return ::NNT_NS::AsNil<stream_type>();
 }
 
 JniHttpConnector::args_type const& JniHttpConnector::respheaders() const
 {
-    return ::NNT_NS::Nil<args_type>();
+    return ::NNT_NS::AsNil<args_type>();
 }
 
 unsigned short JniHttpConnector::respcode() const
@@ -69,7 +69,7 @@ JniWebSocketConnector::JniWebSocketConnector(string const& JavaClassPath)
 
 JniWebSocketConnector::~JniWebSocketConnector()
 {
-    NNT_CLASS_DESTORY();
+    NNT_CLASS_DESTROY();
 }
 
 void JniWebSocketConnector::close()
@@ -82,14 +82,14 @@ bool JniWebSocketConnector::connect()
     return false;
 }
 
-bool JniWebSocketConnector::write(memory_type const& mem)
+bool JniWebSocketConnector::_write(memory_type const& mem)
 {
     return false;
 }
 
-WebSocketConnector::buffer_type JniWebSocketConnector::wait()
+WebSocketConnector::buffer_typep JniWebSocketConnector::wait()
 {
-    return ::NNT_NS::Nil<buffer_type>();
+    return nullptr;
 }
 
 CROSS_END
