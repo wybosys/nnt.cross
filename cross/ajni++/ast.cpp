@@ -785,7 +785,7 @@ JContext::JContext()
 
 JContext::~JContext()
 {
-    NNT_CLASS_DESTORY();
+    NNT_CLASS_DESTROY();
 }
 
 bool JContext::add(class_typep const& cls)

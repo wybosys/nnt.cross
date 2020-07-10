@@ -33,7 +33,7 @@ JInspect::JInspect(const ajni::JClass& clz)
 
 JInspect::~JInspect()
 {
-    NNT_CLASS_DESTORY();
+    NNT_CLASS_DESTROY();
 }
 
 AJNI_END

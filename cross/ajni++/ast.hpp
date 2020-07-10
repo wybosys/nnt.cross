@@ -334,6 +334,16 @@ public:
     typedef JEntry<TClass> self_type;
     typedef shared_ptr<self_type> return_type;
 
+    // 实例化一个实体
+    template<typename ...TArgs>
+    static return_type Instance(TArgs&& ...args)
+    {
+        auto cls = Env.context().register_class<class_type>();
+        auto obj = cls->construct(::std::forward<TArgs>(args)...);
+        return make_shared<self_type>(obj, cls);
+    }
+
+    // 传入其他地方已经实例化好了的
     explicit JEntry(JVariant const& var, class_typep const& clz = nullptr)
         : _clazz(clz)
     {
@@ -348,6 +358,7 @@ public:
         }
     }
 
+    // 传入其他地方已经实例化好了的
     explicit JEntry(shared_ptr<JVariant> const& pvar, class_typep const& clz = nullptr)
         : _clazz(clz)
     {

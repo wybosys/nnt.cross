@@ -50,7 +50,7 @@ private:                                              \
 
 #define NNT_CLASS_CONSTRUCT(...) \
     d_ptr = ::std::make_shared<private_class_type>(__VA_ARGS__);
-#define NNT_CLASS_DESTORY() \
+#define NNT_CLASS_DESTROY() \
     d_ptr = nullptr;
 
 #define NNT_SINGLETON_DECL(cls)             \
@@ -132,6 +132,19 @@ public:                                     \
         }                                          \
     };                                             \
     cls &var = _NNT_COMBINE(__heap_object_, __LINE__)()();
+        
+#ifdef __cplusplus
+#define NNT_CXX
+#endif
+        
+#ifdef __OBJC__
+#define NNT_OBJC
+#if __has_feature(objc_arc)
+#define NNT_OBJC_ARC
+#else
+#error "不支持NON-ARC模式"
+#endif
+#endif
 
 #ifdef NNT_STATIC
 #define NNT_LIBRARY 1
@@ -182,7 +195,20 @@ public:                                     \
 #define NNT_ANDROID
 #define NNT_MOBILE
 #endif
-
+        
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#ifdef __OBJC__
+#import <CoreFoundation/CoreFoundation.h>
+#import <Foundation/Foundation.h>
+#endif
+#define NNT_DARWIN
+#if TARGET_OS_MAC
+#else
+#define NNT_MOBILE
+#endif
+#endif
+        
 #if !defined(NNT_WINDOWS)
 #define NNT_UNIXLIKE
 #endif
@@ -247,7 +273,7 @@ using ::std::string;
 typedef ::std::vector<string> strings;
 
 template<typename T>
-static T const& Nil()
+static T const& AsNil()
 {
 	static const T __s;
 	return __s;
